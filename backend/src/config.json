@@ -2,8 +2,8 @@
     "mongoUrl": "mongodb://mongodb:27017/TotallySpiesBusPlan",
     "agencies": [
         {
-            "agency_key": "berlin",
-            "path": "./gtfs/berlin.zip"
+            "agency_key": "bayern",
+            "path": "./gtfs/bayern.zip"
         }
     ]
 }
