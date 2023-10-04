@@ -1,5 +1,6 @@
-const express = require("express");
+import express from 'express';
 const app = express();
+
 
 app.post("/post", (req, res) => {
 console.log("Connected to React");
