@@ -1,11 +1,16 @@
 import React, {useEffect, useState} from 'react';
 import {MapContainer, Marker, Popup, TileLayer} from 'react-leaflet';
 import {formatTime} from "./utils/utils.js";
+import Select from "react-select";
 
 const Map = () => {
   const [buses, setBuses] = useState([]);
   const [selectedBus, setSelectedBus] = useState(null);
-    const [isSidebarOpen, setSidebarOpen] = useState(false);
+  const [isSidebarOpen, setSidebarOpen] = useState(false);
+  const busOptions = buses.map(bus => ({
+    value: bus.route_short_name,
+    label: bus.route_short_name + " - " + bus.route_long_name
+  }));
 
   useEffect(() => {
     const ws = new WebSocket('ws://localhost:4000');
@@ -42,11 +47,16 @@ const Map = () => {
       <div className="container">
         <div className={`sidebar ${isSidebarOpen ? 'open' : ''}`}>
           <h2>Select a Bus Line</h2>
-          {buses.map(bus => (
-              <button className="BusButton" key={bus._id} onClick={() => setSelectedBus(bus)}>
-                {bus.route_short_name}
-              </button>
-          ))}
+          <Select
+              options={busOptions}
+              onChange={(option) => {
+                // Hier können Sie die ausgewählte Buslinie festlegen
+                const bus = buses.find(b => b.route_short_name === option.value);
+                setSelectedBus(bus);
+              }}
+              isSearchable
+              placeholder="Wählen Sie eine Buslinie..."
+          />
           {selectedBus && (<div className="list">
             <h3>Stops for the Busline {selectedBus.route_short_name}</h3>
             <ul>
@@ -58,7 +68,7 @@ const Map = () => {
 
         </div>
         <MapContainer
-            center={[51.505, -0.09]}
+            center={[52.520008, 13.404954]}
             zoom={13}
             style={{ height: '100vh', width: '100vw' }}
         >

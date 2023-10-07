@@ -19,7 +19,7 @@ export async function getRoutesWithStops() {
     let groupedByRouteName = {};
 
     for (const route of routes) {
-        if (route.route_type !== '3') continue;
+        //if (route.route_type !== '3') continue;
         // Überspringen Sie den Eintrag, wenn route_short_name bereits existiert
         if (groupedByRouteName[route.route_short_name]) continue;
 
