@@ -12,6 +12,7 @@ services:
       - "4000:4000"
     depends_on:
       - mongodb
+    command: ["/app/wait-for-it.sh", "mongodb:27017", "--timeout=30", "--", "node", "/app/src/server.js"]
   ml-service:
     build: ./ml-service
     ports:
