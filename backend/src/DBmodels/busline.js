@@ -4,7 +4,12 @@ const stopTimeScheme = new mongoose.Schema({
     stop_id: String,
     arrival_time: String,
     departure_time: String,
-    stop_sequence: Number
+    stop_sequence: Number,
+    location: {
+        latitude: Number,
+        longitude: Number
+    },
+    stop_name: String
 
 });
 

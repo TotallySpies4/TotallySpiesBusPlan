@@ -15,3 +15,31 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.BusButton {
+  background-color: #4caf50;
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+}
+
+.BusButton:hover {
+  background-color: #3e8e41;
+}
+
+.BusButton:active {
+  background-color: #3e8e41;
+  transform: translateY(4px);
+}
+
+.list{
+  z-index: 2;
+}
+
+.leaflet-container {
+  z-index: 1;
+}

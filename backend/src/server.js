@@ -24,7 +24,7 @@ wss.on('connection', (ws) => {
 // Senden Sie hier die Busstop-Daten an den Client, wenn er sich verbindet
 async function sendBusStops(ws) {
     try {
-        const busstops = await BusRoute.find({});
+        const busstops = await BusRoute.find({route_short_name: '1'});
         ws.send(JSON.stringify(busstops));
     } catch (error) {
         console.error('Error fetching bus stops:', error);

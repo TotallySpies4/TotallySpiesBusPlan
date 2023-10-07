@@ -1,5 +1,5 @@
 import { readFile } from 'fs/promises';
-import GTFS from 'gtfs';
+import * as GTFS from 'gtfs';
 
 /**
  * Method to import GTFS-Data from the zip-file in the gtfs-folder
@@ -14,27 +14,41 @@ import GTFS from 'gtfs';
  * Method to get all routes with their stop times
  * @returns {Promise<*[]>}
  */
-export async function getRoutesWithStopTimes() {
+export async function getRoutesWithStops() {
     const routes = await GTFS.getRoutes();
-    let routesWithStops = [];
+    let groupedByRouteName = {};
 
     for (const route of routes) {
-        const trips = await GTFS.getTrips({ route_id: route.route_id });
-        let allStopTimes = [];
+        if (route.route_type !== '3') continue;
+        // Überspringen Sie den Eintrag, wenn route_short_name bereits existiert
+        if (groupedByRouteName[route.route_short_name]) continue;
 
-        for (const trip of trips) {
-            const stopTimes = await GTFS.getStoptimes({ trip_id: trip.trip_id });
-            allStopTimes = allStopTimes.concat(stopTimes);
+        const [firstTrip] = await GTFS.getTrips({ route_id: route.route_id });
+
+        if (firstTrip) {
+            const stopTimes = await GTFS.getStoptimes({ trip_id: firstTrip.trip_id });
+
+            for (let i = 0; i < stopTimes.length; i++) {
+                const stop = await GTFS.getStops({ stop_id: stopTimes[i].stop_id });
+                //console.log(stop)
+                stopTimes[i].location = {
+                    latitude: stop[0].stop_lat,
+                    longitude: stop[0].stop_lon
+                };
+                stopTimes[i].stop_name = stop[0].stop_name;
+
+            }
+
+            console.log(stopTimes)
+            groupedByRouteName[route.route_short_name] = {
+                route_id: route.route_id,
+                route_short_name: route.route_short_name,
+                route_long_name: route.route_long_name,
+                stop_times: stopTimes
+            };
         }
-
-        routesWithStops.push({
-            route_id: route.route_id,
-            route_short_name: route.route_short_name,
-            route_long_name: route.route_long_name,
-            stop_times: allStopTimes
-        });
     }
 
-    return routesWithStops;
+    return Object.values(groupedByRouteName);
 }
 

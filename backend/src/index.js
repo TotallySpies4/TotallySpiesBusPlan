@@ -1,12 +1,12 @@
 
 import chokidar from 'chokidar';
-import { saveRoutesToMongoDB } from './saveDataToMongoDB';
-import { importGtfsData } from "./gtfsHelper";
+import { saveRoutesToMongoDB } from './saveDataToMongoDB.js';
+import { importGtfsData } from "./gtfsHelper.js";
 
 
 const watcher = chokidar.watch('./gtfs/berlin.zip', { ignoreInitial: true });
 
-watcher.on('change',(path, stats) => {
+//watcher.on('change',(path, stats) => {
     console.log('GTFS-Data changed. Importing new data...');
 
     //Import GTFS-Data
@@ -21,4 +21,4 @@ watcher.on('change',(path, stats) => {
             process.exit();
         })
         .catch(console.error);
-});
+//});
