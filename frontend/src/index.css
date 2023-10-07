@@ -16,6 +16,12 @@ code {
     monospace;
 }
 
+#root{
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+}
+
 .BusButton {
   background-color: #4caf50;
   border: none;
@@ -37,24 +43,32 @@ code {
 }
 
 .container {
+  position: relative;
   display: flex;
-  height: 100vh;
+  height: 100%;
+    width: 100%;
 }
-
 .map {
-  flex: 1;
+  position: absolute;
   height: 100%;
   width: 100%;
+  z-index: 10;
 }
 
 .sidebar {
-  width: 450px; /* Oder die gewünschte Breite */
-  height: 100%;
-  background: #f7f7f7;
-  border-right: 1px solid #ddd;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 350px;
+  height: 600px;
+  z-index: 1000;
+  background-color: rgba(255, 255, 255, 0.8);
   overflow-y: auto;
-  transform: translateX(-250px);
+  transform: translateX(-350px);
   transition: transform 0.3s ease-in-out;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .sidebar.open {
@@ -66,4 +80,11 @@ code {
   top: 10px;
   left: 10px;
   z-index: 1000;
+}
+#map {
+  height: 0 !important;
+}
+
+.css-b62m3t-container{
+width: 80%;
 }
