@@ -36,10 +36,34 @@ code {
   transform: translateY(4px);
 }
 
-.list{
-  z-index: 2;
+.container {
+  display: flex;
+  height: 100vh;
 }
 
-.leaflet-container {
-  z-index: 1;
+.map {
+  flex: 1;
+  height: 100%;
+  width: 100%;
+}
+
+.sidebar {
+  width: 450px; /* Oder die gewünschte Breite */
+  height: 100%;
+  background: #f7f7f7;
+  border-right: 1px solid #ddd;
+  overflow-y: auto;
+  transform: translateX(-250px);
+  transition: transform 0.3s ease-in-out;
+}
+
+.sidebar.open {
+  transform: translateX(0);
+}
+
+.sidebar-toggle {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 1000;
 }
