@@ -35,7 +35,7 @@ server.listen(4000, () => {
 });
 
 // MongoDB connection
-mongoose.connect('mongodb://0.0.0.0:27017/TotallySpiesBusPlan', {
+mongoose.connect('mongodb://mongodb:27017/TotallySpiesBusPlan', {
     useNewUrlParser: true,
     useUnifiedTopology: true,
 })
