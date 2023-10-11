@@ -46,7 +46,7 @@ const App = () => {
       <Map selectedBus={selectedBus} isSidebarOpen={isSidebarOpen} setSidebarOpen={setSidebarOpen} />
         <Sidebar buses={buses} selectedBus={selectedBus}
                  setSelectedBus={setSelectedBus} busOptions={busOptions}
-                 isSidebarOpen={isSidebarOpen} />
+                 isSidebarOpen={isSidebarOpen}  />
     </div>
   );
 };

@@ -38,13 +38,24 @@ export async function getRoutesWithStops() {
                 stopTimes[i].stop_name = stop[0].stop_name;
 
             }
+            // Shapes-Daten für die aktuelle Fahrt (Trip) abrufen
+            const shapes = await GTFS.getShapes({ trip_id: firstTrip.trip_id });
+
+            // Die Koordinaten für die Route aus den Shapes-Daten extrahieren
+            const routeCoordinates = shapes.map(shape => {
+                return {
+                    latitude: shape.shape_pt_lat,
+                    longitude: shape.shape_pt_lon
+                };
+            });
 
             console.log(stopTimes)
             groupedByRouteName[route.route_short_name] = {
                 route_id: route.route_id,
                 route_short_name: route.route_short_name,
                 route_long_name: route.route_long_name,
-                stop_times: stopTimes
+                stop_times: stopTimes,
+                routeCoordinates: routeCoordinates
             };
         }
     }

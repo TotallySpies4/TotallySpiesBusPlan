@@ -13,6 +13,7 @@ const Sidebar = ({buses,selectedBus,setSelectedBus, busOptions, isSidebarOpen}) 
                     // Hier können Sie die ausgewählte Buslinie festlegen
                     const bus = buses.find(b => b.route_short_name === option.value);
                     setSelectedBus(bus);
+
                 }}
                 isSearchable
                 placeholder="Wählen Sie eine Buslinie..."

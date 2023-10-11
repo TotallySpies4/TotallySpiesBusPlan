@@ -1,7 +1,8 @@
-import React, {useEffect, useState} from 'react';
-import {MapContainer, Marker, Popup, TileLayer} from 'react-leaflet';
-import {formatTime} from "./utils/utils.js";
-import Select from "react-select";
+
+import {MapContainer, Marker, Polyline, Popup, TileLayer} from 'react-leaflet';
+import 'leaflet-polylinedecorator';
+import PolylineDecorator from "./PolylineDecorator.js";
+
 
 const Map = ({selectedBus,setSidebarOpen,isSidebarOpen}) => {
 
@@ -9,7 +10,7 @@ const Map = ({selectedBus,setSidebarOpen,isSidebarOpen}) => {
       <div className="map">
 
         <MapContainer
-            center={[52.520008, 13.404954]}
+            center={[48.7904, 11.4979]}
             zoom={13}
             style={{ height: '100vh', width: '100vw' }}
         >
@@ -31,6 +32,21 @@ const Map = ({selectedBus,setSidebarOpen,isSidebarOpen}) => {
                 </Popup>
               </Marker>
           ))}
+            {selectedBus && selectedBus.routeCoordinates && (
+                <>
+                    <Polyline
+                        positions={selectedBus.routeCoordinates.map(stopTime => [stopTime.latitude, stopTime.longitude])}
+                        color='blue'
+                    />
+                    <PolylineDecorator
+                        positions={selectedBus.routeCoordinates.map(stopTime => [stopTime.latitude, stopTime.longitude])}
+                        patterns={[
+                            { offset: '10%', repeat: '20%', symbol: L.Symbol.arrowHead({ pixelSize: 10, pathOptions: { fillOpacity: 1, weight: 0 } }) }
+                        ]}
+                    />
+                </>
+
+            )}
         </MapContainer>
 
       </div>
