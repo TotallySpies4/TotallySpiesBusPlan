@@ -37,6 +37,7 @@ export async function getRoutesWithStops() {
                 };
                 stopTimes[i].stop_name = stop[0].stop_name;
 
+
             }
             // Shapes-Daten für die aktuelle Fahrt (Trip) abrufen
             const shapes = await GTFS.getShapes({ trip_id: firstTrip.trip_id });

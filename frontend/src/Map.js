@@ -1,4 +1,5 @@
-import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
+import { MapContainer, Marker, Popup, Polyline, TileLayer } from "react-leaflet";
+import L from 'leaflet';
 import 'leaflet-polylinedecorator';
 import PolylineDecorator from "./PolylineDecorator.js";
 
@@ -6,7 +7,7 @@ const Map = ({ selectedBus, setSidebarOpen, isSidebarOpen }) => {
   return (
     <div className="map">
       <MapContainer
-        center={[52.520008, 13.404954]}
+        center={[48.137154, 11.576124]}
         zoom={13}
         style={{ height: "100vh", width: "100vw" }}
         zoomControl={false}>
