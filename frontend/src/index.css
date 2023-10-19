@@ -15,3 +15,80 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+#root{
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+}
+
+.BusButton {
+  background-color: #4caf50;
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+}
+
+.BusButton:hover {
+  background-color: #3e8e41;
+}
+
+.BusButton:active {
+  background-color: #3e8e41;
+  transform: translateY(4px);
+}
+
+.container {
+  position: relative;
+  display: flex;
+  height: 100%;
+    width: 100%;
+}
+.map {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  z-index: 10;
+}
+
+.sidebar {
+  position: absolute;
+  top: 12%;
+  left: 0;
+  padding: 10px;
+  width: 350px;
+  height: 75%;
+  z-index: 1000;
+  background-color: rgba(255, 255, 255, 0.8);
+  overflow-y: auto;
+  transform: translateX(-350px);
+  transition: transform 0.3s ease-in-out;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 20px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19) ;
+}
+
+.sidebar.open {
+  transform: translateX(0);
+  left: 20px;
+}
+
+.sidebar-toggle {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 1000;
+}
+#map {
+  height: 0 !important;
+}
+
+.css-b62m3t-container{
+width: 80%;
+}
