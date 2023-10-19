@@ -1,22 +1,30 @@
 import { formatTime } from "./utils/utils.js";
 import Select from "react-select";
 import React, { useState } from "react";
+import useFetch from "./hooks/useFetch.js";
 
 const Sidebar = ({
   buses,
-  selectedBus,
-  setSelectedBus,
+  busline,
   busOptions,
   isSidebarOpen,
-  cities,
-  cityOptions,
-  setSelectedCity,
-  closeSidebar,
+  closeSidebar, selectedBus
 }) => {
   // const [selectedHour, setSelectedHour] = useState("00");
   // const [selectedMinute, setSelectedMinute] = useState("00");
   // const [selectedCity, setSelectedCity] = useState(null); // Update with your city state
-  const [selectedBusLine, setSelectedBusLine] = useState(null); // Update with your bus line state
+  //const [selectedBusLine, setSelectedBusLine] = useState(null);
+
+  // Use the useFetch hook
+  //const {selectedBus, sendRequest} = useFetch("ws://localhost:4000");
+  const handleBusSelection = (option) => {
+    const bus = buses.find((b) => b.route_short_name === option.value);
+    console.log("SelectedBusID: " + bus.route_id);
+    busline(bus);
+    // Send the request using the sendRequest function from the useFetch hook
+    //sendRequest(JSON.stringify({ type: "GET_BUS_LINE_DETAILS", payload: { routeId: bus.route_id } }));
+  };
+
 
   const hours = Array.from({ length: 24 }, (_, i) =>
     i.toString().padStart(2, "0")
@@ -31,7 +39,7 @@ const Sidebar = ({
     // console.log("Selected Hour:", selectedHour);
     // console.log("Selected Minute:", selectedMinute);
     // console.log("Selected City:", selectedCity);
-    console.log("Selected Bus Line:", selectedBusLine);
+    //console.log("Selected Bus Line:", selectedBus);
 
     // Close the sidebar
     closeSidebar();
@@ -70,30 +78,25 @@ const Sidebar = ({
           <p>Bus line</p>
           <Select
             options={busOptions}
-            onChange={(option) => {
-              // Hier können Sie die ausgewählte Buslinie festlegen
-              const bus = buses.find(
-                (b) => b.route_short_name === option.value
-              );
-              setSelectedBus(bus);
-            }}
+            onChange={handleBusSelection}
             isSearchable
             placeholder="Wählen Sie eine Buslinie..."
             className="w-full"
           />
 
-          {selectedBus && (
-            <div className="list">
-              <h3>Stops for the Busline {selectedBus.route_short_name}</h3>
-              <ul>
-                {selectedBus.stop_times.map((stop, index) => (
-                  <li key={index}>
-                    {stop.stop_name} - {formatTime(stop.arrival_time)}
-                  </li>
-                ))}
-              </ul>
-            </div>
+          {selectedBus && selectedBus.stop_times && (
+              <div className="list">
+                <h3>Stops for the Busline {selectedBus.route_short_name}</h3>
+                <ul>
+                  {selectedBus.stop_times.map((stop, index) => (
+                      <li key={index}>
+                        {stop.stop_name} - {formatTime(stop.arrival_time)}
+                      </li>
+                  ))}
+                </ul>
+              </div>
           )}
+
         </div>
 
         {/* Predict Time Selection Dropdown

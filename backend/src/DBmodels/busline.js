@@ -1,31 +1,36 @@
 import mongoose from 'mongoose';
-const coordinateScheme = new mongoose.Schema({
-    latitude: Number,
-    longitude: Number
-}, { _id: false });  // This ensures that Mongoose doesn't create a unique _id for each coordinate
+const Schema = mongoose.Schema;
 
-const stopTimeScheme = new mongoose.Schema({
+const stopTimeSchema = new Schema({
     stop_id: String,
+    stop_sequence: Number,
     arrival_time: String,
     departure_time: String,
-    stop_sequence: Number,
     location: {
         latitude: Number,
         longitude: Number
     },
-    stop_name: String
-
+    stop_name: String,
+    route: { type: Schema.Types.ObjectId, ref: 'Route' }
 });
 
-const busRouteScheme = new mongoose.Schema({
+const shapeSchema = new Schema({
+    shape_pt_lat: Number,
+    shape_pt_lon: Number,
+    route: { type: Schema.Types.ObjectId, ref: 'Route' }
+});
+
+const routeSchema = new Schema({
     route_id: String,
     route_short_name: String,
     route_long_name: String,
-    stop_times: [stopTimeScheme],
-    routeCoordinates: [coordinateScheme]
-
+    stop_times: [{ type: Schema.Types.ObjectId, ref: 'StopTime' }],
+    routeCoordinates: [{ type: Schema.Types.ObjectId, ref: 'Shape' }]
 });
 
-const BusRoute = mongoose.model('BusRoute', busRouteScheme);
+const StopTime = mongoose.model('StopTime', stopTimeSchema);
+const Shape = mongoose.model('Shape', shapeSchema);
+const Route = mongoose.model('Route', routeSchema);
 
-export {BusRoute};
+
+export  { StopTime, Shape, Route };

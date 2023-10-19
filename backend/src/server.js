@@ -2,43 +2,42 @@ import mongoose from "mongoose";
 import express from "express";
 import http from "http";
 import {WebSocketServer} from "ws";
-import {BusRoute} from "./DBmodels/busline.js";
+import {getBusAllBusline, getBusDetails} from "./queryData/queryDbData.js";
 
 const app = express();
 const server = http.createServer(app);
 const wss = new WebSocketServer({server})
 
-wss.on('connection', (ws) => {
+
+wss.on('connection', async (ws) => {
     console.log('Client connected');
 
-    ws.on('message', (message) => {
+    const busLine = await getBusAllBusline()
+    ws.send(JSON.stringify({type: 'ALL_BUS_LINES', payload: busLine}))
+
+    ws.on('message', async (message) => {
         console.log(`Received message => ${message}`);
+        const data = JSON.parse(message);
+        if (data.type === 'GET_BUS_LINE_DETAILS') {
+            const busLineDetail = await getBusDetails(data.payload.routeId)
+            ws.send(JSON.stringify({type: 'BUS_LINE_DETAILS', payload: busLineDetail}))
+        }
+
     });
 
     ws.send('Hello from server!');
-    sendBusStops(ws)
-        .then(r => console.log('Bus stops sent to client.'))
-        .catch(console.error);
+
 });
 
-// Senden Sie hier die Busstop-Daten an den Client, wenn er sich verbindet
-async function sendBusStops(ws) {
-    try {
-        const busstops = await BusRoute.find({});
-        ws.send(JSON.stringify(busstops));
-    } catch (error) {
-        console.error('Error fetching bus stops:', error);
-    }
-}
 server.listen(4000, () => {
     console.log('Server started on http://localhost:4000');
 });
 
 // MongoDB connection
 mongoose.connect('mongodb://mongodb:27017/TotallySpiesBusPlan', {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
+    serverSelectionTimeoutMS: 60000
 })
     .then(() => console.log('Connected to MongoDB'))
     .catch(err => console.error('Could not connect to MongoDB:', err));
 
+mongoose.set('debug', true);

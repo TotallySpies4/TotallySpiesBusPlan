@@ -1,5 +1,8 @@
 import { readFile } from 'fs/promises';
 import * as GTFS from 'gtfs';
+import mongoose from "mongoose";
+import {Route, Shape, StopTime} from "./DBmodels/busline.js";
+
 
 /**
  * Method to import GTFS-Data from the zip-file in the gtfs-folder
@@ -15,52 +18,85 @@ import * as GTFS from 'gtfs';
  * @returns {Promise<*[]>}
  */
 export async function getRoutesWithStops() {
-    const routes = await GTFS.getRoutes();
-    let groupedByRouteName = {};
-
-    for (const route of routes) {
-        //if (route.route_type !== '3') continue;
-        // Überspringen Sie den Eintrag, wenn route_short_name bereits existiert
-        if (groupedByRouteName[route.route_short_name]) continue;
-
-        const [firstTrip] = await GTFS.getTrips({ route_id: route.route_id });
-
-        if (firstTrip) {
-            const stopTimes = await GTFS.getStoptimes({ trip_id: firstTrip.trip_id });
-
-            for (let i = 0; i < stopTimes.length; i++) {
-                const stop = await GTFS.getStops({ stop_id: stopTimes[i].stop_id });
-                //console.log(stop)
-                stopTimes[i].location = {
-                    latitude: stop[0].stop_lat,
-                    longitude: stop[0].stop_lon
-                };
-                stopTimes[i].stop_name = stop[0].stop_name;
+    return new Promise(async (resolve, reject) => {
 
 
+        try {
+
+            //Connect to MongoDB
+            await mongoose.connect('mongodb://localhost:27017/TotallySpiesBusPlan', {
+                serverSelectionTimeoutMS: 60000
+            })
+                .then(() => console.log('Connected to MongoDB in getRoutesWithStops'))
+                .catch(err => console.error('Could not connect to MongoDB:', err));
+
+            await Route.deleteMany({});
+            await StopTime.deleteMany({});
+            await Shape.deleteMany({});
+
+            //Get all routes
+            const routes = await GTFS.getRoutes();
+            for (const route of routes) {
+                let newRoute = new Route({
+
+                    route_id: route.route_id,
+                    route_short_name: route.route_short_name,
+                    route_long_name: route.route_long_name,
+                    // Initially empty arrays for stop_times and routeCoordinates
+                    stop_times: [],
+                    routeCoordinates: []
+                });
+
+                // Save the route first, so we have an _id for reference
+
+                await newRoute.save()
+
+                const [firstTrip] = await GTFS.getTrips({route_id: route.route_id});
+                if (firstTrip) {
+                    const stopTimes = await GTFS.getStoptimes({trip_id: firstTrip.trip_id});
+                    for (let stopTime of stopTimes) {
+
+                        const stop = await GTFS.getStops({stop_id: stopTime.stop_id});
+                        stopTime.location = {
+                            latitude: stop[0].stop_lat,
+                            longitude: stop[0].stop_lon
+                        };
+                        stopTime.stop_name = stop[0].stop_name;
+                        stopTime.route = newRoute._id;
+
+
+                        let newStopTime = new StopTime(stopTime);
+                        await newStopTime.save();
+
+                        // Add the stopTime's _id to the route's stop_times array
+                        newRoute.stop_times.push(newStopTime._id);
+                    }
+
+                    const shapes = await GTFS.getShapes({trip_id: firstTrip.trip_id});
+                    for (let shape of shapes) {
+                        shape.route = newRoute._id;
+
+                        let newShape = new Shape(shape);
+                        await newShape.save();
+
+                        // Add the shape's _id to the route's routeCoordinates array
+                        newRoute.routeCoordinates.push(newShape._id);
+                    }
+
+                    // Finally, update the route with the references
+                    await Route.updateOne({_id: newRoute._id}, newRoute);
+
+                }
             }
-            // Shapes-Daten für die aktuelle Fahrt (Trip) abrufen
-            const shapes = await GTFS.getShapes({ trip_id: firstTrip.trip_id });
 
-            // Die Koordinaten für die Route aus den Shapes-Daten extrahieren
-            const routeCoordinates = shapes.map(shape => {
-                return {
-                    latitude: shape.shape_pt_lat,
-                    longitude: shape.shape_pt_lon
-                };
-            });
 
-            console.log(stopTimes)
-            groupedByRouteName[route.route_short_name] = {
-                route_id: route.route_id,
-                route_short_name: route.route_short_name,
-                route_long_name: route.route_long_name,
-                stop_times: stopTimes,
-                routeCoordinates: routeCoordinates
-            };
+        } catch (err) {
+            console.error("Error while importing data:", err);
         }
-    }
 
-    return Object.values(groupedByRouteName);
+
+
+
+    } );
+
 }
-

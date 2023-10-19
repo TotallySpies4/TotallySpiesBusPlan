@@ -1,12 +1,11 @@
 import mongoose from "mongoose";
-import {BusRoute} from "./DBmodels/busline.js";
 import {getRoutesWithStops} from "./gtfsHelper.js";
 
 
 /**
  * Method to save all routes with their stop times to MongoDB
  */
-export async function saveRoutesToMongoDB() {
+/*export async function saveRoutesToMongoDB() {
 
 
     // MongoDB connection
@@ -27,4 +26,4 @@ export async function saveRoutesToMongoDB() {
         const busRoute = new BusRoute(route);
         await busRoute.save()
     }
-}
+}*/
