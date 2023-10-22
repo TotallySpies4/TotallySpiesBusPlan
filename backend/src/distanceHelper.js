@@ -21,7 +21,10 @@ function calculateTimeDifference(stop1, stop2) {
   const arrivalTime2 = parseTime(stop2.arrival_time, timeFormat);
 
   // Calculate the time difference in seconds
-  const timeDifference = (arrivalTime2 - departureTime1) / (1000);
+  let timeDifference = (arrivalTime2 - departureTime1) / (1000);
+  if(timeDifference===0){
+    timeDifference=30;
+  }
   return timeDifference;
 }
 // Helper function to parse a time string into a Date object

@@ -11,13 +11,13 @@ export async function calculateSpeedForRoute(routeId) {
     });
 
     // Get the details of the bus route
-    const route = await getBusDetails("routeId");
+    const route = await getBusDetails(routeId);
     if (!route) {
       console.log("Route not found");
       return;
     }
 
-    const stopTimes = route.stop_times;
+    const stopTimes = route[0].stop_times;
 
     // Perform the speed calculation logic here
     // Iterate through the stop times and calculate the speed for each road segment
@@ -38,3 +38,4 @@ export async function calculateSpeedForRoute(routeId) {
   }
 
 }
+calculateSpeedForRoute(87881);
