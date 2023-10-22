@@ -7,17 +7,17 @@ export async function calculateSpeedForRoute(routeId) {
   try {
     //Connect to MongoDB
     await mongoose.connect('mongodb://localhost:27017/TotallySpiesBusPlan', {
-        serverSelectionTimeoutMS: 60000,
+      serverSelectionTimeoutMS: 60000,
     });
 
     // Get the details of the bus route
-    const route = await getBusDetails("routeId");
+    const route = await getBusDetails(routeId);
     if (!route) {
       console.log("Route not found");
-      return;
     }
+    //console.log(route);
 
-    const stopTimes = route.stop_times;
+    const stopTimes = route[0].stop_times;
 
     // Perform the speed calculation logic here
     // Iterate through the stop times and calculate the speed for each road segment
@@ -36,5 +36,6 @@ export async function calculateSpeedForRoute(routeId) {
   } catch (error) {
     console.error("Error calculating speed:", error);
   }
-
 }
+
+calculateSpeedForRoute(87881)
