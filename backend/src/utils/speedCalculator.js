@@ -1,4 +1,3 @@
-import {calculateDistance, calculateTimeDifference} from "./distanceHelper.js";
 
 /**
  * Method to calculate the average speed of a route
@@ -6,7 +5,7 @@ import {calculateDistance, calculateTimeDifference} from "./distanceHelper.js";
  * @param currentStop
  * @returns {Promise<number|null>}
  */
-export async function segmentAvgSpeedCalculator(previousStop, currentStop ) {
+ export async function segmentAvgSpeedCalculator(previousStop, currentStop ) {
   try {
 
       const distance = calculateDistance(previousStop.location.longitude, previousStop.location.latitude, currentStop.location.longitude, currentStop.location.latitude);
@@ -22,10 +21,10 @@ export async function segmentAvgSpeedCalculator(previousStop, currentStop ) {
 
 /**
  * Method to calculate the average speed of the vehiclePositions
- * @param vehiclePositions
+ * @param vehiclePositions array of vehiclePositions from the realtime API
  * @returns {Promise<number>}
  */
-export async function realtimeAvgSpeedCalculator(vehiclePositions) {
+ export async function realtimeAvgSpeedCalculator(vehiclePositions) {
     try {
         // Check if vehiclePositions is an array with at least two entries
         if (!vehiclePositions || vehiclePositions.length < 2) {
@@ -89,7 +88,7 @@ export async function realtimeAvgSpeedCalculator(vehiclePositions) {
  * @returns {number} distance in kilometers
  */
 
-export function calculateDistance(lat1, lon1, lat2, lon2) {
+ export function calculateDistance(lat1, lon1, lat2, lon2) {
     const R = 6371; // Radius of the Earth in kilometers
     const dLat = ((lat2 - lat1) * Math.PI) / 180;
     const dLon = ((lon2 - lon1) * Math.PI) / 180;
@@ -111,7 +110,7 @@ export function calculateDistance(lat1, lon1, lat2, lon2) {
  * @returns {number} time difference in seconds
  */
 
-export function calculateTimeDifference(stop1, stop2) {
+ export function calculateTimeDifference(stop1, stop2) {
     const timeFormat = "HH:mm:ss"; // Specify the time format used in the stop times
 
     const departureTime1 = parseTime(stop1.departure_time, timeFormat);
@@ -132,7 +131,7 @@ export function calculateTimeDifference(stop1, stop2) {
  * @param format
  * @returns {Date} Date object
  */
-export function parseTime(timeString, format) {
+ export function parseTime(timeString, format) {
     const [hours, minutes, seconds] = timeString.split(":");
     const date = new Date();
     date.setHours(hours);
@@ -140,5 +139,6 @@ export function parseTime(timeString, format) {
     date.setSeconds(seconds);
     return date;
 }
+
 
 
