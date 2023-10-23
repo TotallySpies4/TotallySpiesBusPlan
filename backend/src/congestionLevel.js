@@ -1,5 +1,5 @@
-import { calculateSpeedForRoute } from "./utils/avgSpeedCalculator.js";
-import { calculateRouteAvgSpeed } from "./RouteAvgSpeed";
+import { segmentAvgSpeedCalculator } from "./utils/avgSpeedCalculator.js";
+import { realtimeAvgSpeedCalculator } from "./RouteAvgSpeed";
 // import mongoose from "mongoose";
 
 /**
@@ -10,8 +10,8 @@ import { calculateRouteAvgSpeed } from "./RouteAvgSpeed";
  */
 
 export async function congestionLevel(routeID, vehiclePosition){
-    const scheduleSpeed = calculateSpeedForRoute(routeID);
-    const route_avg_speed = calculateRouteAvgSpeed(vehiclePosition);
+    const scheduleSpeed = segmentAvgSpeedCalculator(routeID);
+    const route_avg_speed = realtimeAvgSpeedCalculator(vehiclePosition);
 
     const route = (await scheduleSpeed).route[0]
     if(vehiclePosition.trip_id===route.trip_id && vehiclePosition.stop_sequence===routeID.stop_sequence){

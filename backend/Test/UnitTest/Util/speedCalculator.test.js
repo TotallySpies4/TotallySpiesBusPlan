@@ -2,7 +2,7 @@ import {beforeEach, describe, expect, it, jest} from "@jest/globals";
 
 import {
     calculateDistance,
-    calculateSpeedForRoute,
+    segmentAvgSpeedCalculator,
     calculateTimeDifference
 } from "../../../src/utils/avgSpeedCalculator.js";
 
@@ -38,7 +38,7 @@ describe("calculateSpeedForRoute", () => {
         calculateDistance.mockReturnValue(100); // mock distance: 100 units
         calculateTimeDifference.mockReturnValue(2); // mock time difference: 2 hours
 
-        const result = await calculateSpeedForRoute(mockPreviousStop, mockCurrentStop);
+        const result = await segmentAvgSpeedCalculator(mockPreviousStop, mockCurrentStop);
 
         expect(calculateDistance).toHaveBeenCalledWith(50, 50, 51, 51);
         expect(calculateTimeDifference).toHaveBeenCalledWith(mockPreviousStop, mockCurrentStop);
@@ -64,7 +64,7 @@ describe("calculateSpeedForRoute", () => {
             throw new Error("Mocked error");
         });
 
-        const result = await calculateSpeedForRoute(mockPreviousStop, mockCurrentStop);
+        const result = await segmentAvgSpeedCalculator(mockPreviousStop, mockCurrentStop);
 
         expect(result).toBeNull();
     });

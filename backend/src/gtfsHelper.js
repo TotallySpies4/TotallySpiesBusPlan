@@ -2,7 +2,7 @@ import { readFile } from 'fs/promises';
 import * as GTFS from 'gtfs';
 import mongoose from "mongoose";
 import {Route, Shape, Speed, StopTime} from "./DBmodels/busline.js";
-import {calculateSpeedForRoute} from "./utils/avgSpeedCalculator.js";
+import {segmentAvgSpeedCalculator} from "./utils/avgSpeedCalculator.js";
 
 
 /**
@@ -77,7 +77,7 @@ export async function getRoutesWithStops() {
 
                         // Calculate and save speed if there's a previousStopTime
                         if (previousStopTime) {
-                            const averageSpeed = await calculateSpeedForRoute(previousStopTime, newStopTime);
+                            const averageSpeed = await segmentAvgSpeedCalculator(previousStopTime, newStopTime);
                             const speedEntry = new Speed({
                                 previousStop: previousStopTime._id,
                                 currentStop: newStopTime._id,
