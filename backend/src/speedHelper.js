@@ -15,7 +15,6 @@ export async function calculateSpeedForRoute(routeId) {
     if (!route) {
       console.log("Route not found");
     }
-    //console.log(route);
 
     const stopTimes = route[0].stop_times;
 
@@ -37,5 +36,4 @@ export async function calculateSpeedForRoute(routeId) {
     console.error("Error calculating speed:", error);
   }
 }
-
-calculateSpeedForRoute(87881)
+calculateSpeedForRoute(87881);
