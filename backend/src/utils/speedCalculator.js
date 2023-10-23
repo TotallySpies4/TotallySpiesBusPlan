@@ -132,6 +132,11 @@
  * @returns {Date} Date object
  */
  export function parseTime(timeString, format) {
+    if (!timeString) {
+        console.error("parseTime called with undefined or empty timeString:", timeString);
+        return new Date();
+    }
+
     const [hours, minutes, seconds] = timeString.split(":");
     const date = new Date();
     date.setHours(hours);

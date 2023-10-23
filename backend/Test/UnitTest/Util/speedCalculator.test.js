@@ -25,23 +25,29 @@ describe("calculateSpeedForRoute", () => {
             location: {
                 latitude: 50,
                 longitude: 50
-            }
+            },
+            departure_time: "12:00:00"
         };
         const mockCurrentStop = {
             location: {
                 latitude: 51,
                 longitude: 51
-            }
+            },
+            departure_time: "14:00:00"
         };
 
         calculateDistance.mockReturnValue(100); // mock distance: 100 units
         calculateTimeDifference.mockReturnValue(2); // mock time difference: 2 hours
 
+        console.log("Distance:", calculateDistance(50, 51, 50, 51));
+        console.log("Time difference:", calculateTimeDifference(mockPreviousStop, mockCurrentStop));
+
+
         const result = await segmentAvgSpeedCalculator(mockPreviousStop, mockCurrentStop);
 
         expect(calculateDistance).toHaveBeenCalledWith(50, 51, 50, 51);
         expect(calculateTimeDifference).toHaveBeenCalledWith(mockPreviousStop, mockCurrentStop);
-        expect(result).toBe(180000); // (100 units / 2 hours) * 3600 = 50 units per hour
+        expect(result).toBe(180000);
     });
 
     it("should handle errors and return null", async () => {
