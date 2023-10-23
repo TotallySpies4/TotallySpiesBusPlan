@@ -2,8 +2,8 @@ import { readFile } from 'fs/promises';
 import { FeedMessage } from 'gtfs-realtime-bindings';
 import mongoose from 'mongoose';
 import { VehiclePositions } from "./DBmodels/vehiclepostions.js";
-import { calculateDistance, calculateTimeDifference } from './distanceHelper.js';
 
+/**
 export async function importGtfsRealtimeData() {
     try {
         const pbData = await readFile('./gtfs-realtime/vehiclePositions.pb');
@@ -62,4 +62,4 @@ function calculateSpeed(tripId, position, timestamp) {
     }
     return 0;
 }
-
+*/
