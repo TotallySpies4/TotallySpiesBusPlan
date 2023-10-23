@@ -7,11 +7,8 @@ export async function importGtfsRealtimeData() {
     try {
         const pbData = await readFile('./gtfs-realtime/vehiclePositions.pb');
 
-        const feed = FeedMessage.decode(pbData);
+        const feed = FeedMessage.decode(pbData)
 
-        await mongoose.connect('mongodb://mongodb:27017/TotallySpiesBusPlan',
-        serverSelectionTimeoutMS: 60000),
-    });
     console.log('Connected to MongoDB');
 
     for (const entity of feed.entity){
@@ -21,7 +18,7 @@ export async function importGtfsRealtimeData() {
             timestamp: entity.vehicle.timestamp,
             latitude: entity.vehicle.position.latitude,
             longitude: entity.vehicle.position.longitude,
-            speed:        ,
+            //speed:        ,
             current_stop_sequence: entity.vehicle.current_stop_sequence,
             current_status: entity.vehicle.current_status,
             stop_id: entity.vehicle.stop_id,

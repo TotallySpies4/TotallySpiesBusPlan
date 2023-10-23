@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 const vehiclePositionsSchema = new Schema({
     trip_id: String,
-    route: { type: Schema.Types.ObjectId, ref: 'Route' }
+    route: { type: Schema.Types.ObjectId, ref: 'Route' },
     timestamp: Date,
     position: {
             latitude: Number,
