@@ -2,7 +2,7 @@ import { calculateSpeedForRoute } from "./speedHelper";
 import { calculateRouteAvgSpeed } from "./RouteAvgSpeed";
 // import mongoose from "mongoose";
 
-export async function congestionLevel(){
+export async function congestionLevel(routeID, vehiclePosition){
     const scheduleSpeed = calculateSpeedForRoute(routeID);
     const route_avg_speed = calculateRouteAvgSpeed(vehiclePosition);
     if(vehiclePosition.tripID===routeID.tripI && vehiclePosition.stop_sequence===routeID.stop_sequence){

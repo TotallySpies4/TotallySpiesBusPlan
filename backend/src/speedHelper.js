@@ -17,11 +17,8 @@ export async function calculateSpeedForRoute(routeId) {
     }
 
     const stopTimes = route[0].stop_times;
+    const speeds = []
 
-    // Perform the speed calculation logic here
-    // Iterate through the stop times and calculate the speed for each road segment
-
-    // Example: Calculate speed between consecutive stops
     for (let i = 1; i < stopTimes.length; i++) {
       const previousStop = stopTimes[i - 1];
       const currentStop = stopTimes[i];
@@ -30,10 +27,18 @@ export async function calculateSpeedForRoute(routeId) {
       const timeDifference = calculateTimeDifference(previousStop, currentStop);
 
       const speed = (distance / timeDifference)*3600;
-      console.log(`Speed between ${previousStop.stop_name} and ${currentStop.stop_name}: ${speed} km/h`);
+        speeds.push({
+          previousStop: previousStop.stop_id,
+          currentStop: currentStop.stop_id,
+            speed: speed
+        })
     }
+    return {route, speeds};
+
   } catch (error) {
     console.error("Error calculating speed:", error);
+    return null;
   }
 }
-calculateSpeedForRoute(87881);
+const result = await calculateSpeedForRoute(87881);
+console.log(result);

@@ -54,6 +54,9 @@ export async function calculateRouteAvgSpeed(vehiclePositions) {
     console.error("Error calculating speed:", error);
   }
 }
+
+
+
  // Example usage:
  const vehiclePositions = [
   { position: [52.992, 6.570674], timestamp: 1698042500 }, 

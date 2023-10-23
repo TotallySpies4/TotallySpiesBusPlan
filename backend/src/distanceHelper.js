@@ -27,6 +27,7 @@ function calculateTimeDifference(stop1, stop2) {
   }
   return timeDifference;
 }
+
 // Helper function to parse a time string into a Date object
 function parseTime(timeString, format) {
   const [hours, minutes, seconds] = timeString.split(":");
