@@ -20,8 +20,17 @@ const shapeSchema = new Schema({
     route: { type: Schema.Types.ObjectId, ref: 'Route' }
 });
 
+const speedSchema = new Schema({
+    previousStop: { type: Schema.Types.ObjectId, ref: 'StopTime' },
+    currentStop: { type: Schema.Types.ObjectId, ref: 'StopTime' },
+    route: { type: Schema.Types.ObjectId, ref: 'Route' },  // Route reference
+    trip: String,  // Trip ID (assuming it's a string)
+    averageSpeed: Number
+});
+
 const routeSchema = new Schema({
     route_id: String,
+    trip_id: String,
     route_short_name: String,
     route_long_name: String,
     stop_times: [{ type: Schema.Types.ObjectId, ref: 'StopTime' }],
@@ -31,6 +40,8 @@ const routeSchema = new Schema({
 const StopTime = mongoose.model('StopTime', stopTimeSchema);
 const Shape = mongoose.model('Shape', shapeSchema);
 const Route = mongoose.model('Route', routeSchema);
+const Speed = mongoose.model('Speed', speedSchema);
 
 
-export  { StopTime, Shape, Route };
+
+export  { StopTime, Shape, Route, Speed };

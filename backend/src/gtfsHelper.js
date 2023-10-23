@@ -1,7 +1,8 @@
 import { readFile } from 'fs/promises';
 import * as GTFS from 'gtfs';
 import mongoose from "mongoose";
-import {Route, Shape, StopTime} from "./DBmodels/busline.js";
+import {Route, Shape, Speed, StopTime} from "./DBmodels/busline.js";
+import {calculateSpeedForRoute} from "./utils/avgSpeedCalculator.js";
 
 
 /**
@@ -33,6 +34,7 @@ export async function getRoutesWithStops() {
             await Route.deleteMany({});
             await StopTime.deleteMany({});
             await Shape.deleteMany({});
+            await Speed.deleteMany({});
 
             //Get all routes
             const routes = await GTFS.getRoutes();
@@ -40,6 +42,7 @@ export async function getRoutesWithStops() {
                 let newRoute = new Route({
 
                     route_id: route.route_id,
+                    trip_id: null,
                     route_short_name: route.route_short_name,
                     route_long_name: route.route_long_name,
                     // Initially empty arrays for stop_times and routeCoordinates
@@ -53,7 +56,11 @@ export async function getRoutesWithStops() {
 
                 const [firstTrip] = await GTFS.getTrips({route_id: route.route_id});
                 if (firstTrip) {
+                    newRoute.trip_id = firstTrip.trip_id;
+
                     const stopTimes = await GTFS.getStoptimes({trip_id: firstTrip.trip_id});
+                    let previousStopTime = null;
+
                     for (let stopTime of stopTimes) {
 
                         const stop = await GTFS.getStops({stop_id: stopTime.stop_id});
@@ -67,6 +74,21 @@ export async function getRoutesWithStops() {
 
                         let newStopTime = new StopTime(stopTime);
                         await newStopTime.save();
+
+                        // Calculate and save speed if there's a previousStopTime
+                        if (previousStopTime) {
+                            const averageSpeed = await calculateSpeedForRoute(previousStopTime, newStopTime);
+                            const speedEntry = new Speed({
+                                previousStop: previousStopTime._id,
+                                currentStop: newStopTime._id,
+                                route: newRoute._id,
+                                trip: firstTrip.trip_id,
+                                averageSpeed: averageSpeed
+                            });
+                            await speedEntry.save();
+                        }
+
+                        previousStopTime = newStopTime;
 
                         // Add the stopTime's _id to the route's stop_times array
                         newRoute.stop_times.push(newStopTime._id);
