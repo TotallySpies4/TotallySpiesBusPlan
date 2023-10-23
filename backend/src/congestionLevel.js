@@ -1,6 +1,5 @@
-import { segmentAvgSpeedCalculator } from "./utils/avgSpeedCalculator.js";
-import { realtimeAvgSpeedCalculator } from "./RouteAvgSpeed";
-// import mongoose from "mongoose";
+import {realtimeAvgSpeedCalculator, segmentAvgSpeedCalculator} from "./utils/speedCalculator.js";
+
 
 /**
  * Method to calculate the congestion level of a route

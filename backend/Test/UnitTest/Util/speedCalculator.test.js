@@ -4,12 +4,12 @@ import {
     calculateDistance,
     segmentAvgSpeedCalculator,
     calculateTimeDifference
-} from "../../../src/utils/avgSpeedCalculator.js";
+} from "../../../src/utils/speedCalculator.js";
 
 
 
 // Mock the imported methods
-jest.mock("../../../src/utils/avgSpeedCalculator.js", () => ({
+jest.mock("../../../src/utils/speedCalculator.js", () => ({
     calculateDistance: jest.fn(),
     calculateTimeDifference: jest.fn()
 }));

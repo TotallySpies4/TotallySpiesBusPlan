@@ -2,7 +2,7 @@ import { readFile } from 'fs/promises';
 import * as GTFS from 'gtfs';
 import mongoose from "mongoose";
 import {Route, Shape, Speed, StopTime} from "./DBmodels/busline.js";
-import {segmentAvgSpeedCalculator} from "./utils/avgSpeedCalculator.js";
+import {segmentAvgSpeedCalculator} from "./utils/speedCalculator.js";
 
 
 /**
