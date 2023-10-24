@@ -2,6 +2,7 @@ import {Route, Speed, StopTime, Trip} from "../DBmodels/busline.js";
 import mongoose from "mongoose";
 import {segmentAvgSpeedCalculator} from "../utils/speedCalculator.js";
 import {VehiclePositions} from "../DBmodels/vehiclepositions.js";
+import {getShapesBetweenStops} from "../utils/shapesUtilSet.js";
 
 async function getBusAllBusline(){
     return Route.find({});
@@ -16,15 +17,22 @@ async function getBusDetails(routeID){
     const currentVehicle = await VehiclePositions.findOne({route: routeObjID});
     if (!currentVehicle) {
         const trip = await handleInactivity(route)
-        return {currentVehicle: null, trip}
+        return {currentVehicle: null, trip: trip, congestionShape: null};
     }
+
     const trip = await Trip.findOne({_id: currentVehicle.currentTrip_id}).populate('stop_times').populate('shapes');
    if (!trip) {
     throw new Error('No matching trip found in database.');
    }
-   console.log("trip after getting the route_Id",trip)
+    console.log("trip after getting the route_Id",trip)
     console.log("currentVehicle after getting the route_Id",currentVehicle)
-   return {currentVehicle, trip};
+
+    const shapeID = trip.shapes[0]._id;
+   const previousStopTime = currentVehicle.congestion_level.previousStop;
+    const currentStopTime = currentVehicle.congestion_level.currentStop;
+
+    const  congestionShape = await getShapesBetweenStops(shapeID, previousStopTime, currentStopTime)
+   return {currentVehicle:currentVehicle, trip: trip,  congestionShape:congestionShape};
 }
 
 async function handleInactivity(route) {
