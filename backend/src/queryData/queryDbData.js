@@ -40,7 +40,7 @@ async function fetchAverageSpeedFromDB(routeID, tripID, stopSequence) {
             throw new Error('Speed data not found for the given stops.');
         }
 
-        return speedEntry.averageSpeed;
+        return {speedEntry, currentStopTime, previousStopTime};
 
     } catch (error) {
         console.error("Error fetching average speed from database:", error);

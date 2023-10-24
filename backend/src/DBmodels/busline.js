@@ -11,37 +11,44 @@ const stopTimeSchema = new Schema({
         longitude: Number
     },
     stop_name: String,
-    route: { type: Schema.Types.ObjectId, ref: 'Route' }
+    route: String,
+    trip_id: String
 });
 
 const shapeSchema = new Schema({
     shape_pt_lat: Number,
     shape_pt_lon: Number,
-    route: { type: Schema.Types.ObjectId, ref: 'Route' }
+    route: String
 });
 
 const speedSchema = new Schema({
     previousStop: { type: Schema.Types.ObjectId, ref: 'StopTime' },
     currentStop: { type: Schema.Types.ObjectId, ref: 'StopTime' },
-    route: { type: Schema.Types.ObjectId, ref: 'Route' },  // Route reference
+    route: String,  // Route reference
     trip: String,  // Trip ID (assuming it's a string)
     averageSpeed: Number
 });
 
+const tripSchema = new Schema({
+    trip_id: String,
+    route_id: String,
+    stop_times: [{ type: Schema.Types.ObjectId, ref: 'StopTime' }],
+    shapes: [{ type: Schema.Types.ObjectId, ref: 'Shape' }]
+});
+
 const routeSchema = new Schema({
     route_id: String,
-    trip_id: String,
     route_short_name: String,
     route_long_name: String,
-    stop_times: [{ type: Schema.Types.ObjectId, ref: 'StopTime' }],
-    routeCoordinates: [{ type: Schema.Types.ObjectId, ref: 'Shape' }]
+    trips: [{ type: Schema.Types.ObjectId, ref: 'Trip' }]
 });
 
 const StopTime = mongoose.model('StopTime', stopTimeSchema);
 const Shape = mongoose.model('Shape', shapeSchema);
 const Route = mongoose.model('Route', routeSchema);
+const Trip = mongoose.model('Trip', tripSchema);
 const Speed = mongoose.model('Speed', speedSchema);
 
 
 
-export  { StopTime, Shape, Route, Speed };
+export  { StopTime, Shape, Route, Speed, Trip };

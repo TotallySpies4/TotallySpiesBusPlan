@@ -1,19 +1,29 @@
 import {KafkaStreams, KStream} from "kafka-streams";
 import {Kafka} from "kafkajs";
-
+const topic = 'gtfs-realtime-topic';
 const config = {
     kafkaHost: "localhost:9092",
-    groupId: "gtfs-realtime-consumer",
-    workerPerPartition: 1,
-    options: {
-        sessionTimeout: 8000,
-        protocol: ["roundrobin"],
-        fromOffset: "earliest", // "earliest" start from the beginning
-        fetchMaxBytes: 1024 * 100,
-        fetchMinBytes: 1,
-        fetchMaxWaitMs: 10
-    }
+    groupId: "gtfs-realtime-group",
+    // ... weitere Konfigurationen
 };
+const kafkaStreams = new KafkaStreams(config);
+const rawStream = kafkaStreams.getKStream(topic);
+
+const windowedStream = rawStream
+    .filter(message => message.vehicle.currentStatus === "IN_TRANSIT_TO")
+    .map(message => message.vehicle)
+    .groupByKey(record => record.trip_id)
+    .windowedByTime(1000 * 60 * 5) // 5 Minuten
+    .aggregate(
+        () => [], /* Initialwert des Aggregators: ein leeres Array */
+        (aggValue, newValue) => {
+            aggValue.push(newValue);
+            return aggValue;
+        }
+    );
+
+console.log(windowedStream)
+kafkaStreams.getKStream().start()
 
 
 
@@ -22,8 +32,8 @@ const kafka = new Kafka({
     brokers: ['localhost:9092']
 });
 
-const topic = 'gtfs-realtime-topic';
-const consumer = kafka.consumer({ groupId: 'gtfs-realtime-group' });
+
+/**const consumer = kafka.consumer({ groupId: 'gtfs-realtime-group' });
 
 const run = async () => {
     // Verbindung zum Konsumenten herstellen
@@ -33,13 +43,19 @@ const run = async () => {
 
     await consumer.run({
         eachMessage: async ({ topic, partition, message }) => {
-            console.log({
-                value: message.value.toString(),
-                partition,
-            });
+            const rawData = message.value.toString();
+            const data = JSON.parse(rawData);
+
+            for (const vehicle of data) {
+                if(vehicle.vehicle.currentStatus === "IN_TRANSIT_TO"){
+                    console.log(vehicle.vehicle)
+                }
+
+            }
+
         },
     });
 };
 
-run().catch(console.error);
+run().catch(console.error);**/
 
