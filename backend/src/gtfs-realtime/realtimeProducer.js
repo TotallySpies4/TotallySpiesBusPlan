@@ -12,29 +12,7 @@ const kafka = new Kafka({ brokers: ['localhost:9092'] });
 const topic = 'gtfs-realtime-topic';
 const producer = kafka.producer();
 
-async function createTopic() {
-    const admin = kafka.admin();
-    await admin.connect();
-    const existingTopics = await admin.listTopics();
 
-    if (!(existingTopics).includes(topic)) {
-        await admin.createTopics({
-            topics: [{
-                topic: topic,
-                numPartitions: 1,
-            }],
-        });
-    } else {
-
-            await admin.deleteTopics({
-                topics: [topic],
-                timeout: 1000,
-            })
-        await createTopic()
-
-    }
-    await admin.disconnect();
-}
 
 async function sendToKafka(data) {
     await producer.connect();
@@ -45,21 +23,49 @@ async function sendToKafka(data) {
     await producer.disconnect();
 }
 
+async function clearAndRecreateTopic() {
+    const admin = kafka.admin();
+    await admin.connect();
+
+    const existingTopics = await admin.listTopics();
+    console.log(existingTopics);
+    if (existingTopics.includes(topic)) {
+        console.log(`Topic ${topic} already exists. Deleting it...`);
+        await admin.deleteTopics({
+            topics: [topic],
+            timeout: 1000,
+        });
+
+        await new Promise(resolve => setTimeout(resolve, 5000));
+
+    }
+
+    console.log("after delete",existingTopics);
+
+    await admin.createTopics({
+        topics: [{
+            topic: topic,
+            numPartitions: 1,
+        }],
+    });
+    await admin.disconnect();
+}
+
 function fetchAndSend() {
     request(requestSettings, async function (error, response, body) {
-        if (!error && response.statusCode == 200) {
-            const feed = GtfsRealtimeBindings.default.transit_realtime.FeedMessage.decode(body);
-            const entities = [];
-            feed.entity.forEach(entity => {
-                entities.push(entity);
-            });
-
-            console.log(entities);
-            await createTopic();
-            await sendToKafka(entities);
+        if (error || response.statusCode !== 200) {
+            console.error("Failed to fetch data:", error || response.statusCode);
+            return;
         }
+
+        const feed = GtfsRealtimeBindings.default.transit_realtime.FeedMessage.decode(body);
+
+        console.log(feed.entity);
+        await clearAndRecreateTopic();
+        await sendToKafka(feed.entity);
     });
 }
 
 fetchAndSend();
 setInterval(fetchAndSend, INTERVAL_MS);
+
