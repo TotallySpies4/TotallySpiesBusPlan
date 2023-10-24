@@ -13,7 +13,10 @@ const vehiclePositionsSchema = new Schema({
     current_stop_sequence: Number,
     current_status: Number,
     stop_id: String,
-    congestion_level: Number
+    congestion_level: {
+        timestamp: Date,
+        level: Number
+    }
 })
 
 const VehiclePositions = mongoose.model('VehiclePositions', vehiclePositionsSchema);

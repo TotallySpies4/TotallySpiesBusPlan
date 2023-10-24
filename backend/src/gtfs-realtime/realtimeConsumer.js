@@ -1,7 +1,9 @@
 import {KafkaStreams, KStream} from "kafka-streams";
 import {Kafka} from "kafkajs";
+import {VehiclePositions} from "../DBmodels/vehiclepositions.js";
+import {Route} from "../DBmodels/busline.js";
 const topic = 'gtfs-realtime-topic';
-const config = {
+/**const config = {
     kafkaHost: "localhost:9092",
     groupId: "gtfs-realtime-group",
     // ... weitere Konfigurationen
@@ -15,7 +17,7 @@ const windowedStream = rawStream
     .groupByKey(record => record.trip_id)
     .windowedByTime(1000 * 60 * 5) // 5 Minuten
     .aggregate(
-        () => [], /* Initialwert des Aggregators: ein leeres Array */
+        () => [],
         (aggValue, newValue) => {
             aggValue.push(newValue);
             return aggValue;
@@ -23,7 +25,7 @@ const windowedStream = rawStream
     );
 
 console.log(windowedStream)
-kafkaStreams.getKStream().start()
+kafkaStreams.getKStream().start()**/
 
 
 
@@ -33,7 +35,7 @@ const kafka = new Kafka({
 });
 
 
-/**const consumer = kafka.consumer({ groupId: 'gtfs-realtime-group' });
+const consumer = kafka.consumer({ groupId: 'gtfs-realtime-group' });
 
 const run = async () => {
     // Verbindung zum Konsumenten herstellen
@@ -47,15 +49,55 @@ const run = async () => {
             const data = JSON.parse(rawData);
 
             for (const vehicle of data) {
-                if(vehicle.vehicle.currentStatus === "IN_TRANSIT_TO"){
-                    console.log(vehicle.vehicle)
-                }
+                if (vehicle.vehicle.currentStatus === "IN_TRANSIT_TO") {
 
+                    // Check if the trip exists in the database
+                    const existingTrip = await Trip.findOne({ _id: vehicle.vehicle.trip_id });
+                    if (!existingTrip) {
+                        console.log(`Trip ID ${vehicle.vehicle.trip_id} not in the database.`);
+                        continue;  // Skip this vehicle
+                    }
+
+                    const existingPosition = await VehiclePositions.findOne({ currentTrip_id: existingTrip._id });
+
+                    if (existingPosition) {
+                        // Update existing entry
+                        existingPosition.position.latitude = vehicle.vehicle.position.latitude;
+                        existingPosition.position.longitude = vehicle.vehicle.position.longitude;
+                        existingPosition.timestamp = vehicle.vehicle.timestamp || new Date(); // Just making sure there's a fallback
+                        existingPosition.current_stop_sequence = vehicle.vehicle.current_stop_sequence;
+                        existingPosition.current_status = vehicle.vehicle.current_status;
+                        existingPosition.stop_id = vehicle.vehicle.stop_id;
+                        await existingPosition.save();
+                    } else {
+                        // Create new entry
+                        const route = await Route.findOne({ _id: existingTrip.route_id });
+                        const newPosition = new VehiclePositions({
+                            currentTrip_id: existingTrip._id,
+                            route: route, // Assuming the Trip model has a 'route' field you want to use
+                            timestamp: vehicle.vehicle.timestamp || new Date(),
+                            position: {
+                                latitude: vehicle.vehicle.position.latitude,
+                                longitude: vehicle.vehicle.position.longitude
+                            },
+                            speed: vehicle.vehicle.speed || null,  // Use the speed if available, else set as null
+                            current_stop_sequence: vehicle.vehicle.current_stop_sequence,
+                            current_status: vehicle.vehicle.current_status,
+                            stop_id: vehicle.vehicle.stop_id,
+                            congestion_level: {
+                                timestamp: new Date(),  // Using current timestamp as default
+                                level: 0  // Setting level as 0 by default
+                            }
+                        });
+                        await newPosition.save();
+                    }
+                }
             }
+
 
         },
     });
 };
 
-run().catch(console.error);**/
+run().catch(console.error);
 

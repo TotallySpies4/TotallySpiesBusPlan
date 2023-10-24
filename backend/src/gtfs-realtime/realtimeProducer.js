@@ -24,6 +24,14 @@ async function createTopic() {
                 numPartitions: 1,
             }],
         });
+    } else {
+
+            await admin.deleteTopics({
+                topics: [topic],
+                timeout: 1000,
+            })
+        await createTopic()
+
     }
     await admin.disconnect();
 }
