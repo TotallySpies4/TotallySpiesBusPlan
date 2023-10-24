@@ -16,12 +16,12 @@ export async function congestionLevel(routeID, vehiclePosition) {
     console.log("scheduleSpeed",scheduleSpeed)
 
     // Calculate real-time average speed
-    const route_avg_speed = realtimeAvgSpeedCalculator(vehiclePosition.positions);
-    console.log("route_avg_speed",route_avg_speed)
+    const route_avg_speed = await realtimeAvgSpeedCalculator(vehiclePosition.positions);
 
 
-        if (scheduleSpeed.averageSpeed < route_avg_speed) {
-            if (scheduleSpeed.averageSpeed < route_avg_speed + 10) {
+
+        if (scheduleSpeed <= route_avg_speed) {
+            if (scheduleSpeed < route_avg_speed + 10) {
                 return 1; // yellow
             } else {
                 return 2; // red

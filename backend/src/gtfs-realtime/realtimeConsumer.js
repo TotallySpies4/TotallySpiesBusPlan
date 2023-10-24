@@ -5,30 +5,6 @@ import {Route, Trip} from "../DBmodels/busline.js";
 import mongoose from "mongoose";
 import {congestionLevel} from "../congestionLevel.js";
 const topic = 'gtfs-realtime-topic';
-/**const config = {
-    kafkaHost: "localhost:9092",
-    groupId: "gtfs-realtime-group",
-    // ... weitere Konfigurationen
-};
-const kafkaStreams = new KafkaStreams(config);
-const rawStream = kafkaStreams.getKStream(topic);
-
-const windowedStream = rawStream
-    .filter(message => message.vehicle.currentStatus === "IN_TRANSIT_TO")
-    .map(message => message.vehicle)
-    .groupByKey(record => record.trip_id)
-    .windowedByTime(1000 * 60 * 5) // 5 Minuten
-    .aggregate(
-        () => [],
-        (aggValue, newValue) => {
-            aggValue.push(newValue);
-            return aggValue;
-        }
-    );
-
-console.log(windowedStream)
-kafkaStreams.getKStream().start()**/
-
 
 
 const kafka = new Kafka({
@@ -56,9 +32,6 @@ const run = async () => {
             /*for (const entity of data) {
                 console.log(entity.vehicle);
            }*/
-
-
-
 
             //Somehow not working right now
            for (const vehicle of data) {
