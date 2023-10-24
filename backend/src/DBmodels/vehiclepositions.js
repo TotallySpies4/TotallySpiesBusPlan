@@ -4,15 +4,14 @@ const Schema = mongoose.Schema;
 const vehiclePositionsSchema = new Schema({
     currentTrip_id: { type: Schema.Types.ObjectId, ref: 'Trip' },
     route: { type: Schema.Types.ObjectId, ref: 'Route' },
-    timestamp: Date,
+    timestamp: String,
     position: {
             latitude: Number,
             longitude: Number
     },
-    speed: Number,
-    current_stop_sequence: Number,
-    current_status: Number,
     stop_id: String,
+    current_stop_sequence: Number,
+    current_status: String,
     congestion_level: {
         timestamp: Date,
         level: Number

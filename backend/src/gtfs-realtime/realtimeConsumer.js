@@ -2,6 +2,7 @@ import {KafkaStreams, KStream} from "kafka-streams";
 import {Kafka} from "kafkajs";
 import {VehiclePositions} from "../DBmodels/vehiclepositions.js";
 import {Route, Trip} from "../DBmodels/busline.js";
+import mongoose from "mongoose";
 const topic = 'gtfs-realtime-topic';
 /**const config = {
     kafkaHost: "localhost:9092",
@@ -38,30 +39,40 @@ const kafka = new Kafka({
 const consumer = kafka.consumer({ groupId: 'gtfs-realtime-group' });
 
 const run = async () => {
-    // Verbindung zum Konsumenten herstellen
+
+
     await consumer.connect();
-    // Dem Topic abonnieren
+
     await consumer.subscribe({ topic });
 
     await consumer.run({
         eachMessage: async ({ topic, partition, message }) => {
             const rawData = message.value.toString();
             const data = JSON.parse(rawData);
-            console.log(data);
+            /*for (const entity of data) {
+                console.log(entity.vehicle);
+           }*/
 
+
+            await mongoose.connect('mongodb://localhost:27017/TotallySpiesBusPlan', {
+                serverSelectionTimeoutMS: 60000
+            });
+
+            await VehiclePositions.deleteMany()
             //Somehow not working right now
-            for (const vehicle of data) {
+           for (const vehicle of data) {
                 if (vehicle.vehicle.currentStatus === "IN_TRANSIT_TO") {
 
                     // Check if the trip exists in the database
-                    const existingTrip = await Trip.findOne({ _id: vehicle.vehicle.trip_id });
+                    const existingTrip = await Trip.findOne({ trip_id: vehicle.vehicle.trip.tripId });
+                    console.log("existing trip",existingTrip);
                     if (!existingTrip) {
                         console.log(`Trip ID ${vehicle.vehicle.trip_id} not in the database.`);
                         continue;  // Skip this vehicle
                     }
 
                     const existingPosition = await VehiclePositions.findOne({ currentTrip_id: existingTrip._id });
-
+                    console.log("existing position",existingPosition);
                     if (existingPosition) {
                         // Update existing entry
                         existingPosition.position.latitude = vehicle.vehicle.position.latitude;
@@ -76,16 +87,16 @@ const run = async () => {
                         const route = await Route.findOne({ _id: existingTrip.route_id });
                         const newPosition = new VehiclePositions({
                             currentTrip_id: existingTrip._id,
-                            route: route, // Assuming the Trip model has a 'route' field you want to use
+                            route: route,
                             timestamp: vehicle.vehicle.timestamp || new Date(),
                             position: {
                                 latitude: vehicle.vehicle.position.latitude,
                                 longitude: vehicle.vehicle.position.longitude
                             },
-                            speed: vehicle.vehicle.speed || null,  // Use the speed if available, else set as null
-                            current_stop_sequence: vehicle.vehicle.current_stop_sequence,
-                            current_status: vehicle.vehicle.current_status,
-                            stop_id: vehicle.vehicle.stop_id,
+                            stop_id: vehicle.vehicle.stopId,
+                            current_stop_sequence: vehicle.vehicle. currentStopSequence,
+                            current_status: vehicle.vehicle. currentStatus,
+
                             congestion_level: {
                                 timestamp: new Date(),  // Using current timestamp as default
                                 level: 0  // Setting level as 0 by default
@@ -95,6 +106,7 @@ const run = async () => {
                     }
                 }
             }
+           console.log("done");
 
 
         },
