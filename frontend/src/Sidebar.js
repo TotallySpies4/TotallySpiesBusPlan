@@ -60,7 +60,7 @@ const Sidebar = ({
             // }}
             // isSearchable
             // placeholder="Choose a city"
-            placeholder="Wählen Sie eine Stadt..."
+            placeholder="Bayern"
             className="w-full"
           />
         </div>
