@@ -26,54 +26,41 @@
  */
  export async function realtimeAvgSpeedCalculator(vehiclePositions) {
     try {
-        // Check if vehiclePositions is an array with at least two entries
-        if (!vehiclePositions || vehiclePositions.length < 2) {
-            throw new Error('Insufficient data to calculate average speed.');
+
+        const currentPosition = vehiclePositions[1].position;
+        const previousPosition = vehiclePositions[0].position;
+        console.log("currentPosition timestamp",currentPosition.timestamp)
+        console.log("previousPosition timestamp",previousPosition.timestamp)
+
+        const currentTimestamp = parseInt(vehiclePositions[1].timestamp, 10); // In Sekunden
+        const previousTimestamp = parseInt(vehiclePositions[0].timestamp, 10); // In Sekunden
+
+
+        console.log("currentTimestamp",currentTimestamp)
+        console.log("previousTimestamp",previousTimestamp)
+
+
+        const distance = calculateDistance(
+            previousPosition.longitude,
+            previousPosition.latitude,
+            currentPosition.longitude,
+            currentPosition.latitude);
+
+        console.log("distance",distance)
+
+        const timeDifference = currentTimestamp - previousTimestamp; // In seconds
+        console.log("timeDifference",timeDifference)
+
+        if (timeDifference === 0) {
+            throw new Error("Time difference is zero, cannot calculate speed.");
         }
 
-        // Check if all vehiclePositions have the same routeId and tripId
-        const routeId = vehiclePositions[0].vehicle.trip.routeId;
-        const tripId = vehiclePositions[0].vehicle.trip.tripId;
 
-        for (const position of vehiclePositions) {
-            if (position.vehicle.trip.routeId !== routeId || position.vehicle.trip.tripId !== tripId) {
-                throw new Error('Inconsistent routeId or tripId in vehiclePositions.');
-            }
-        }
+        const speed = (distance / timeDifference) * 3600; // km/h
+        console.log("speed",speed)
 
-        //sort vehiclePositions by timestamp
-        vehiclePositions.sort((a, b) => a.vehicle.timestamp - b.vehicle.timestamp);
+        return speed;
 
-        // Calculate the average speed of the vehiclePositions
-        let speedSum = 0;
-        let speedCount = 0;
-
-        for (let i = 1; i < vehiclePositions.length; i++) {
-            const currentPosition = vehiclePositions[i].vehicle.position;
-            const previousPosition = vehiclePositions[i - 1].vehicle.position;
-
-            const distance = calculateDistance(
-                previousPosition.longitude,
-                previousPosition.latitude,
-                currentPosition.longitude,
-                currentPosition.latitude
-            );
-
-            const timeDifference = (vehiclePositions[i].vehicle.timestamp - vehiclePositions[i - 1].vehicle.timestamp) / 1000;
-
-            if (timeDifference !== 0) {
-                const speed = (distance / timeDifference) * 3600;
-                speedSum += speed;
-                speedCount++;
-            }
-        }
-
-        if (speedCount > 0) {
-            const averageSpeed = speedSum / speedCount;
-            return averageSpeed;
-        } else {
-            throw new Error('Insufficient data to calculate average speed.');
-        }
     } catch (error) {
         console.error("Error calculating speed:", error);
     }

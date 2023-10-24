@@ -24,7 +24,7 @@ const shapeSchema = new Schema({
 const speedSchema = new Schema({
     previousStop: { type: Schema.Types.ObjectId, ref: 'StopTime' },
     currentStop: { type: Schema.Types.ObjectId, ref: 'StopTime' },
-    route: String,  // Route reference
+    route: {type: Schema.Types.ObjectId, ref: 'Route'},  // Route reference
     trip: String,  // Trip ID (assuming it's a string)
     averageSpeed: Number
 });

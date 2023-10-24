@@ -11,13 +11,15 @@ export async function congestionLevel(routeID, vehiclePosition) {
 
 
     // Fetch scheduled average speed for the current segment
-    const speedObject = await fetchAverageSpeedFromDB(routeID, vehiclePosition.trip_id, vehiclePosition.stop_sequence);
+    const speedObject = await fetchAverageSpeedFromDB(routeID, vehiclePosition.trip_id, vehiclePosition.stopSequence);
     const scheduleSpeed = speedObject.speedEntry;
+    console.log("scheduleSpeed",scheduleSpeed)
 
     // Calculate real-time average speed
-    const route_avg_speed = realtimeAvgSpeedCalculator(vehiclePosition);
+    const route_avg_speed = realtimeAvgSpeedCalculator(vehiclePosition.positions);
+    console.log("route_avg_speed",route_avg_speed)
 
-    if (vehiclePosition.trip_id === scheduleSpeed.trip_id && vehiclePosition.stop_sequence === routeID.stop_sequence) {
+
         if (scheduleSpeed.averageSpeed < route_avg_speed) {
             if (scheduleSpeed.averageSpeed < route_avg_speed + 10) {
                 return 1; // yellow
@@ -27,5 +29,5 @@ export async function congestionLevel(routeID, vehiclePosition) {
         } else {
             return 0; // green
         }
-    }
+
 }
