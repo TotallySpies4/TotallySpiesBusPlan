@@ -12,45 +12,30 @@ const kafka = new Kafka({ brokers: ['localhost:9092'] });
 const topic = 'gtfs-realtime-topic';
 const producer = kafka.producer();
 
-
-
-const MAX_MESSAGE_SIZE = 1000000; // Limit the message size to 1MB
-
-async function sendToKafka(data) {
-
-
-    console.log("Data sent to Kafka");
-    await producer.disconnect();
-}
-
-
-
-async function clearAndRecreateTopic() {
+async function createTopic() {
     const admin = kafka.admin();
     await admin.connect();
-
     const existingTopics = await admin.listTopics();
-    console.log(existingTopics);
-    if (existingTopics.includes(topic)) {
-        console.log(`Topic ${topic} already exists. Deleting it...`);
-        await admin.deleteTopics({
-            topics: [topic],
-            timeout: 1000,
+
+    if (!(existingTopics).includes(topic)) {
+        await admin.createTopics({
+            topics: [{
+                topic: topic,
+                numPartitions: 1,
+            }],
         });
-
-        await new Promise(resolve => setTimeout(resolve, 5000));
-
     }
-
-    console.log("after delete",existingTopics);
-
-    await admin.createTopics({
-        topics: [{
-            topic: topic,
-            numPartitions: 1,
-        }],
-    });
     await admin.disconnect();
+}
+
+async function sendToKafka(data) {
+    await producer.connect();
+    await producer.send({
+        topic,
+        messages: [{ value: JSON.stringify(data) }],
+    });
+    console.log('Sent to Kafka');
+    await producer.disconnect();
 }
 
 function fetchAndSend() {
@@ -71,4 +56,3 @@ function fetchAndSend() {
 
 fetchAndSend();
 setInterval(fetchAndSend, INTERVAL_MS);
-

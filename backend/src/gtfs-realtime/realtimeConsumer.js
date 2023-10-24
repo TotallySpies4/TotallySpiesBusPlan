@@ -1,7 +1,7 @@
 import {KafkaStreams, KStream} from "kafka-streams";
 import {Kafka} from "kafkajs";
 import {VehiclePositions} from "../DBmodels/vehiclepositions.js";
-import {Route} from "../DBmodels/busline.js";
+import {Route, Trip} from "../DBmodels/busline.js";
 const topic = 'gtfs-realtime-topic';
 /**const config = {
     kafkaHost: "localhost:9092",
@@ -47,7 +47,9 @@ const run = async () => {
         eachMessage: async ({ topic, partition, message }) => {
             const rawData = message.value.toString();
             const data = JSON.parse(rawData);
+            console.log(data);
 
+            //Somehow not working right now
             for (const vehicle of data) {
                 if (vehicle.vehicle.currentStatus === "IN_TRANSIT_TO") {
 
