@@ -11,9 +11,7 @@ request(requestSettings, function (error, response, body) {
 
     const feed = GtfsRealtimeBindings.default.transit_realtime.FeedMessage.decode(body);
     feed.entity.forEach(function(entity) {
-      // if (entity.trip_update) {
-      //   console.log(entity.trip_update);
-      // }
+
     console.log(entity);
     });
   }

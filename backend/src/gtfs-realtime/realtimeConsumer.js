@@ -14,18 +14,33 @@ const config = {
         fetchMaxWaitMs: 10
     }
 };
+const INTERVAL_MS = 5 * 60 * 1000;
 
-const kafkaStreams = new KafkaStreams(config);
-const stream = kafkaStreams.getKStream("your-input-topic");
 
-stream
-    .map(message => {
-        // Verarbeiten Sie die Rohdaten und berechnen Sie die Stau-Daten
-        const processedData = yourProcessingFunction(message.value);
-        return { key: message.key, value: processedData };
-    })
-    .to("your-output-topic");
-
-kafkaStreams.start(() => {
-    console.log("Kafka stream started.");
+const kafka = new Kafka({
+    clientId: 'my-app',
+    brokers: ['localhost:9092']
 });
+
+const topic = 'gtfs-realtime-topic';
+const consumer = kafka.consumer({ groupId: 'gtfs-realtime-group' });
+
+const run = async () => {
+    // Verbindung zum Konsumenten herstellen
+    await consumer.connect();
+    // Dem Topic abonnieren
+    await consumer.subscribe({ topic });
+
+    await consumer.run({
+        eachMessage: async ({ topic, partition, message }) => {
+            console.log({
+                value: message.value.toString(),
+                partition,
+            });
+        },
+    });
+};
+
+run().catch(console.error);
+setInterval(run, INTERVAL_MS);
+
