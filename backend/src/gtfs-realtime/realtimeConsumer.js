@@ -14,7 +14,7 @@ const config = {
         fetchMaxWaitMs: 10
     }
 };
-const INTERVAL_MS = 5 * 60 * 1000;
+
 
 
 const kafka = new Kafka({
@@ -42,5 +42,4 @@ const run = async () => {
 };
 
 run().catch(console.error);
-setInterval(run, INTERVAL_MS);
 
