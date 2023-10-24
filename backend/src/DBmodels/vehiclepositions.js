@@ -18,7 +18,9 @@ const vehiclePositionsSchema = new Schema({
     current_status: String,
     congestion_level: {
         timestamp: Date,
-        level: Number
+        level: Number,
+        previousStop: { type: Schema.Types.ObjectId, ref: 'StopTime' },
+        currentStop: { type: Schema.Types.ObjectId, ref: 'StopTime' },
     }
 })
 

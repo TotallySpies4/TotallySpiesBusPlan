@@ -1,15 +1,34 @@
-import {Route, Speed, StopTime} from "../DBmodels/busline.js";
+import {Route, Speed, StopTime, Trip} from "../DBmodels/busline.js";
 import mongoose from "mongoose";
 import {segmentAvgSpeedCalculator} from "../utils/speedCalculator.js";
+import {VehiclePositions} from "../DBmodels/vehiclepositions.js";
 
 async function getBusAllBusline(){
     return Route.find({});
 }
 
 async function getBusDetails(routeID){
-    return Route.find({route_id: routeID})
-        .populate('stop_times')
-        .populate('routeCoordinates');
+    const route = await Route.findOne({route_id: routeID}).populate('trips');
+    if (!route) {
+        throw new Error('No matching route found in database.');
+    }
+    const routeObjID = route._id;
+    const currentVehicle = await VehiclePositions.findOne({route: routeObjID});
+    if (!currentVehicle) {
+        const trip = await handleInactivity(route)
+        return {currentVehicle: null, trip}
+    }
+    const trip = await Trip.findOne({_id: currentVehicle.currentTrip_id}).populate('stop_times').populate('shapes');
+   if (!trip) {
+    throw new Error('No matching trip found in database.');
+   }
+   console.log("trip after getting the route_Id",trip)
+    console.log("currentVehicle after getting the route_Id",currentVehicle)
+   return {currentVehicle, trip};
+}
+
+async function handleInactivity(route) {
+    return route.trips[0];
 }
 
 
@@ -59,12 +78,16 @@ async function fetchAverageSpeedFromDB(routeID, tripID, stopSequence) {
         if (previousStopTime) {
             speedEntry = await segmentAvgSpeedCalculator(previousStopTime, currentStopTime);
             console.log("speedEntry",speedEntry)
-            return { speedEntry, currentStopTime, previousStopTime};
+            const currentStop = currentStopTime
+            const previousStop = previousStopTime
+            return { speedEntry, currentStop, previousStop};
         } else if (nextStopTime) {
             console.log("We are in the if nextStopTime")
             console.log("speedEntry",speedEntry)
+            const previousStop = currentStopTime
+            const currentStop = nextStopTime
             speedEntry = await segmentAvgSpeedCalculator(currentStopTime, nextStopTime);
-            return { speedEntry, currentStopTime, nextStopTime };
+            return { speedEntry, currentStop, previousStop}
         }
 
 

@@ -43,8 +43,11 @@ const App = () => {
                     try {
                         const busLineDetail = JSON.parse(event.data);
                         console.log(busLineDetail);
-                        console.log("testPayload:", busLineDetail.payload[0].stop_times[0].location);
-                        setSelectedBus(busLineDetail.payload[0]);
+                        console.log("testPayload:", busLineDetail.payload);
+                        console.log("testPayload[]:", busLineDetail.payload[0]);
+                        console.log("testPayload Current :", busLineDetail.payload.currentVehicle);
+                        console.log("testPayload Trip :", busLineDetail.payload.trip);
+                        //setSelectedBus(busLineDetail.payload[0]);
                         console.log("test:", selectedBus);
                     } catch (error) {
                         console.error("Error parsing the incoming data:", error);

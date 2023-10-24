@@ -1,11 +1,11 @@
-import { realtimeAvgSpeedCalculator } from "./utils/speedCalculator.js";
-import { fetchAverageSpeedFromDB } from "./queryData/queryDbData.js";
+import { realtimeAvgSpeedCalculator } from "./speedCalculator.js";
+import { fetchAverageSpeedFromDB } from "../queryData/queryDbData.js";
 
 /**
  * Method to calculate the congestion level of a route segment
  * @param routeID
  * @param vehiclePosition array of vehiclePositions from the realtime API
- * @returns {Promise<number>}
+ * @returns {Promise<{congestionLevel: number, currentStop: (*|null), previousStop: (*|undefined|null)}>}
  */
 export async function congestionLevel(routeID, vehiclePosition) {
 
@@ -13,6 +13,8 @@ export async function congestionLevel(routeID, vehiclePosition) {
     // Fetch scheduled average speed for the current segment
     const speedObject = await fetchAverageSpeedFromDB(routeID, vehiclePosition.trip_id, vehiclePosition.stopSequence);
     const scheduleSpeed = speedObject.speedEntry;
+    const previousStop = speedObject.previousStop;
+    const currentStop = speedObject.currentStop;
     console.log("scheduleSpeed",scheduleSpeed)
 
     // Calculate real-time average speed
@@ -22,12 +24,12 @@ export async function congestionLevel(routeID, vehiclePosition) {
 
         if (scheduleSpeed <= route_avg_speed) {
             if (scheduleSpeed < route_avg_speed + 10) {
-                return 1; // yellow
+                return {congestionLevel: 1, previousStop: previousStop, currentStop: currentStop }; // yellow
             } else {
-                return 2; // red
+                return {congestionLevel: 2, previousStop: previousStop, currentStop: currentStop }; // red
             }
         } else {
-            return 0; // green
+            return {congestionLevel: 0, previousStop: previousStop, currentStop: currentStop }; // green
         }
 
 }
