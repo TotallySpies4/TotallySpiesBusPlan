@@ -10,19 +10,11 @@ const Sidebar = ({
   isSidebarOpen,
   closeSidebar, selectedBus
 }) => {
-  // const [selectedHour, setSelectedHour] = useState("00");
-  // const [selectedMinute, setSelectedMinute] = useState("00");
-  // const [selectedCity, setSelectedCity] = useState(null); // Update with your city state
-  //const [selectedBusLine, setSelectedBusLine] = useState(null);
 
-  // Use the useFetch hook
-  //const {selectedBus, sendRequest} = useFetch("ws://localhost:4000");
   const handleBusSelection = (option) => {
     const bus = buses.find((b) => b.route_short_name === option.value);
     console.log("SelectedBusID: " + bus.route_id);
     busline(bus);
-    // Send the request using the sendRequest function from the useFetch hook
-    //sendRequest(JSON.stringify({ type: "GET_BUS_LINE_DETAILS", payload: { routeId: bus.route_id } }));
   };
 
 

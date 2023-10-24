@@ -22,9 +22,15 @@ export async function getRoutesWithStops() {
             await Speed.deleteMany({});
             await Trip.deleteMany({});
 
-            const routes = await GTFS.getRoutes();
+            let count = 0;
+            const agencyOfInterest = "GVB";
+            const routesForGVB = await GTFS.getRoutes({ agency_id: agencyOfInterest });
+            const routes = routesForGVB.filter(route => route.route_type === 3).slice(0, 10);
+            const numberOfRoutes = routes.length;
+            console.log(`Found ${numberOfRoutes} routes for agency ${agencyOfInterest} bus`)
 
             for (const route of routes) {
+                console.log(`Importing route ${route.route_id} in to the database (${count++}/${numberOfRoutes})`);
                 let newRoute = new Route({
                     route_id: route.route_id,
                     route_short_name: route.route_short_name,
@@ -34,6 +40,7 @@ export async function getRoutesWithStops() {
                 await newRoute.save();
 
                 const tripsForThisRoute = await GTFS.getTrips({route_id: route.route_id});
+                console.log(`Found ${tripsForThisRoute.length} trips for route ${route.route_id}`)
 
                 for (let tripData of tripsForThisRoute) {
                     let tripInstance = new Trip({
@@ -86,6 +93,8 @@ export async function getRoutesWithStops() {
                     }
 
                     await tripInstance.save();
+
+                    console.log(`Imported trip ${tripData.trip_id} in to the database`);
                     newRoute.trips.push(tripInstance._id);
                 }
 
