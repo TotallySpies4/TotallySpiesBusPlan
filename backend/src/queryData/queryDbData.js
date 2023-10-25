@@ -27,16 +27,17 @@ async function getBusDetails(routeID){
     console.log("trip after getting the route_Id",trip)
     console.log("currentVehicle after getting the route_Id",currentVehicle)
 
-    const shapeID = trip.shapes[0]._id;
+    const shapes = trip.shapes
    const previousStopTime = currentVehicle.congestion_level.previousStop;
     const currentStopTime = currentVehicle.congestion_level.currentStop;
 
-    const  congestionShape = await getShapesBetweenStops(shapeID, previousStopTime, currentStopTime)
+    const  congestionShape = await getShapesBetweenStops(shapes, previousStopTime, currentStopTime)
    return {currentVehicle:currentVehicle, trip: trip,  congestionShape:congestionShape};
 }
 
 async function handleInactivity(route) {
-    return route.trips[0];
+    const trip = await Trip.findOne({_id: route.trips[0]}).populate('stop_times').populate('shapes');
+    return trip;
 }
 
 

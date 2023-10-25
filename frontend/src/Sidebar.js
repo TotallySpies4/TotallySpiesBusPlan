@@ -8,7 +8,7 @@ const Sidebar = ({
   busline,
   busOptions,
   isSidebarOpen,
-  closeSidebar, selectedBus
+  closeSidebar, selectedTrip
 }) => {
 
   const handleBusSelection = (option) => {
@@ -76,11 +76,11 @@ const Sidebar = ({
             className="w-full"
           />
 
-          {selectedBus && selectedBus.stop_times && (
+          {selectedTrip && selectedTrip.stop_times && (
               <div className="list">
-                <h3>Stops for the Busline {selectedBus.route_short_name}</h3>
+
                 <ul>
-                  {selectedBus.stop_times.map((stop, index) => (
+                  {selectedTrip.stop_times.map((stop, index) => (
                       <li key={index}>
                         {stop.stop_name} - {formatTime(stop.arrival_time)}
                       </li>

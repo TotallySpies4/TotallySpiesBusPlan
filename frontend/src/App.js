@@ -9,10 +9,12 @@ const App = () => {
 
     const [ws, setWs] = useState(null);
     const [buses, setBuses] = useState([]);
-    const [selectedBus, setSelectedBus] = useState(null);
+    const [selectedTrip, setSelectedTrip] = useState(null);
+    const [currentVehicle, setCurrentVehicle] = useState(null);
+    const [congestionShape, setCongestionShape] = useState(null);
     useEffect(() => {
-        console.log("SelectedBusID in App: " + selectedBus)
-    }, [selectedBus]);
+        console.log("SelectedBusID in App: " + selectedTrip)
+    }, [selectedTrip, currentVehicle, congestionShape]);
 
 
     useEffect(() => {
@@ -44,11 +46,13 @@ const App = () => {
                         const busLineDetail = JSON.parse(event.data);
                         console.log(busLineDetail);
                         console.log("testPayload:", busLineDetail.payload);
-                        console.log("testPayload[]:", busLineDetail.payload[0]);
                         console.log("testPayload Current :", busLineDetail.payload.currentVehicle);
                         console.log("testPayload Trip :", busLineDetail.payload.trip);
-                        //setSelectedBus(busLineDetail.payload[0]);
-                        console.log("test:", selectedBus);
+                        console.log("testPayload Congestion :", busLineDetail.payload.congestionShape);
+                        console.log("test:", selectedTrip);
+                        setSelectedTrip(busLineDetail.payload.trip);
+                        setCurrentVehicle(busLineDetail.payload.currentVehicle);
+                        setCongestionShape(busLineDetail.payload.congestionShape);
                     } catch (error) {
                         console.error("Error parsing the incoming data:", error);
                     }
@@ -69,7 +73,7 @@ const App = () => {
         }
     };
 
-    //const {buses, selectedBus ,ws, sendRequest} = useFetch("ws://localhost:4000");
+    //const {buses, selectedTrip ,ws, sendRequest} = useFetch("ws://localhost:4000");
     const [busLine, setBusLine] = useState(null);
     useEffect(() => {
         if (busLine){
@@ -91,13 +95,15 @@ const App = () => {
   return (
     <div className="container">
       <Map
-        selectedBus={selectedBus}
+          selectedTrip={selectedTrip}
         isSidebarOpen={isSidebarOpen}
         setSidebarOpen={setSidebarOpen}
+          congestionShape={congestionShape}
+            currentVehicle={currentVehicle}
       />
       <Sidebar
         buses={buses}
-        selectedBus={selectedBus}
+        selectedTrip={selectedTrip}
         busline={setBusLine}
         busOptions={busOptions}
         isSidebarOpen={isSidebarOpen}
