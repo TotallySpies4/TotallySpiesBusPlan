@@ -1,6 +1,7 @@
 
 import React, { useEffect } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, Polyline } from 'react-leaflet';
+import L from 'leaflet';
 
 function Map({ selectedTrip, isSidebarOpen, setSidebarOpen, congestionShape, currentVehicle }) {
     useEffect(() => {
@@ -39,6 +40,8 @@ function Map({ selectedTrip, isSidebarOpen, setSidebarOpen, congestionShape, cur
                             The bus is currently not in operation.
                         </div>
                 )}
+
+
 
                 {selectedTrip && selectedTrip.stop_times.map((stop, index) => (
                     <Marker key={index} position={[stop.location.latitude, stop.location.longitude]}>

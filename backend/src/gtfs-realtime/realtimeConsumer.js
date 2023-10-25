@@ -29,19 +29,16 @@ const run = async () => {
         eachMessage: async ({ topic, partition, message }) => {
             const rawData = message.value.toString();
             const data = JSON.parse(rawData);
-            /*for (const entity of data) {
-                console.log(entity.vehicle);
-           }*/
 
             //Somehow not working right now
-           for (const vehicle of data) {
+            for (const vehicle of data) {
                 //if (vehicle.vehicle.currentStatus === "IN_TRANSIT_TO" || vehicle.vehicle.currentStatus === "STOPPED_AT") {
 
                     // Check if the trip exists in the database
                     const existingTrip = await Trip.findOne({ trip_id: vehicle.vehicle.trip.tripId });
                     console.log("existing trip",existingTrip);
                     if (!existingTrip) {
-                        console.log(`Trip ID ${vehicle.vehicle.trip_id} not in the database.`);
+                        console.log(`Trip ID ${vehicle.vehicle.trip.tripId} not in the database.`);
                         continue;  // Skip this vehicle
                     }
 
