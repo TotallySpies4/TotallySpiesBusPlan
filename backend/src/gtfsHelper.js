@@ -51,7 +51,6 @@ export async function getRoutesWithStops() {
                     });
 
                     const stopTimes = await GTFS.getStoptimes({trip_id: tripData.trip_id});
-                    let previousStopTime = null;
 
                     for (let stopTime of stopTimes) {
                         const stop = await GTFS.getStops({stop_id: stopTime.stop_id});
@@ -66,26 +65,13 @@ export async function getRoutesWithStops() {
                         let newStopTime = new StopTime(stopTime);
                         await newStopTime.save();
 
-                        if (previousStopTime) {
-                            const averageSpeed = await segmentAvgSpeedCalculator(previousStopTime, newStopTime);
-                            const speedEntry = new Speed({
-                                previousStop: previousStopTime._id,
-                                currentStop: newStopTime._id,
-                                route: newRoute._id,
-                                trip: tripData.trip_id,
-                                averageSpeed: averageSpeed
-                            });
-                            await speedEntry.save();
-                        }
 
-                        previousStopTime = newStopTime;
                         tripInstance.stop_times.push(newStopTime._id);
                     }
 
                     const shapes = await GTFS.getShapes({trip_id: tripData.trip_id});
                     for (let shape of shapes) {
                         shape.route = newRoute._id;
-
                         let newShape = new Shape(shape);
                         await newShape.save();
 

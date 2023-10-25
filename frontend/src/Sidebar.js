@@ -8,7 +8,7 @@ const Sidebar = ({
   busline,
   busOptions,
   isSidebarOpen,
-  closeSidebar, selectedBus
+  closeSidebar, selectedTrip
 }) => {
 
   const handleBusSelection = (option) => {
@@ -60,7 +60,7 @@ const Sidebar = ({
             // }}
             // isSearchable
             // placeholder="Choose a city"
-            placeholder="Bayern"
+            placeholder="Amsterdam"
             className="w-full"
           />
         </div>
@@ -72,15 +72,15 @@ const Sidebar = ({
             options={busOptions}
             onChange={handleBusSelection}
             isSearchable
-            placeholder="Wählen Sie eine Buslinie..."
+            placeholder="Choose a bus line..."
             className="w-full"
           />
 
-          {selectedBus && selectedBus.stop_times && (
+          {selectedTrip && selectedTrip.stop_times && (
               <div className="list">
-                <h3>Stops for the Busline {selectedBus.route_short_name}</h3>
+
                 <ul>
-                  {selectedBus.stop_times.map((stop, index) => (
+                  {selectedTrip.stop_times.map((stop, index) => (
                       <li key={index}>
                         {stop.stop_name} - {formatTime(stop.arrival_time)}
                       </li>

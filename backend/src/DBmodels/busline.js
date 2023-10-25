@@ -11,6 +11,7 @@ const stopTimeSchema = new Schema({
         longitude: Number
     },
     stop_name: String,
+    shape_dist_traveled: Number,
     route: String,
     trip_id: String
 });
@@ -18,13 +19,14 @@ const stopTimeSchema = new Schema({
 const shapeSchema = new Schema({
     shape_pt_lat: Number,
     shape_pt_lon: Number,
-    route: String
+    shape_dist_traveled: Number,
+    route: {type: Schema.Types.ObjectId, ref: 'Route'}  // Route reference
 });
 
 const speedSchema = new Schema({
     previousStop: { type: Schema.Types.ObjectId, ref: 'StopTime' },
     currentStop: { type: Schema.Types.ObjectId, ref: 'StopTime' },
-    route: String,  // Route reference
+    route: {type: Schema.Types.ObjectId, ref: 'Route'},  // Route reference
     trip: String,  // Trip ID (assuming it's a string)
     averageSpeed: Number
 });
