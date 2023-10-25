@@ -92,3 +92,13 @@ code {
 .css-b62m3t-container{
 width: 80%;
 }
+
+.bus-message {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: rgba(255,255,255,0.8);
+  padding: 10px;
+  border-radius: 5px;
+  z-index: 1000;
+}

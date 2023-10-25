@@ -29,13 +29,19 @@ function Map({ selectedTrip, isSidebarOpen, setSidebarOpen, congestionShape, cur
                 {selectedTrip && (
                     <Polyline
                         positions={selectedTrip.shapes.map(shape => [shape.shape_pt_lat, shape.shape_pt_lon])}
-                        color="blue"
+                        color={currentVehicle ? "green" : "blue"}
                     />
+                )}
+
+                {!currentVehicle && (
+                    <div className="bus-message">
+                            The bus is currently not in operation.
+                        </div>
                 )}
 
                 {selectedTrip && selectedTrip.stop_times.map((stop, index) => (
                     <Marker key={index} position={[stop.location.latitude, stop.location.longitude]}>
-                        <Popup>{stop.stop_name} (Ankunft: {stop.arrival_time}, Abfahrt: {stop.departure_time})</Popup>
+                        <Popup>{stop.stop_name} (Arrival Time: {stop.arrival_time}, Departure Time: {stop.departure_time})</Popup>
                     </Marker>
                 ))}
 
@@ -43,7 +49,7 @@ function Map({ selectedTrip, isSidebarOpen, setSidebarOpen, congestionShape, cur
                 // Drawing vehicle position
                 {currentVehicle && (
                     <Marker position={[currentVehicle.current_position.latitude, currentVehicle.current_position.longitude]}>
-                        <Popup>Fahrzeug Position</Popup>
+                        <Popup>Bus Position</Popup>
                     </Marker>
                 )}
 
