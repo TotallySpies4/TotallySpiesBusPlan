@@ -10,7 +10,7 @@ function Map({ selectedTrip, isSidebarOpen, setSidebarOpen, congestionShape, cur
     return (
         <div className="map">
 
-            <MapContainer center={[50.1109, 8.6821]} zoom={13} style={{ height: "100vh", width: "100vw" }} zoomControl={false}>
+            <MapContainer center={[52.3676, 4.9041]} zoom={13} style={{ height: "100vh", width: "100vw" }} zoomControl={false}>
                 <button
                     className="sidebar-toggle"
                     onClick={() => setSidebarOpen(!isSidebarOpen)}>

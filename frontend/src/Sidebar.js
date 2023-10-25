@@ -60,7 +60,7 @@ const Sidebar = ({
             // }}
             // isSearchable
             // placeholder="Choose a city"
-            placeholder="Bayern"
+            placeholder="Amsterdam"
             className="w-full"
           />
         </div>
@@ -72,7 +72,7 @@ const Sidebar = ({
             options={busOptions}
             onChange={handleBusSelection}
             isSearchable
-            placeholder="Wählen Sie eine Buslinie..."
+            placeholder="Choose a bus line..."
             className="w-full"
           />
 
