@@ -33,8 +33,9 @@ function Map({ selectedTrip, isSidebarOpen, setSidebarOpen, congestionShape, cur
                     />
                 )}
 
-                {!currentVehicle && (
+                {selectedTrip && !currentVehicle && (
                     <div className="bus-message">
+                        <img src="/icon/info.png" alt="Info" className="bus-icon" />
                             The bus is currently not in operation.
                         </div>
                 )}
@@ -47,7 +48,7 @@ function Map({ selectedTrip, isSidebarOpen, setSidebarOpen, congestionShape, cur
 
 
                 // Drawing vehicle position
-                {currentVehicle && (
+                {currentVehicle &&  (
                     <Marker position={[currentVehicle.current_position.latitude, currentVehicle.current_position.longitude]}>
                         <Popup>Bus Position</Popup>
                     </Marker>

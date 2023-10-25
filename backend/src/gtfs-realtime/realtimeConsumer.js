@@ -54,21 +54,18 @@ const run = async () => {
                         const previousPosition = {position: existingPosition.current_position, timestamp: existingPosition.timestamp};
                         const currentPosition = {position: vehicle.vehicle.position, timestamp: vehicle.vehicle.timestamp};
 
-                        console.log("previousPosition",previousPosition)
-                        console.log("currentPosition",currentPosition)
+
                         const route = await Route.findOne({ _id: existingTrip.route_id });
                         if(existingPosition.current_position.latitude !== vehicle.vehicle.position.latitude || existingPosition.current_position.latitude !== vehicle.vehicle.position.longitude){
-                            console.log("Stopsequence before uebergabe",vehicle.vehicle.currentStopSequence)
+
                             const vehicleInfo = {
                                 trip_id: existingTrip.trip_id,
                                 stopSequence: vehicle.vehicle.currentStopSequence,
                                 positions: [previousPosition, currentPosition]
                             }
-                            console.log("vehicleInfo",vehicleInfo)
-                            console.log("vehicleInfo Position",vehicleInfo.positions)
-                            console.log("routeID before calculating congestion",route.route_id)
+
                             const congestion =await congestionLevel(route.route_id, vehicleInfo);
-                            console.log("congestion",congestion)
+
                             existingPosition.congestion_level.timestamp = new Date();
                             existingPosition.congestion_level.level = congestion.congestionLevel;
                             existingPosition.congestion_level.previousStop = congestion.previousStop;
