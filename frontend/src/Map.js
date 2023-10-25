@@ -54,7 +54,7 @@ function Map({ selectedTrip, isSidebarOpen, setSidebarOpen, congestionShape, cur
                     </Marker>
                 )}
 
-                {/* Verkehrsdaten zeichnen */}
+               // Drawing congestion shape
                 {congestionShape && (
                     <Polyline positions={congestionShape.map(shape => [shape.shape_pt_lat, shape.shape_pt_lon])} color={getCongestionColor(currentVehicle.congestion_level.level)} />
                 )}
