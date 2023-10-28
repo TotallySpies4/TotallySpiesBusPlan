@@ -6,6 +6,7 @@ const trainDataSchema = new Schema({
     stop_times: [{
             timestamp: Date,
             trips: [{
+                trip: { type: mongoose.Schema.Types.ObjectId, ref: 'Trip' },
                 location: {
                                 latitude: Number,
                                 longitude: Number
