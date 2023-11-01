@@ -2,18 +2,18 @@
 import {Kafka} from "kafkajs";
 import {TrainData} from "../DBmodels/traindata.js";
 import mongoose from "mongoose";
-import {Trip} from "../../../backend/src/DBmodels/busline.js";
+import {Trip} from "/app/shared/busline.js";
 const topic = 'train-data-topic';
 
 const kafka = new Kafka({
     clientId: 'my-app-topic2',
-    brokers: ['localhost:9092']
+    brokers: ['kafka:9092']
 });
 
 const consumer = kafka.consumer({ groupId: 'train-data-group' });
 
 const run = async () => {
-    await mongoose.connect('mongodb://backend:27017/TotallySpiesBusPlan', {
+    await mongoose.connect('mongodb://mongodb:27017/TotallySpiesBusPlan', {
         serverSelectionTimeoutMS: 60000,
     }).then(() => console.log("Connected to MongoDB")).catch((err) => console.log(err));
     await consumer.connect();

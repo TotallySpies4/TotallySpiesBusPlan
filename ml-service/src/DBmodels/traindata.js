@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 const Schema = mongoose.Schema;
 
-import {Route, Trip, Speed} from "../../../backend/src/DBmodels/busline.js";
+import {Route, Trip, Speed} from "/app/shared/busline.js";
 
 const trainDataSchema = new Schema({
     route: { type: Schema.Types.ObjectId, ref: 'Route' },

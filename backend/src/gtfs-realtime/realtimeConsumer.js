@@ -9,7 +9,7 @@ const topic = 'gtfs-realtime-topic';
 
 const kafka = new Kafka({
     clientId: 'my-app',
-    brokers: ['localhost:9092']
+    brokers: ['kafka:9092']
 });
 
 
