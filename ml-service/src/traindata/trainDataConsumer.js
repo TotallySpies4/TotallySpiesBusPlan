@@ -7,7 +7,7 @@ const topic = 'train-data-topic';
 
 const kafka = new Kafka({
     clientId: 'my-app-topic2',
-    brokers: ['kafka:9092']
+    brokers: ['kafka:19092']
 });
 
 const consumer = kafka.consumer({ groupId: 'train-data-group' });
