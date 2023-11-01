@@ -8,15 +8,27 @@ services:
       - ./frontend:/app
   backend:
     build: ./backend
+    image: backend_image
     ports:
       - "4000:4000"
+    environment:
+      - MONGO_URI=mongodb://mongodb:27017/TotallySpiesBusPlan
+    volumes:
+      - ./backend:/app
+      - shared_volume:/app/shared
     depends_on:
       - mongodb
-    command: ["/app/wait-for-it.sh", "mongodb:27017", "--timeout=30", "--", "node", "/app/src/server.js"]
+
   ml-service:
     build: ./ml-service
+    image: ml_service_image
     ports:
       - "6000:6000"
+    volumes:
+      - ./ml-service:/app
+      - shared_volume:/app/shared
+    depends_on:
+      - mongodb
   mongodb:
     image: "mongo:latest"
     ports:
@@ -116,6 +128,7 @@ volumes:
   sonarqube_bundled-plugins:
   postgresql:
   postgresql_data:
+  shared_volume:
 
 
 

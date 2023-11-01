@@ -1,8 +1,8 @@
-import {KafkaStreams, KStream} from "kafka-streams";
+
 import {Kafka} from "kafkajs";
 import {TrainData} from "../DBmodels/traindata.js";
-import {Route, Trip, Speed} from "../../../backend/src/DBmodels/busline.js";
 import mongoose from "mongoose";
+import {Trip} from "../../../backend/src/DBmodels/busline.js";
 const topic = 'train-data-topic';
 
 const kafka = new Kafka({
@@ -13,7 +13,7 @@ const kafka = new Kafka({
 const consumer = kafka.consumer({ groupId: 'train-data-group' });
 
 const run = async () => {
-    await mongoose.connect('mongodb://localhost:27017/TotallySpiesBusPlan', {
+    await mongoose.connect('mongodb://backend:27017/TotallySpiesBusPlan', {
         serverSelectionTimeoutMS: 60000,
     }).then(() => console.log("Connected to MongoDB")).catch((err) => console.log(err));
     await consumer.connect();
@@ -25,12 +25,13 @@ const run = async () => {
             const rawData = message.value.toString();
             const data = JSON.parse(rawData);
 
-            console.log(data);
+            const existingTrip = await Trip.findOne({ trip_id: '174631933' });
+            console.log("existing trip", existingTrip);
 
             for (const vehicle of data) {
                 try {
-                    const existingTrip = await Trip.findOne({ trip_id: vehicle.vehicle.trip.tripId }).maxTimeMS(20000);
-                    console.log("existing trip", existingTrip);
+
+
 //
 //                    if (!existingTrip) {
 //                        console.log(`Trip ID ${vehicle.vehicle.trip.tripId} not in the database.`);

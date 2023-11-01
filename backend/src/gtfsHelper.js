@@ -12,9 +12,10 @@ export async function importGtfsData() {
 export async function getRoutesWithStops() {
     return new Promise(async (resolve, reject) => {
         try {
-            await mongoose.connect('mongodb://localhost:27017/TotallySpiesBusPlan', {
+            await mongoose.connect('mongodb://mongodb:27017/TotallySpiesBusPlan', {
                 serverSelectionTimeoutMS: 60000
-            });
+            }).then(() => console.log("Connected to MongoDB"))
+                .catch((err) => console.error("MongoDB connection error:", err));
 
             await Route.deleteMany({});
             await StopTime.deleteMany({});
@@ -87,6 +88,7 @@ export async function getRoutesWithStops() {
                 await Route.updateOne({_id: newRoute._id}, newRoute);
             }
             resolve();
+
         } catch (err) {
             console.error("Error while importing data:", err);
             reject(err);

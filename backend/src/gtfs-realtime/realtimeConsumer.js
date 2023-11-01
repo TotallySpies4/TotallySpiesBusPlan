@@ -17,7 +17,7 @@ const consumer = kafka.consumer({ groupId: 'gtfs-realtime-group' });
 
 const run = async () => {
 
-    await mongoose.connect('mongodb://localhost:27017/TotallySpiesBusPlan', {
+    await mongoose.connect('mongodb://mongodb:27017/TotallySpiesBusPlan', {
         serverSelectionTimeoutMS: 60000
     });
     await VehiclePositions.deleteMany()
