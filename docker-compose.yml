@@ -19,6 +19,11 @@ services:
     depends_on:
       - mongodb
 
+  gtfs_data_harvest:
+    build: ./GTFSDataHarvest
+    container_name: gtfs_data_harvest_container
+    restart: always
+
   ml-service:
     build: ./ml-service
     image: ml_service_image
@@ -114,6 +119,7 @@ services:
         KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: LISTENER_DOCKER_INTERNAL:PLAINTEXT,LISTENER_DOCKER_EXTERNAL:PLAINTEXT
         KAFKA_INTER_BROKER_LISTENER_NAME: LISTENER_DOCKER_INTERNAL
         KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+
 
 networks:
   sonarnet:
