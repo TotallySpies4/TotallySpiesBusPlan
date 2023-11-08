@@ -30,7 +30,7 @@ const run = async () => {
             const rawData = message.value.toString();
             const data = JSON.parse(rawData);
 
-            //Somehow not working right now
+
             for (const vehicle of data) {
                 //if (vehicle.vehicle.currentStatus === "IN_TRANSIT_TO" || vehicle.vehicle.currentStatus === "STOPPED_AT") {
 

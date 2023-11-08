@@ -8,7 +8,7 @@ const requestSettings = {
     encoding: null
 };
 const INTERVAL_MS =  60 * 1000;
-const kafka = new Kafka({ brokers: ['localhost:9092'] });
+const kafka = new Kafka({ brokers: ['kafka:19092'] });
 const topic = 'gtfs-realtime-topic';
 const producer = kafka.producer();
 
