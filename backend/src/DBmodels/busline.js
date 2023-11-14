@@ -2,6 +2,7 @@ import mongoose from 'mongoose';
 const Schema = mongoose.Schema;
 
 const stopTimeSchema = new Schema({
+    agency_id: String,
     stop_id: String,
     stop_sequence: Number,
     arrival_time: String,
@@ -17,6 +18,7 @@ const stopTimeSchema = new Schema({
 });
 
 const shapeSchema = new Schema({
+    agency_id: String,
     shape_pt_lat: Number,
     shape_pt_lon: Number,
     shape_dist_traveled: Number,
@@ -24,6 +26,7 @@ const shapeSchema = new Schema({
 });
 
 const speedSchema = new Schema({
+    agency_id: String,
     previousStop: { type: Schema.Types.ObjectId, ref: 'StopTime' },
     currentStop: { type: Schema.Types.ObjectId, ref: 'StopTime' },
     route: {type: Schema.Types.ObjectId, ref: 'Route'},  // Route reference
@@ -32,6 +35,7 @@ const speedSchema = new Schema({
 });
 
 const tripSchema = new Schema({
+    agency_id: String,
     trip_id: String,
     route_id: String,
     stop_times: [{ type: Schema.Types.ObjectId, ref: 'StopTime' }],
