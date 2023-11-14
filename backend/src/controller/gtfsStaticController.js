@@ -1,18 +1,17 @@
-import { readFile } from 'fs/promises';
 import * as GTFS from 'gtfs';
 import mongoose from "mongoose";
-import {Route, Shape, Speed, StopTime, Trip} from "./DBmodels/busline.js";
-import {segmentAvgSpeedCalculator} from "./utils/speedCalculator.js";
+import {Route, Shape, Speed, StopTime, Trip} from "../DBmodels/busline.js";
 
-export async function importGtfsData() {
-    const config = JSON.parse(await readFile('./config.json', 'utf-8'));
+
+
+export async function importGtfsData(config) {
     return GTFS.importGtfs(config);
 }
 
-export async function getRoutesWithStops() {
+export async function getRoutesWithStops( agencyConfig ) {
     return new Promise(async (resolve, reject) => {
         try {
-            await mongoose.connect('mongodb://mongodb:27017/TotallySpiesBusPlan', {
+            await mongoose.connect(agencyConfig.mongoUri, {
                 serverSelectionTimeoutMS: 60000
             }).then(() => console.log("Connected to MongoDB"))
                 .catch((err) => console.error("MongoDB connection error:", err));
@@ -24,9 +23,16 @@ export async function getRoutesWithStops() {
             await Trip.deleteMany({});
 
             let count = 0;
-            const agencyOfInterest = "GVB";
-            const routesForGVB = await GTFS.getRoutes({ agency_id: agencyOfInterest });
-            const routes = routesForGVB.filter(route => route.route_type === 3).slice(0, 10);
+            let busRouteType;
+            const agencyOfInterest = agencyConfig.agency_id;
+            if(agencyOfInterest === "GVB"){
+                busRouteType = 3;
+            }
+            else if(agencyOfInterest === "14010000000001001"){
+                busRouteType = 700;
+            }
+            const routesForAgency = await GTFS.getRoutes({ agency_id: agencyOfInterest });
+            const routes = routesForAgency.filter(route => route.route_type === 3).slice(0, 10);
             const numberOfRoutes = routes.length;
             console.log(`Found ${numberOfRoutes} routes for agency ${agencyOfInterest} bus`)
 

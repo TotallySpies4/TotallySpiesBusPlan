@@ -1,14 +1,14 @@
 
-import {getRoutesWithStops, importGtfsData} from "./gtfsHelper.js";
+import {getRoutesWithStops, importGtfsData} from "./controller/gtfsStaticController.js";
+import {readFile} from "fs/promises";
 
-
-    console.log('GTFS-Data changed. Importing new data...');
-
-    //Import GTFS-Data
-    importGtfsData()
+const configs = JSON.parse(await readFile('./config.json', 'utf-8'));
+for (const config of configs) {
+    console.log(`Importing GTFS-Data for ${config.agency_id}`);
+    importGtfsData(config)
         .then(() => {
-            console.log('GTFS-Data was imported successfully.');
-            getRoutesWithStops()
+            console.log(`Imported GTFS-Data for ${config.agency_id}`);
+            getRoutesWithStops(config)
                 .then(() => {
                     console.log('Routes with stops were fetched.')
                     console.log('All routes were saved to MongoDB.');
@@ -18,4 +18,5 @@ import {getRoutesWithStops, importGtfsData} from "./gtfsHelper.js";
         })
         .catch(console.error);
 
+}
 
