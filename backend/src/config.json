@@ -4,6 +4,10 @@
         {
             "agency_key": "nl",
             "path": "./gtfs/nl.zip"
+        },
+        {
+            "agency_key": "sl",
+            "path": "./gtfs/nl.zip"
         }
     ]
 }
