@@ -43,6 +43,7 @@ const tripSchema = new Schema({
 });
 
 const routeSchema = new Schema({
+    agency_id: String,
     route_id: String,
     route_short_name: String,
     route_long_name: String,
