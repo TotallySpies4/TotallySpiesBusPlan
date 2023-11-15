@@ -3,101 +3,113 @@ import mongoose from "mongoose";
 import {Route, Shape, Speed, StopTime, Trip} from "../DBmodels/busline.js";
 
 
+export class GtfsStaticController {
 
-export async function importGtfsData(config) {
-    return GTFS.importGtfs(config);
-}
+    constructor() {
+    }
+    async importGtfsData(config) {
+        console.log('In importGtfsData')
+        return GTFS.importGtfs(config);
+    }
 
-export async function getRoutesWithStops( agencyConfig ) {
-    return new Promise(async (resolve, reject) => {
-        try {
-            await mongoose.connect(agencyConfig.mongoUri, {
-                serverSelectionTimeoutMS: 60000
-            }).then(() => console.log("Connected to MongoDB"))
-                .catch((err) => console.error("MongoDB connection error:", err));
+    async getRoutesWithStops( agencyConfig ) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                await mongoose.connect(agencyConfig.agencies[0].mongoUrl, {
+                    serverSelectionTimeoutMS: 60000
+                }).then(() => console.log("Connected to MongoDB"))
+                    .catch((err) => console.error("MongoDB connection error:", err));
 
-            await Route.deleteMany({});
-            await StopTime.deleteMany({});
-            await Shape.deleteMany({});
-            await Speed.deleteMany({});
-            await Trip.deleteMany({});
-
-            let count = 0;
-            let busRouteType;
-            const agencyOfInterest = agencyConfig.agency_id;
-            if(agencyOfInterest === "GVB"){
-                busRouteType = 3;
-            }
-            else if(agencyOfInterest === "14010000000001001"){
-                busRouteType = 700;
-            }
-            const routesForAgency = await GTFS.getRoutes({ agency_id: agencyOfInterest });
-            const routes = routesForAgency.filter(route => route.route_type === 3).slice(0, 10);
-            const numberOfRoutes = routes.length;
-            console.log(`Found ${numberOfRoutes} routes for agency ${agencyOfInterest} bus`)
-
-            for (const route of routes) {
-                console.log(`Importing route ${route.route_id} in to the database (${count++}/${numberOfRoutes})`);
-                let newRoute = new Route({
-                    route_id: route.route_id,
-                    route_short_name: route.route_short_name,
-                    route_long_name: route.route_long_name,
-                    trips: []
-                });
-                await newRoute.save();
-
-                const tripsForThisRoute = await GTFS.getTrips({route_id: route.route_id});
-                console.log(`Found ${tripsForThisRoute.length} trips for route ${route.route_id}`)
-
-                for (let tripData of tripsForThisRoute) {
-                    let tripInstance = new Trip({
-                        trip_id: tripData.trip_id,
-                        route_id: newRoute._id,
-                        stop_times: [],
-                        shapes: []
-                    });
-
-                    const stopTimes = await GTFS.getStoptimes({trip_id: tripData.trip_id});
-
-                    for (let stopTime of stopTimes) {
-                        const stop = await GTFS.getStops({stop_id: stopTime.stop_id});
-                        stopTime.location = {
-                            latitude: stop[0].stop_lat,
-                            longitude: stop[0].stop_lon
-                        };
-                        stopTime.stop_name = stop[0].stop_name;
-                        stopTime.route = newRoute._id;
-                        stopTime.trip_id = tripInstance._id;
-
-                        let newStopTime = new StopTime(stopTime);
-                        await newStopTime.save();
-
-
-                        tripInstance.stop_times.push(newStopTime._id);
-                    }
-
-                    const shapes = await GTFS.getShapes({trip_id: tripData.trip_id});
-                    for (let shape of shapes) {
-                        shape.route = newRoute._id;
-                        let newShape = new Shape(shape);
-                        await newShape.save();
-
-                        tripInstance.shapes.push(newShape._id);
-                    }
-
-                    await tripInstance.save();
-
-                    console.log(`Imported trip ${tripData.trip_id} in to the database`);
-                    newRoute.trips.push(tripInstance._id);
+                let count = 0;
+                let busRouteType;
+                const agencyOfInterest = agencyConfig.agencies[0].agency_id;
+                if(agencyOfInterest === "GVB"){
+                    busRouteType = 3;
+                }
+                else if(agencyOfInterest === "14010000000001001"){
+                    busRouteType = 700;
                 }
 
-                await Route.updateOne({_id: newRoute._id}, newRoute);
-            }
-            resolve();
+                await Route.deleteMany({agency_id: agencyOfInterest});
+                await StopTime.deleteMany({agency_id: agencyOfInterest});
+                await Shape.deleteMany({agency_id: agencyOfInterest});
+                await Speed.deleteMany({agency_id: agencyOfInterest});
+                await Trip.deleteMany({agency_id: agencyOfInterest});
 
-        } catch (err) {
-            console.error("Error while importing data:", err);
-            reject(err);
-        }
-    });
+
+                const routesForAgency = await GTFS.getRoutes({ agency_id: agencyOfInterest });
+                const routes = routesForAgency.filter(route => route.route_type === 3).slice(0, 10);
+                const numberOfRoutes = routes.length;
+                console.log(`Found ${numberOfRoutes} routes for agency ${agencyOfInterest} bus`)
+
+                for (const route of routes) {
+                    console.log(`Importing route ${route.route_id} in to the database (${count++}/${numberOfRoutes})`);
+                    let newRoute = new Route({
+                        agency_id: agencyOfInterest,
+                        route_id: route.route_id,
+                        route_short_name: route.route_short_name,
+                        route_long_name: route.route_long_name,
+                        trips: []
+                    });
+                    await newRoute.save();
+
+                    const tripsForThisRoute = await GTFS.getTrips({route_id: route.route_id});
+                    console.log(`Found ${tripsForThisRoute.length} trips for route ${route.route_id}`)
+
+                    for (let tripData of tripsForThisRoute) {
+                        let tripInstance = new Trip({
+                            agency_id: agencyOfInterest,
+                            trip_id: tripData.trip_id,
+                            route_id: newRoute._id,
+                            stop_times: [],
+                            shapes: []
+                        });
+
+                        const stopTimes = await GTFS.getStoptimes({trip_id: tripData.trip_id});
+
+                        for (let stopTime of stopTimes) {
+                            const stop = await GTFS.getStops({stop_id: stopTime.stop_id});
+                            stopTime.location = {
+                                latitude: stop[0].stop_lat,
+                                longitude: stop[0].stop_lon
+                            };
+                            stopTime.stop_name = stop[0].stop_name;
+                            stopTime.route = newRoute._id;
+                            stopTime.trip_id = tripInstance._id;
+                            stopTime.agency_id = agencyOfInterest;
+
+                            let newStopTime = new StopTime(stopTime);
+                            await newStopTime.save();
+
+
+                            tripInstance.stop_times.push(newStopTime._id);
+                        }
+
+                        const shapes = await GTFS.getShapes({trip_id: tripData.trip_id});
+                        for (let shape of shapes) {
+                            shape.route = newRoute._id;
+                            shape.agency_id = agencyOfInterest;
+                            let newShape = new Shape(shape);
+                            await newShape.save();
+
+                            tripInstance.shapes.push(newShape._id);
+                        }
+
+                        await tripInstance.save();
+
+                        console.log(`Imported trip ${tripData.trip_id} in to the database`);
+                        newRoute.trips.push(tripInstance._id);
+                    }
+
+                    await Route.updateOne({_id: newRoute._id}, newRoute);
+                }
+                resolve();
+
+            } catch (err) {
+                console.error("Error while importing data:", err);
+                reject(err);
+            }
+        });
+    }
+
 }

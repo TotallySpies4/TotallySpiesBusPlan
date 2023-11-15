@@ -2,17 +2,27 @@
     "mongoUrl": "mongodb://mongodb:27017/TotallySpiesBusPlan",
     "agencies":
     [
-        {
-            "agency_id": "GVB",
-            "mongoUri": "mongodb://mongodb:27017/TotallySpiesBusPlan",
-            "path": "./gtfs/nl.zip",
-            "country": "Netherlands"
+        {"agencies":
+        [
+            {
+                "agency_id": "GVB",
+                "mongoUrl": "mongodb://mongodb:27017/TotallySpiesBusPlan",
+                "path": "./gtfs/nl.zip",
+                "country": "Netherlands"
+            }
+        ]
+
         },
-        {
-            "agency_id": "14010000000001001",
-            "mongoUri": "mongodb://mongodb:27017/SwedishBusPlan",
-            "path": "./gtfs/sl.zip",
-            "country": "Sweden"
+        {  "agencies":
+            [
+                {
+                    "agency_id": "14010000000001001",
+                    "mongoUrl": "mongodb://mongodb:27017/TotallySpiesBusPlan",
+                    "path": "./gtfs/sl.zip",
+                    "country": "Sweden"
+                }
+            ]
+
         }
     ]
 }
