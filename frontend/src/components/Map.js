@@ -3,24 +3,16 @@ import React, { useEffect } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, Polyline } from 'react-leaflet';
 import L from 'leaflet';
 
-function Map({ selectedTrip, isSidebarOpen, setSidebarOpen, congestionShape, currentVehicle }) {
+function Map({ selectedTrip, congestionShape, currentVehicle }) {
     useEffect(() => {
         console.log("SelectedBusID in Map: " + selectedTrip)
-    }, [isSidebarOpen,selectedTrip]);
+    }, [selectedTrip]);
 
     return (
         <div className="map">
 
             <MapContainer center={[52.3676, 4.9041]} zoom={13} style={{ height: "100vh", width: "100vw" }} zoomControl={false}>
-                <button
-                    className="sidebar-toggle"
-                    onClick={() => setSidebarOpen(!isSidebarOpen)}>
-                    {!isSidebarOpen && (
-                        <div className="w-24 h-24">
-                            <img src="/icon/bus-station.png" alt="Filter bus line" />
-                        </div>
-                    )}
-                </button>
+
                 <TileLayer
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'

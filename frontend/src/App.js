@@ -12,9 +12,10 @@ const App = () => {
     const [selectedTrip, setSelectedTrip] = useState(null);
     const [currentVehicle, setCurrentVehicle] = useState(null);
     const [congestionShape, setCongestionShape] = useState(null);
+    const [selectedCity, setSelectedCity] = useState(null);
     useEffect(() => {
         console.log("SelectedBusID in App: " + selectedTrip)
-    }, [selectedTrip, currentVehicle, congestionShape]);
+    }, [selectedTrip, currentVehicle, congestionShape,selectedCity]);
 
 
     useEffect(() => {
@@ -81,23 +82,20 @@ const App = () => {
             sendRequest(JSON.stringify({type: "GET_BUS_LINE_DETAILS", payload: {routeId: busLine.route_id}}));
     }}, [busLine]);
 
-    const [isSidebarOpen, setSidebarOpen] = useState(false);
-    const busOptions = buses.map((bus) => ({
+
+
+
+
+    /**const busOptions = buses.map((bus) => ({
         value: bus.route_short_name,
         label: bus.route_short_name + " - " + bus.route_long_name,
-  }));
-
-  const closeSidebar = () => {
-    setSidebarOpen(false);
-  };
+  }));*/
 
 
   return (
     <div className="container">
       <Map
           selectedTrip={selectedTrip}
-        isSidebarOpen={isSidebarOpen}
-        setSidebarOpen={setSidebarOpen}
           congestionShape={congestionShape}
             currentVehicle={currentVehicle}
       />
@@ -105,10 +103,9 @@ const App = () => {
         buses={buses}
         selectedTrip={selectedTrip}
         busline={setBusLine}
-        busOptions={busOptions}
-        isSidebarOpen={isSidebarOpen}
-        closeSidebar={closeSidebar}
-        ws={ws}
+        //busOptions={busOptions}
+        selectedCity={selectedCity}
+        setSelectedCity={setSelectedCity}
       />
     </div>
   );
