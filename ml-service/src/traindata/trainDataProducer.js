@@ -9,7 +9,7 @@ const requestSettings = {
 };
 const INTERVAL_MS =  60 * 1000;
 const kafka = new Kafka({ brokers: ['kafka:19092'] });
-const topic = 'gtfs-realtime-topic';
+const topic = 'train-data-topic';
 const producer = kafka.producer();
 
 async function createTopic() {

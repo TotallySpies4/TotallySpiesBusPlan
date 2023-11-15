@@ -9,7 +9,7 @@ const topic = 'gtfs-realtime-topic';
 
 const kafka = new Kafka({
     clientId: 'my-app',
-    brokers: ['localhost:9092']
+    brokers: ['kafka:19092']
 });
 
 
@@ -17,7 +17,7 @@ const consumer = kafka.consumer({ groupId: 'gtfs-realtime-group' });
 
 const run = async () => {
 
-    await mongoose.connect('mongodb://localhost:27017/TotallySpiesBusPlan', {
+    await mongoose.connect('mongodb://mongodb:27017/TotallySpiesBusPlan', {
         serverSelectionTimeoutMS: 60000
     });
     await VehiclePositions.deleteMany()
@@ -30,7 +30,7 @@ const run = async () => {
             const rawData = message.value.toString();
             const data = JSON.parse(rawData);
 
-            //Somehow not working right now
+
             for (const vehicle of data) {
                 //if (vehicle.vehicle.currentStatus === "IN_TRANSIT_TO" || vehicle.vehicle.currentStatus === "STOPPED_AT") {
 

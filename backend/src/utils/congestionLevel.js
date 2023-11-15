@@ -21,9 +21,10 @@ export async function congestionLevel(routeID, vehiclePosition) {
     const route_avg_speed = await realtimeAvgSpeedCalculator(vehiclePosition.positions);
 
 
-
-        if (scheduleSpeed <= route_avg_speed) {
-            if (scheduleSpeed < route_avg_speed + 10) {
+        // professor said that if the route_avg_speed is larger than scheduleSpeed just 1 or 2 km/h, set this value to congestion level 1 is not fair.
+        // so we need an interval for it.
+        if (scheduleSpeed <= route_avg_speed + 5) {
+            if (scheduleSpeed < route_avg_speed + 20) {
                 return {congestionLevel: 1, previousStop: previousStop, currentStop: currentStop }; // yellow
             } else {
                 return {congestionLevel: 2, previousStop: previousStop, currentStop: currentStop }; // red
