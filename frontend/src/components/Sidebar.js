@@ -7,7 +7,7 @@ import {BusllineSelection} from "./BusllineSelection.js";
 
 const Sidebar = ({
     allroutes,
-    setSelectedBuslines,
+    seteSelectedBusline,
     isSidebarOpen,
     selectedTrip,
     selectedCity,
@@ -32,7 +32,7 @@ const Sidebar = ({
               selectedCity ={selectedCity}
               allroutes={allroutes}
               selectedTrip={selectedTrip}
-              setSelectedBuslines={setSelectedBuslines}
+             setSelectedBusline={seteSelectedBusline}
           />
 
         </div>

@@ -13,10 +13,17 @@ const App = () => {
     const [currentVehicle, setCurrentVehicle] = useState(null);
     const [congestionShape, setCongestionShape] = useState(null);
     const [selectedCity, setSelectedCity] = useState(null);
+    const [selectedBusline, setSelectedBusline] = useState(null);
     useEffect(() => {
         console.log("SelectedBusID in App: " + selectedTrip)
         console.log("SelectedCity in App: " + selectedCity)
     }, [selectedTrip, currentVehicle, congestionShape,selectedCity]);
+
+    useEffect(() => {
+        if (selectedBusline){
+            console.log("SelectedBusID in App: " + selectedBusline.route_id)
+            sendRequest(JSON.stringify({type: "GET_BUS_LINE_DETAILS", payload: {routeId: selectedBusline.route_id}}));
+        }}, [selectedBusline]);
 
 
     useEffect(() => {
@@ -76,12 +83,6 @@ const App = () => {
     };
 
     //const {buses, selectedTrip ,ws, sendRequest} = useFetch("ws://localhost:4000");
-    const [selectedBusline, setSelectedBusline] = useState(null);
-    useEffect(() => {
-        if (selectedBusline){
-            console.log("SelectedBusID in App: " + selectedBusline.route_id)
-            sendRequest(JSON.stringify({type: "GET_BUS_LINE_DETAILS", payload: {routeId: selectedBusline.route_id}}));
-    }}, [selectedBusline]);
 
 
 
@@ -96,8 +97,7 @@ const App = () => {
       <Sidebar
         allroutes={allroutes}
         selectedTrip={selectedTrip}
-        setSelectedBusline={setSelectedBusline}
-        //busOptions={busOptions}
+        seteSelectedBusline={setSelectedBusline}
         selectedCity={selectedCity}
         setSelectedCity={setSelectedCity}
       />
