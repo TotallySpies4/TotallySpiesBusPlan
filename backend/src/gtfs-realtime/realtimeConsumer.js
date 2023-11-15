@@ -51,7 +51,7 @@ async function setupConsumerForCity(topic,city) {
                         continue;  // Skip this vehicle
                     }
 
-                    /**const existingPosition = await VehiclePositions.findOne({currentTrip_id: existingTrip._id});
+                    const existingPosition = await VehiclePositions.findOne({currentTrip_id: existingTrip._id});
                      console.log("existing position", existingPosition);
                      if (existingPosition) {
                     // Update existing entry
@@ -93,7 +93,7 @@ async function setupConsumerForCity(topic,city) {
                     await existingPosition.save();
 
 
-                } **/ /**else {
+                } else {
                     // Create new entry
                     const route = await Route.findOne({_id: existingTrip.route_id});
                     const newPosition = new VehiclePositions({
@@ -122,7 +122,7 @@ async function setupConsumerForCity(topic,city) {
                     });
                     await newPosition.save();
                 }
-                     // } **/
+                     // }
 
 
             }

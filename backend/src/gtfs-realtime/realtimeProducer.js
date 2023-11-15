@@ -72,8 +72,8 @@ const stockholmConfig = {
 };
 
 // Fetch and send data for each city
-//fetchAndSend(amsterdamConfig.url, amsterdamConfig.topic);
-//setInterval(() => fetchAndSend(amsterdamConfig.url, amsterdamConfig.topic), INTERVAL_MS);
+fetchAndSend(amsterdamConfig.url, amsterdamConfig.topic);
+setInterval(() => fetchAndSend(amsterdamConfig.url, amsterdamConfig.topic), INTERVAL_MS);
 
 fetchAndSend(stockholmConfig.url, stockholmConfig.topic);
 setInterval(() => fetchAndSend(stockholmConfig.url, stockholmConfig.topic), INTERVAL_MS);
