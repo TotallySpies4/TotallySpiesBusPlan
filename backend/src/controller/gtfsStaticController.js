@@ -38,7 +38,7 @@ export class GtfsStaticController {
 
 
                 const routesForAgency = await GTFS.getRoutes({ agency_id: agencyOfInterest });
-                const routes = routesForAgency.filter(route => route.route_type === 3).slice(0, 10);
+                const routes = routesForAgency.filter(route => route.route_type === busRouteType).slice(0, 10);
                 const numberOfRoutes = routes.length;
                 console.log(`Found ${numberOfRoutes} routes for agency ${agencyOfInterest} bus`)
 
