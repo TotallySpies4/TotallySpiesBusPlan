@@ -8,13 +8,14 @@ const App = () => {
     const url = "ws://localhost:4000";
 
     const [ws, setWs] = useState(null);
-    const [buses, setBuses] = useState([]);
+    const [allroutes, setAllroutes] = useState([]);
     const [selectedTrip, setSelectedTrip] = useState(null);
     const [currentVehicle, setCurrentVehicle] = useState(null);
     const [congestionShape, setCongestionShape] = useState(null);
     const [selectedCity, setSelectedCity] = useState(null);
     useEffect(() => {
         console.log("SelectedBusID in App: " + selectedTrip)
+        console.log("SelectedCity in App: " + selectedCity)
     }, [selectedTrip, currentVehicle, congestionShape,selectedCity]);
 
 
@@ -36,7 +37,7 @@ const App = () => {
                     try {
                         const allBusLine = JSON.parse(event.data);
                         console.log(allBusLine.payload);
-                        setBuses(allBusLine.payload);
+                        setAllroutes(allBusLine.payload);
 
 
                     } catch (error) {
@@ -75,21 +76,14 @@ const App = () => {
     };
 
     //const {buses, selectedTrip ,ws, sendRequest} = useFetch("ws://localhost:4000");
-    const [busLine, setBusLine] = useState(null);
+    const [selectedBusline, setSelectedBusline] = useState(null);
     useEffect(() => {
-        if (busLine){
-            console.log("SelectedBusID in App: " + busLine.route_id)
-            sendRequest(JSON.stringify({type: "GET_BUS_LINE_DETAILS", payload: {routeId: busLine.route_id}}));
-    }}, [busLine]);
+        if (selectedBusline){
+            console.log("SelectedBusID in App: " + selectedBusline.route_id)
+            sendRequest(JSON.stringify({type: "GET_BUS_LINE_DETAILS", payload: {routeId: selectedBusline.route_id}}));
+    }}, [selectedBusline]);
 
 
-
-
-
-    /**const busOptions = buses.map((bus) => ({
-        value: bus.route_short_name,
-        label: bus.route_short_name + " - " + bus.route_long_name,
-  }));*/
 
 
   return (
@@ -100,9 +94,9 @@ const App = () => {
             currentVehicle={currentVehicle}
       />
       <Sidebar
-        buses={buses}
+        allroutes={allroutes}
         selectedTrip={selectedTrip}
-        busline={setBusLine}
+        setSelectedBusline={setSelectedBusline}
         //busOptions={busOptions}
         selectedCity={selectedCity}
         setSelectedCity={setSelectedCity}

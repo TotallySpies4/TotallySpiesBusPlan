@@ -1,7 +1,8 @@
 import Select from "react-select";
 import React from "react";
-export const CitySelection = ({selectedCity,setSelectedCity}) => {
-    let cityOptions = ["Amsterdam", "Stockholm"]
+export const CitySelection = ({setSelectedCity}) => {
+    let cityOptions = ["Amsterdam", "Stockholm"].map(city => ({ value: city, label: city }));
+
     return (
         <div className="space-y-4 w-full">
             <p>City</p>
@@ -9,8 +10,8 @@ export const CitySelection = ({selectedCity,setSelectedCity}) => {
                 options={cityOptions}
                 onChange={(option) => {
                     console.log(option);
-                    //const city = option;
-                    //setSelectedCity(city);
+                    const city = option.value;
+                    setSelectedCity(city);
                 }}
                 isSearchable
                 placeholder="Choose a city"
