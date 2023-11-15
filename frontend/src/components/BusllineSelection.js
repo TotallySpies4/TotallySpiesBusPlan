@@ -1,8 +1,7 @@
 import Select from "react-select";
 import {formatTime} from "../utils/utils.js";
-import React, {useEffect} from "react";
 
-export const BusllineSelection = ({selectedCity,selectedTrip,setSelectedBuslines,allroutes}) => {
+export const BusllineSelection = ({selectedCity,selectedTrip,setSelectedBusline,allroutes}) => {
     let busOptions;
 
 
@@ -26,7 +25,7 @@ export const BusllineSelection = ({selectedCity,selectedTrip,setSelectedBuslines
             bus = allroutes.stockholm.find((b) => b.route_short_name === option.value);
         }
         console.log("SelectedBusID: " + bus.route_id);
-        setSelectedBuslines(bus);
+        setSelectedBusline(bus);
     };
     return (
         <div>
