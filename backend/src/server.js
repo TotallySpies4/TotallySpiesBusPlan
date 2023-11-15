@@ -2,7 +2,11 @@ import mongoose from "mongoose";
 import express from "express";
 import http from "http";
 import {WebSocketServer} from "ws";
-import {getBusAllBusline, getBusDetails} from "./queryData/queryDbData.js";
+import {
+    getBusAllBuslineAmsterdam,
+    getBusAllBuslineStockholm,
+    getBusDetails
+} from "./queryData/queryDbData.js";
 
 const app = express();
 const server = http.createServer(app);
@@ -12,7 +16,12 @@ const wss = new WebSocketServer({server})
 wss.on('connection', async (ws) => {
     console.log('Client connected');
 
-    const busLine = await getBusAllBusline()
+    const busLineAmsterdam = await getBusAllBuslineAmsterdam();
+    const busLineStockholm = await getBusAllBuslineStockholm();
+    const busLine = {
+        amsterdam: busLineAmsterdam,
+        stockholm: busLineStockholm
+    }
     ws.send(JSON.stringify({type: 'ALL_BUS_LINES', payload: busLine}))
 
     ws.on('message', async (message) => {

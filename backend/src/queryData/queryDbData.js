@@ -4,8 +4,12 @@ import {segmentAvgSpeedCalculator} from "../utils/speedCalculator.js";
 import {VehiclePositions} from "../DBmodels/vehiclepositions.js";
 import {getShapesBetweenStops} from "../utils/shapesUtilSet.js";
 
-async function getBusAllBusline(){
-    return Route.find({});
+async function getBusAllBuslineAmsterdam(){
+    return Route.find({agency_id:"GVB"});
+}
+
+async function getBusAllBuslineStockholm(){
+    return Route.find({agency_id:"14010000000001001"});
 }
 
 async function getBusDetails(routeID){
@@ -110,4 +114,4 @@ async function fetchAverageSpeedFromDB(routeID, tripID, stopSequence) {
 
 
 
-export {getBusAllBusline, getBusDetails , fetchAverageSpeedFromDB};
+export {getBusAllBuslineAmsterdam,getBusAllBuslineStockholm, getBusDetails , fetchAverageSpeedFromDB};
