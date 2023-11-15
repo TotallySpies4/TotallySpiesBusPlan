@@ -49,7 +49,7 @@ async function fetchAndSend(url, topic) {
             const feed = GtfsRealtimeBindings.default.transit_realtime.FeedMessage.decode(response.data);
             const entities = feed.entity.map(entity => entity);
 
-            console.log(entities)
+            console.log(entities[0])
             await createTopic(topic);
             await sendToKafka(topic, entities);
             console.log(`Data sent to Kafka on topic: ${topic}`);
@@ -72,8 +72,8 @@ const stockholmConfig = {
 };
 
 // Fetch and send data for each city
-fetchAndSend(amsterdamConfig.url, amsterdamConfig.topic);
-setInterval(() => fetchAndSend(amsterdamConfig.url, amsterdamConfig.topic), INTERVAL_MS);
+//fetchAndSend(amsterdamConfig.url, amsterdamConfig.topic);
+//setInterval(() => fetchAndSend(amsterdamConfig.url, amsterdamConfig.topic), INTERVAL_MS);
 
 fetchAndSend(stockholmConfig.url, stockholmConfig.topic);
 setInterval(() => fetchAndSend(stockholmConfig.url, stockholmConfig.topic), INTERVAL_MS);
