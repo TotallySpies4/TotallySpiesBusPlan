@@ -22,7 +22,6 @@ for (const config of agencies) {
         .then(() => {
             console.log('Routes with stops were fetched.')
             console.log('All routes were saved to MongoDB.');
-            process.exit();
         });
 }
 
