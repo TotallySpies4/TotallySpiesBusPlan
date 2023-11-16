@@ -23,14 +23,21 @@ export async function congestionLevel(routeID, vehiclePosition) {
 
         // professor said that if the route_avg_speed is larger than scheduleSpeed just 1 or 2 km/h, set this value to congestion level 1 is not fair.
         // so we need an interval for it.
-        if (scheduleSpeed <= route_avg_speed + 5) {
-            if (scheduleSpeed < route_avg_speed + 20) {
-                return {congestionLevel: 1, previousStop: previousStop, currentStop: currentStop }; // yellow
-            } else {
-                return {congestionLevel: 2, previousStop: previousStop, currentStop: currentStop }; // red
-            }
-        } else {
-            return {congestionLevel: 0, previousStop: previousStop, currentStop: currentStop }; // green
-        }
+    return {congestionLevel: level(scheduleSpeed, route_avg_speed), previousStop: previousStop, currentStop: currentStop}
 
+
+}
+export function congestionLevelstockholm(routeID, speed) {
+
+}
+function level(scheduleSpeed, route_avg_speed){
+    if (scheduleSpeed <= route_avg_speed + 5) {
+        if (scheduleSpeed < route_avg_speed + 20) {
+            return 1; // yellow
+        } else {
+            return 2; // red
+        }
+    } else {
+        return 0; // green
+    }
 }

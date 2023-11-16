@@ -1,3 +1,4 @@
+import {StopTime} from "../DBmodels/busline.js";
 
 /**
  * Method to calculate the average speed of a route
@@ -64,6 +65,56 @@
     } catch (error) {
         console.error("Error calculating speed:", error);
     }
+}
+
+async function calculateScheduledSpeedStockholm(tripId, latitude, longitude) {
+    const stopTimes = await StopTime.find({trip_id: tripId}).sort('stop_sequence');
+
+    // Determine the current stop based on latitude and longitude
+    const currentStop = findNearestStop(stopTimes, latitude, longitude);
+    const nextStop = stopTimes[stopTimes.indexOf(currentStop) + 1];
+
+    if (!currentStop || !nextStop) {
+        console.error('Current or next stop not found');
+        return;
+    }
+
+    // Calculate distance and time difference
+    const distance = nextStop.shape_dist_traveled - currentStop.shape_dist_traveled;
+    const timeDifferenceSeconds = timeDifferenceInSeconds(currentStop.departure_time, nextStop.arrival_time);
+    const timeDifferenceHours = timeDifferenceSeconds / 3600;
+
+    return distance / timeDifferenceHours; // Speed in the same units as shape_dist_traveled per hour
+}
+
+function findNearestStop(stopTimes, lat, lon) {
+    let nearestStop = null;
+    let smallestDistance = Infinity;
+
+    for (const stop of stopTimes) {
+        const distance = haversineDistance(lat, lon, stop.location.latitude, stop.location.longitude);
+        if (distance < smallestDistance) {
+            smallestDistance = distance;
+            nearestStop = stop;
+        }
+    }
+
+    return nearestStop;
+}
+
+function haversineDistance(lat1, lon1, lat2, lon2) {
+    const R = 6371e3; // meters
+    const φ1 = lat1 * Math.PI / 180;
+    const φ2 = lat2 * Math.PI / 180;
+    const Δφ = (lat2 - lat1) * Math.PI / 180;
+    const Δλ = (lon2 - lon1) * Math.PI / 180;
+
+    const a = Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +
+        Math.cos(φ1) * Math.cos(φ2) *
+        Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+    return R * c; // Distance in meters
 }
 
 /**
