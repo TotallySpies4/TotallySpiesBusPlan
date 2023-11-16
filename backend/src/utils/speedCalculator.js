@@ -67,12 +67,31 @@ import {StopTime} from "../DBmodels/busline.js";
     }
 }
 
-async function calculateScheduledSpeedStockholm(tripId, latitude, longitude) {
-    const stopTimes = await StopTime.find({trip_id: tripId}).sort('stop_sequence');
+export async function calculateScheduledSpeedStockholm(tripId, latitude, longitude,vehicleBearing){
+    const stopTimes = await StopTime.find({ trip_id: tripId }).sort('stop_sequence');
 
-    // Determine the current stop based on latitude and longitude
-    const currentStop = findNearestStop(stopTimes, latitude, longitude);
-    const nextStop = stopTimes[stopTimes.indexOf(currentStop) + 1];
+    // Determine the nearest stop based on latitude and longitude
+    let nearestStop = findNearestStop(stopTimes, latitude, longitude);
+    const nearestIndex = stopTimes.indexOf(nearestStop);
+
+    // Determine the direction of travel
+    let currentStop, nextStop;
+    if (nearestIndex < stopTimes.length - 1) {
+        const nextIndex = nearestIndex + 1;
+        const nextStopBearing = calculateBearing(nearestStop, stopTimes[nextIndex]);
+
+        if (isMovingTowards(nextStopBearing, vehicleBearing)) {
+            currentStop = nearestStop;
+            nextStop = stopTimes[nextIndex];
+        } else {
+            currentStop = nearestIndex > 0 ? stopTimes[nearestIndex - 1] : null;
+            nextStop = nearestStop;
+        }
+    } else {
+        // Handle last stop scenario
+        currentStop = nearestIndex > 0 ? stopTimes[nearestIndex - 1] : null;
+        nextStop = nearestStop;
+    }
 
     if (!currentStop || !nextStop) {
         console.error('Current or next stop not found');
@@ -83,9 +102,38 @@ async function calculateScheduledSpeedStockholm(tripId, latitude, longitude) {
     const distance = nextStop.shape_dist_traveled - currentStop.shape_dist_traveled;
     const timeDifferenceSeconds = timeDifferenceInSeconds(currentStop.departure_time, nextStop.arrival_time);
     const timeDifferenceHours = timeDifferenceSeconds / 3600;
+    const speedSchedule = distance / timeDifferenceHours;
+    return { scheduleSpeed: speedSchedule, currentStop: currentStop, nextStop: nextStop }
 
-    return distance / timeDifferenceHours; // Speed in the same units as shape_dist_traveled per hour
 }
+
+function calculateBearing(currentStop, nextStop) {
+    const toRadians = degree => degree * Math.PI / 180;
+    const toDegrees = radian => radian * 180 / Math.PI;
+
+    const startLat = currentStop.latitude;
+    const startLng = currentStop.longitude;
+    const destLat = nextStop.latitude;
+    const destLng = nextStop.longitude;
+
+    const startLatRad = toRadians(startLat);
+    const startLngRad = toRadians(startLng);
+    const destLatRad = toRadians(destLat);
+    const destLngRad = toRadians(destLng);
+
+    const y = Math.sin(destLngRad - startLngRad) * Math.cos(destLatRad);
+    const x = Math.cos(startLatRad) * Math.sin(destLatRad) -
+        Math.sin(startLatRad) * Math.cos(destLatRad) * Math.cos(destLngRad - startLngRad);
+
+    return (toDegrees(Math.atan2(y, x)) + 360) % 360; // Normalize the angle into the range 0° to 360°
+}
+
+function isMovingTowards(nextStopBearing, vehicleBearing, tolerance = 10) {
+    // Check if the vehicle's bearing is within a certain range (tolerance) of the next stop's bearing
+    const diff = Math.abs(vehicleBearing - nextStopBearing);
+    return diff <= tolerance || diff >= 360 - tolerance;
+}
+
 
 function findNearestStop(stopTimes, lat, lon) {
     let nearestStop = null;
@@ -149,10 +197,10 @@ function haversineDistance(lat1, lon1, lat2, lon2) {
  */
 
  export function calculateTimeDifference(stop1, stop2) {
-    const timeFormat = "HH:mm:ss"; // Specify the time format used in the stop times
 
-    const departureTime1 = parseTime(stop1.departure_time, timeFormat);
-    const arrivalTime2 = parseTime(stop2.arrival_time, timeFormat);
+
+    const departureTime1 = parseTime(stop1.departure_time);
+    const arrivalTime2 = parseTime(stop2.arrival_time);
 
     // Calculate the time difference in seconds
     let timeDifference = (arrivalTime2 - departureTime1) / (1000);
@@ -166,10 +214,9 @@ function haversineDistance(lat1, lon1, lat2, lon2) {
 /**
  * Method to parse a time string into a Date object
  * @param timeString
- * @param format
  * @returns {Date} Date object
  */
- export function parseTime(timeString, format) {
+ export function parseTime(timeString) {
     if (!timeString) {
         console.error("parseTime called with undefined or empty timeString:", timeString);
         return new Date();
@@ -181,6 +228,11 @@ function haversineDistance(lat1, lon1, lat2, lon2) {
     date.setMinutes(minutes);
     date.setSeconds(seconds);
     return date;
+}
+function timeDifferenceInSeconds(startTime, endTime) {
+    const start = parseTime(startTime);
+    const end = parseTime(endTime);
+    return (end - start) / 1000; // Convert milliseconds to seconds
 }
 
 

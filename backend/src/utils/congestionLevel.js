@@ -1,4 +1,4 @@
-import { realtimeAvgSpeedCalculator } from "./speedCalculator.js";
+import {calculateScheduledSpeedStockholm, realtimeAvgSpeedCalculator} from "./speedCalculator.js";
 import { fetchAverageSpeedFromDB } from "../queryData/queryDbData.js";
 
 /**
@@ -27,8 +27,9 @@ export async function congestionLevel(routeID, vehiclePosition) {
 
 
 }
-export function congestionLevelstockholm(routeID, speed) {
-
+export function congestionLevelstockholm(tripID, speed,latitude, longitude) {
+// calculate scheduleSpeed
+    calculateScheduledSpeedStockholm(tripID, latitude, longitude)
 }
 function level(scheduleSpeed, route_avg_speed){
     if (scheduleSpeed <= route_avg_speed + 5) {
