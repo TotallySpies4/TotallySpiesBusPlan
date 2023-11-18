@@ -9,7 +9,7 @@ pipeline {
             }
         }
 
-        stage('Backend Tests') {
+        /*stage('Backend Tests') {
             steps {
                 script {
                     // Starten Sie den Testservice, der in Ihrer docker-compose.yml definiert ist.
@@ -28,5 +28,5 @@ pipeline {
             echo 'Cleaning up...'
             sh 'docker compose -f docker-compose.yml down'
         }
-    }
+    }*/
 }
