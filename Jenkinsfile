@@ -27,6 +27,6 @@ pipeline {
             // Aktionen, die immer durchgeführt werden, egal ob der Build erfolgreich war oder fehlgeschlagen ist.
             echo 'Cleaning up...'
             sh 'docker compose -f docker-compose.yml down'
-        }
-    }*/
+        }*/
+    }
 }
