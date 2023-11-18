@@ -2,6 +2,7 @@ import mongoose from 'mongoose';
 const Schema = mongoose.Schema;
 
 const vehiclePositionsSchema = new Schema({
+    city: String,
     currentTrip_id: { type: Schema.Types.ObjectId, ref: 'Trip' },
     route: { type: Schema.Types.ObjectId, ref: 'Route' },
     timestamp: String,

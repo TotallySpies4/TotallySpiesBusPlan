@@ -1,58 +1,80 @@
+import axios from 'axios';
 import * as GtfsRealtimeBindings from 'gtfs-realtime-bindings';
-import request from 'request';
 import { Kafka } from 'kafkajs';
 
-const requestSettings = {
-    method: 'GET',
-    url: 'http://gtfs.ovapi.nl/nl/vehiclePositions.pb',
-    encoding: null
-};
-const INTERVAL_MS =  60 * 1000;
+const INTERVAL_MS = 60 * 1000;
 const kafka = new Kafka({ brokers: ['kafka:19092'] });
-const topic = 'gtfs-realtime-topic';
-const producer = kafka.producer();
 
-async function createTopic() {
+
+
+export async function createTopic(topic) {
     const admin = kafka.admin();
     await admin.connect();
     const existingTopics = await admin.listTopics();
 
-    if (!(existingTopics).includes(topic)) {
+    if (!existingTopics.includes(topic)) {
         await admin.createTopics({
-            topics: [{
-                topic: topic,
-                numPartitions: 1,
-            }],
+            topics: [{ topic, numPartitions: 1 }],
         });
     }
     await admin.disconnect();
 }
 
-async function sendToKafka(data) {
+export async function sendToKafka(topic, data) {
+    const producer = kafka.producer();
     await producer.connect();
     await producer.send({
         topic,
         messages: [{ value: JSON.stringify(data) }],
     });
-    console.log('Sent to Kafka');
+    console.log(`Sent to Kafka on topic: ${topic}`);
     await producer.disconnect();
 }
 
-function fetchAndSend() {
-    request(requestSettings, async function (error, response, body) {
-        if (!error && response.statusCode == 200) {
-            const feed = GtfsRealtimeBindings.default.transit_realtime.FeedMessage.decode(body);
-            const entities = [];
-            feed.entity.forEach(entity => {
-                entities.push(entity);
-            });
+export async function fetchAndSend(url, topic) {
+    try {
+        const response = await axios({
+            method: 'GET',
+            url: url,
+            responseType: 'arraybuffer', // Wichtig für binäre Daten
+            headers: {
+                //'Accept': 'application/octet-stream',
+                //'Content-Type': 'application/x-protobuf',
+            },
+        });
+        console.log(`Fetched data for topic ${topic}`);
+        console.log(response.status);
 
-            console.log(entities);
-            await createTopic();
-            await sendToKafka(entities);
+
+        if (response.status === 200) {
+            const feed = GtfsRealtimeBindings.default.transit_realtime.FeedMessage.decode(response.data);
+            const entities = feed.entity.map(entity => entity);
+
+            console.log(entities[0])
+            await createTopic(topic);
+            await sendToKafka(topic, entities);
+            console.log(`Data sent to Kafka on topic: ${topic}`);
         }
-    });
+    } catch (error) {
+        console.error(`Error fetching and sending data for topic ${topic}:`, error);
+    }
 }
 
-fetchAndSend();
-setInterval(fetchAndSend, INTERVAL_MS);
+
+// City configurations
+const amsterdamConfig = {
+    url: 'http://gtfs.ovapi.nl/nl/vehiclePositions.pb',
+    topic: 'gtfs-realtime-amsterdam'
+};
+
+const stockholmConfig = {
+    url: 'https://opendata.samtrafiken.se/gtfs-rt/sl/VehiclePositions.pb?key=dace0c5b6dc643c898caf86761be7e86',
+    topic: 'gtfs-realtime-stockholm'
+};
+
+// Fetch and send data for each city
+fetchAndSend(amsterdamConfig.url, amsterdamConfig.topic);
+setInterval(() => fetchAndSend(amsterdamConfig.url, amsterdamConfig.topic), INTERVAL_MS);
+
+fetchAndSend(stockholmConfig.url, stockholmConfig.topic);
+setInterval(() => fetchAndSend(stockholmConfig.url, stockholmConfig.topic), INTERVAL_MS);
