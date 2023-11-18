@@ -28,13 +28,14 @@ pipeline {
             echo 'Cleaning up...'
             sh 'docker compose -f docker-compose.yml down'
         }*/
-    }
-      stage('SonarQube Analysis for Backend') {
-                steps {
-                    dir('backend') {
-                        echo 'Running SonarQube analysis for backend...'
-                        sh 'sonar-scanner -Dsonar.projectKey=YourBackendProjectKey -Dsonar.sources=./src -Dsonar.exclusions=**/node_modules/**,**/*.spec.js'
+        stage('SonarQube Analysis for Backend') {
+                        steps {
+                            dir('backend') {
+                                echo 'Running SonarQube analysis for backend...'
+                                sh 'sonar-scanner -Dsonar.projectKey=totallyspies -Dsonar.sources=./src -Dsonar.exclusions=**/node_modules/**,**/*.spec.js'
+                            }
+                        }
                     }
-                }
-            }
+    }
+
 }
