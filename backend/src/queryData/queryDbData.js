@@ -62,10 +62,10 @@ async function fetchAverageSpeedFromDB(routeID, tripID, stopSequence) {
         }
 
         // Fetch the stop times for the trip
-        console.log("Stop sequence der uebergeben wurde",stopSequence)
+        //console.log("Stop sequence der uebergeben wurde",stopSequence)
         const currentStopTime = await StopTime.findOne({ _id: { $in: trip.stop_times }, stop_sequence: stopSequence });
-        console.log("currentStopTime",currentStopTime)
-        console.log("Stoptim ID",currentStopTime._id)
+        //console.log("currentStopTime",currentStopTime)
+        //console.log("Stoptim ID",currentStopTime._id)
         if (!currentStopTime) {
             throw new Error('Stop time data not found for the given sequence.');
         }
@@ -82,19 +82,19 @@ async function fetchAverageSpeedFromDB(routeID, tripID, stopSequence) {
 
 
         // Assuming the max sequence is the length of trip.stop_times (you might need a different condition depending on your data model)
-        console.log("trip.stop_times.length",trip.stop_times.length)
+        //console.log("trip.stop_times.length",trip.stop_times.length)
 
         // Fetch the speed entry
         let speedEntry;
         if (previousStopTime) {
             speedEntry = await segmentAvgSpeedCalculator(previousStopTime, currentStopTime);
-            console.log("speedEntry",speedEntry)
+            //console.log("speedEntry",speedEntry)
             const currentStop = currentStopTime
             const previousStop = previousStopTime
             return { speedEntry, currentStop, previousStop};
         } else if (nextStopTime) {
-            console.log("We are in the if nextStopTime")
-            console.log("speedEntry",speedEntry)
+            //console.log("We are in the if nextStopTime")
+            //console.log("speedEntry",speedEntry)
             const previousStop = currentStopTime
             const currentStop = nextStopTime
             speedEntry = await segmentAvgSpeedCalculator(currentStopTime, nextStopTime);

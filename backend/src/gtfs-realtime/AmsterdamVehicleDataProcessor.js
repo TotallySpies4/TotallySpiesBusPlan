@@ -30,6 +30,7 @@ export class AmsterdamVehicleDataProcessor extends IVehicleDataProcessor {
         });
     }
     async updateVehicle(vehicle, existingPosition, existingTrip) {
+       // console.log("ExistingPosition in Amsterdam:", existingPosition)
         // Calculate congestion level
         const previousPosition = {
             position: existingPosition.current_position,

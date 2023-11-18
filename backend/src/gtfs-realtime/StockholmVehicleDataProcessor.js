@@ -22,13 +22,23 @@ export class StockholmVehicleDataProcessor extends IVehicleDataProcessor {
             }
         })
     }
-    updateVehicle(vehicle,existingTrip, existingPosition) {
+    async updateVehicle(vehicle, existingPosition, existingTrip) {
+        console.log("update stockholm")
+        console.log("Existingposition:", existingPosition)
         existingPosition.timestamp = vehicle.vehicle.timestamp || new Date();
         existingPosition.current_position.latitude = vehicle.vehicle.position.latitude;
         existingPosition.current_position.longitude = vehicle.vehicle.position.longitude;
         existingPosition.congestion_level.timestamp = new Date();
 
-        const congestionLevelObject = congestionLevelStockholm(existingTrip.trip_id, vehicle.vehicle.position.speed, vehicle.vehicle.position.latitude, vehicle.vehicle.position.longitude);
+        console.log("existingtrip Id:", existingTrip.trip_id)
+        console.log("existingTrip objID", existingTrip._id)
+        const congestionLevelObject = await congestionLevelStockholm(
+            existingTrip._id,
+            vehicle.vehicle.position.speed,
+            vehicle.vehicle.position.latitude,
+            vehicle.vehicle.position.longitude,
+            vehicle.vehicle.position.bearing);
+        console.log("congestionLevelObject:", congestionLevelObject)
         existingPosition.congestion_level.level = congestionLevelObject.congestionLevel;
         existingPosition.congestion_level.currentStop = congestionLevelObject.nextStop;
         existingPosition.congestion_level.previousStop = congestionLevelObject.currentStop;

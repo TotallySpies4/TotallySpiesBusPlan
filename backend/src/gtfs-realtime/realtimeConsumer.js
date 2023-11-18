@@ -36,25 +36,25 @@ async function setupConsumerForCity(topic,city) {
 
             for (const vehicle of data) {
                 if (!vehicle || !vehicle.vehicle || !vehicle.vehicle.trip) {
-                    console.error('Invalid vehicle data format:', vehicle);
+                    //console.error('Invalid vehicle data format:', vehicle);
                     continue; // Skip this iteration because the structure is not as expected
                 }
 
                 if (!vehicle.vehicle.trip.tripId) {
-                    console.error('Trip ID is undefined for vehicle:', vehicle);
+                    //console.error('Trip ID is undefined for vehicle:', vehicle);
                     continue; // Skip this iteration because tripId is undefined
                 }
 
-                    console.log("vehicleID", vehicle);
+                    //console.log("vehicleID", vehicle);
                     const existingTrip = await Trip.findOne({trip_id: vehicle.vehicle.trip.tripId});
-                    console.log("existing trip", existingTrip);
+                    //console.log("existing trip", existingTrip);
                     if (!existingTrip) {
-                        console.log(`Trip ID ${vehicle.vehicle.trip.tripId} not in the database.`);
+                        //console.log(`Trip ID ${vehicle.vehicle.trip.tripId} not in the database.`);
                         continue;  // Skip this vehicle
                     }
 
                     const existingPosition = await VehiclePositions.findOne({currentTrip_id: existingTrip._id});
-                     console.log("existing position", existingPosition);
+                     //console.log("existing position", existingPosition);
                      if (existingPosition) {
 
                     // Update existing entry

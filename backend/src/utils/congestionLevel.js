@@ -15,7 +15,7 @@ export async function congestionLevel(routeID, vehiclePosition) {
     const scheduleSpeed = speedObject.speedEntry;
     const previousStop = speedObject.previousStop;
     const currentStop = speedObject.currentStop;
-    console.log("scheduleSpeed",scheduleSpeed)
+    //console.log("scheduleSpeed",scheduleSpeed)
 
     // Calculate real-time average speed
     const route_avg_speed = await realtimeAvgSpeedCalculator(vehiclePosition.positions);
@@ -34,12 +34,18 @@ export async function congestionLevel(routeID, vehiclePosition) {
  * @param speed
  * @param latitude
  * @param longitude
+ * @param vehicleBearing
  * @returns {{nextStop: *, congestionLevel: number, currentStop: *}}
  */
-export function congestionLevelStockholm(tripID, speed,latitude, longitude) {
+export async function congestionLevelStockholm(tripID, speed, latitude, longitude,vehicleBearing) {
+    console.log("in congestionLevelStockholm")
 // calculate scheduleSpeed
-    const speedObject = calculateScheduledSpeedStockholm(tripID, latitude, longitude);
-    return {congestionLevel: level(speedObject.scheduleSpeed, speed), currentStop: speedObject.currentStop, nextStop: speedObject.nextStop}
+    const speedObject = await calculateScheduledSpeedStockholm(tripID, latitude, longitude, vehicleBearing);
+    return {
+        congestionLevel: level(speedObject.scheduleSpeed, speed),
+        currentStop: speedObject.currentStop,
+        nextStop: speedObject.nextStop
+    }
 }
 
 /**
