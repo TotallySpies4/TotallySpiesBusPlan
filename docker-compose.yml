@@ -19,6 +19,14 @@ services:
     depends_on:
       - mongodb
 
+  backend-tests:
+      build: ./backend
+      command: npm test
+      volumes:
+        - ./:/app
+      environment:
+        - NODE_ENV=test
+
   gtfs_data_harvest:
     build: ./GTFSDataHarvest
     container_name: gtfs_data_harvest_container
