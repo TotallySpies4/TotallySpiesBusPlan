@@ -32,7 +32,7 @@ pipeline {
                         steps {
                             dir('backend') {
                                 echo 'Running SonarQube analysis for backend...'
-                                sh 'sonar-scanner -Dsonar.projectKey=YourBackendProjectKey -Dsonar.sources=./src -Dsonar.exclusions=**/node_modules/**,**/*.spec.js'
+                                sh 'sonar-scanner -Dsonar.projectKey=totallyspies -Dsonar.sources=./src -Dsonar.exclusions=**/node_modules/**,**/*.spec.js'
                             }
                         }
                     }
