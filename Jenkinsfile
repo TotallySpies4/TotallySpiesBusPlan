@@ -14,7 +14,7 @@ pipeline {
                 script {
                     // Starten Sie den Testservice, der in Ihrer docker-compose.yml definiert ist.
                     // Stellen Sie sicher, dass dieser Service so konfiguriert ist, dass er npm test oder den entsprechenden Testbefehl ausführt.
-                    sh 'docker-compose -f docker-compose.yml run backend-tests'
+                    sh 'docker compose -f docker-compose.yml run backend-tests'
                 }
             }
         }
@@ -26,7 +26,7 @@ pipeline {
         always {
             // Aktionen, die immer durchgeführt werden, egal ob der Build erfolgreich war oder fehlgeschlagen ist.
             echo 'Cleaning up...'
-            sh 'docker-compose -f docker-compose.yml down'
+            sh 'docker compose -f docker-compose.yml down'
         }
     }
 }
