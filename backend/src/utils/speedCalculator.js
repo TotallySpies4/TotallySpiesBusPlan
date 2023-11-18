@@ -72,11 +72,10 @@ import {StopTime} from "../DBmodels/busline.js";
  * @param tripId
  * @param latitude
  * @param longitude
- * @param vehicleBearing
  * @returns {Promise<{nextStop, scheduleSpeed: number, currentStop}>}
  */
 
-export async function calculateScheduledSpeedStockholm(tripId, latitude, longitude,vehicleBearing){
+export async function calculateScheduledSpeedStockholm(tripId, latitude, longitude){
     const stopTimes = await StopTime.find({ trip_id: tripId }).sort('stop_sequence');
 
     // Determine the nearest stop based on latitude and longitude

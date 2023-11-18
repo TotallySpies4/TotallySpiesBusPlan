@@ -42,6 +42,12 @@ export function congestionLevelStockholm(tripID, speed,latitude, longitude) {
     return {congestionLevel: level(speedObject.scheduleSpeed, speed), currentStop: speedObject.currentStop, nextStop: speedObject.nextStop}
 }
 
+/**
+ * Method to calculate the congestion level
+ * @param scheduleSpeed
+ * @param route_avg_speed
+ * @returns {number}
+ */
 function level(scheduleSpeed, route_avg_speed){
     if (scheduleSpeed <= route_avg_speed + 5) {
         if (scheduleSpeed < route_avg_speed + 20) {

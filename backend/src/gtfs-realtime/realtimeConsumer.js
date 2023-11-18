@@ -1,7 +1,7 @@
 import {Kafka} from "kafkajs";
 import mongoose from "mongoose";
 
-import {congestionLevel} from "../utils/congestionLevel.js";
+import {congestionLevel, congestionLevelStockholm} from "../utils/congestionLevel.js";
 import {VehiclePositions} from "../DBmodels/vehiclepositions.js";
 import {Route, Trip} from "../DBmodels/busline.js";
 
@@ -103,8 +103,16 @@ class StockholmVehicleDataProcessor extends IVehicleDataProcessor {
             }
         })
     }
-    updateVehicle(vehicle) {
+    updateVehicle(vehicle,existingTrip, existingPosition) {
+        existingPosition.timestamp = vehicle.vehicle.timestamp || new Date();
+        existingPosition.current_position.latitude = vehicle.vehicle.position.latitude;
+        existingPosition.current_position.longitude = vehicle.vehicle.position.longitude;
+        existingPosition.congestion_level.timestamp = new Date();
 
+        const congestionLevelObject = congestionLevelStockholm(existingTrip.trip_id, vehicle.vehicle.position.speed, vehicle.vehicle.position.latitude, vehicle.vehicle.position.longitude);
+        existingPosition.congestion_level.level = congestionLevelObject.congestionLevel;
+        existingPosition.congestion_level.currentStop = congestionLevelObject.nextStop;
+        existingPosition.congestion_level.previousStop = congestionLevelObject.currentStop;
     }
 
 }
