@@ -27,10 +27,21 @@ export async function congestionLevel(routeID, vehiclePosition) {
 
 
 }
-export function congestionLevelstockholm(tripID, speed,latitude, longitude) {
+
+/**
+ * Method to calculate the congestion level of a route segment for Stockholm
+ * @param tripID
+ * @param speed
+ * @param latitude
+ * @param longitude
+ * @returns {{nextStop: *, congestionLevel: number, currentStop: *}}
+ */
+export function congestionLevelStockholm(tripID, speed,latitude, longitude) {
 // calculate scheduleSpeed
-    calculateScheduledSpeedStockholm(tripID, latitude, longitude)
+    const speedObject = calculateScheduledSpeedStockholm(tripID, latitude, longitude);
+    return {congestionLevel: level(speedObject.scheduleSpeed, speed), currentStop: speedObject.currentStop, nextStop: speedObject.nextStop}
 }
+
 function level(scheduleSpeed, route_avg_speed){
     if (scheduleSpeed <= route_avg_speed + 5) {
         if (scheduleSpeed < route_avg_speed + 20) {

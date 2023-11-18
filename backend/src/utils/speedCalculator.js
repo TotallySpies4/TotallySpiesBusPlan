@@ -67,6 +67,15 @@ import {StopTime} from "../DBmodels/busline.js";
     }
 }
 
+/**
+ * Method to calculate the scheduled speed of a route segment for Stockholm
+ * @param tripId
+ * @param latitude
+ * @param longitude
+ * @param vehicleBearing
+ * @returns {Promise<{nextStop, scheduleSpeed: number, currentStop}>}
+ */
+
 export async function calculateScheduledSpeedStockholm(tripId, latitude, longitude,vehicleBearing){
     const stopTimes = await StopTime.find({ trip_id: tripId }).sort('stop_sequence');
 
@@ -152,14 +161,14 @@ function findNearestStop(stopTimes, lat, lon) {
 
 function haversineDistance(lat1, lon1, lat2, lon2) {
     const R = 6371e3; // meters
-    const φ1 = lat1 * Math.PI / 180;
-    const φ2 = lat2 * Math.PI / 180;
-    const Δφ = (lat2 - lat1) * Math.PI / 180;
-    const Δλ = (lon2 - lon1) * Math.PI / 180;
+    const d1 = lat1 * Math.PI / 180;
+    const d2 = lat2 * Math.PI / 180;
+    const fd = (lat2 - lat1) * Math.PI / 180;
+    const fDelta = (lon2 - lon1) * Math.PI / 180;
 
-    const a = Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +
-        Math.cos(φ1) * Math.cos(φ2) *
-        Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
+    const a = Math.sin(fd / 2) * Math.sin(fd / 2) +
+        Math.cos(d1) * Math.cos(d2) *
+        Math.sin(fDelta / 2) * Math.sin(fDelta / 2);
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
     return R * c; // Distance in meters
