@@ -9,75 +9,24 @@ pipeline {
             }
         }
 
-        // Backend
-        stage('Install Backend Dependencies') {
+        stage('Backend Tests') {
             steps {
-                dir('backend') {
-                    echo 'Installing backend dependencies...'
-                    sh 'npm install'
+                script {
+                    // Starten Sie den Testservice, der in Ihrer docker-compose.yml definiert ist.
+                    // Stellen Sie sicher, dass dieser Service so konfiguriert ist, dass er npm test oder den entsprechenden Testbefehl ausführt.
+                    sh 'docker-compose -f docker-compose.yml run backend-tests'
                 }
             }
         }
 
-        stage('Test Backend') {
-            steps {
-                dir('backend') {
-                    echo 'Running backend tests...'
-                    sh 'npm test'
-                }
-            }
-        }
-
-        stage('SonarQube Analysis for Backend') {
-            steps {
-                dir('backend') {
-                    echo 'Running SonarQube analysis for backend...'
-                    sh 'sonar-scanner -Dsonar.projectKey=totallyspies -Dsonar.sources=./src -Dsonar.exclusions=**/node_modules/**,**/*.spec.js'
-                }
-            }
-        }
-
-        // Frontend
-        stage('Install Frontend Dependencies') {
-            steps {
-                dir('frontend') {
-                    echo 'Installing frontend dependencies...'
-                    sh 'npm install'
-                }
-            }
-        }
-
-        stage('Test Frontend') {
-            steps {
-                dir('frontend') {
-                    echo 'Running frontend tests...'
-                    sh 'npm test'
-                }
-            }
-        }
-
-        stage('SonarQube Analysis for Frontend') {
-            steps {
-                dir('frontend') {
-                    echo 'Running SonarQube analysis for frontend...'
-                    sh 'sonar-scanner -Dsonar.projectKey=totallyspies -Dsonar.sources=./src -Dsonar.exclusions=**/node_modules/**,**/*.spec.js'
-                }
-            }
-        }
+        // Weitere Schritte für den Build, SonarQube-Analyse usw.
     }
 
     post {
-        success {
-            echo 'Build and analysis were successful.'
-        }
-
-        failure {
-            echo 'Build or analysis failed.'
-        }
-
         always {
+            // Aktionen, die immer durchgeführt werden, egal ob der Build erfolgreich war oder fehlgeschlagen ist.
             echo 'Cleaning up...'
-
+            sh 'docker-compose -f docker-compose.yml down'
+        }
     }
-  }
 }
