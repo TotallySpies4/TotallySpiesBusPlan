@@ -4,10 +4,10 @@ import { Kafka } from 'kafkajs';
 
 const INTERVAL_MS = 60 * 1000;
 const kafka = new Kafka({ brokers: ['kafka:19092'] });
-const producer = kafka.producer();
 
 
-async function createTopic(topic) {
+
+export async function createTopic(topic) {
     const admin = kafka.admin();
     await admin.connect();
     const existingTopics = await admin.listTopics();
@@ -20,7 +20,8 @@ async function createTopic(topic) {
     await admin.disconnect();
 }
 
-async function sendToKafka(topic, data) {
+export async function sendToKafka(topic, data) {
+    const producer = kafka.producer();
     await producer.connect();
     await producer.send({
         topic,
@@ -30,7 +31,7 @@ async function sendToKafka(topic, data) {
     await producer.disconnect();
 }
 
-async function fetchAndSend(url, topic) {
+export async function fetchAndSend(url, topic) {
     try {
         const response = await axios({
             method: 'GET',

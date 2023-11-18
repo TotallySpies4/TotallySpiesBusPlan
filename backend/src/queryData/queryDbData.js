@@ -1,5 +1,4 @@
-import {Route, Speed, StopTime, Trip} from "../DBmodels/busline.js";
-import mongoose from "mongoose";
+import {Route, StopTime, Trip} from "../DBmodels/busline.js";
 import {segmentAvgSpeedCalculator} from "../utils/speedCalculator.js";
 import {VehiclePositions} from "../DBmodels/vehiclepositions.js";
 import {getShapesBetweenStops} from "../utils/shapesUtilSet.js";
@@ -40,8 +39,7 @@ async function getBusDetails(routeID){
 }
 
 async function handleInactivity(route) {
-    const trip = await Trip.findOne({_id: route.trips[0]}).populate('stop_times').populate('shapes');
-    return trip;
+    return Trip.findOne({_id: route.trips[0]}).populate('stop_times').populate('shapes');
 }
 
 

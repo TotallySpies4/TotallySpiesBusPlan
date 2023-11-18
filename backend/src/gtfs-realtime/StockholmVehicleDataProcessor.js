@@ -1,7 +1,9 @@
 import {VehiclePositions} from "../DBmodels/vehiclepositions.js";
 import {congestionLevelStockholm} from "../utils/congestionLevel.js";
+import {IVehicleDataProcessor} from "./IVehicleDataProcessor.js";
 
-class StockholmVehicleDataProcessor extends IVehicleDataProcessor {
+
+export class StockholmVehicleDataProcessor extends IVehicleDataProcessor {
     createNewVehicle(vehicle,existingTrip,route,city) {
         return new VehiclePositions({
             city: city,

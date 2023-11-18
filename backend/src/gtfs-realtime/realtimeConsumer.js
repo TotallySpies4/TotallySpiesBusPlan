@@ -1,9 +1,9 @@
 import {Kafka} from "kafkajs";
 import mongoose from "mongoose";
-
-import {congestionLevel, congestionLevelStockholm} from "../utils/congestionLevel.js";
 import {VehiclePositions} from "../DBmodels/vehiclepositions.js";
 import {Route, Trip} from "../DBmodels/busline.js";
+import {StockholmVehicleDataProcessor} from "./StockholmVehicleDataProcessor.js";
+import {AmsterdamVehicleDataProcessor} from "./AmsterdamVehicleDataProcessor.js";
 
 const kafka = new Kafka({
     clientId: 'my-app',
@@ -35,20 +35,15 @@ async function setupConsumerForCity(topic,city) {
 
 
             for (const vehicle of data) {
-                //if (vehicle.vehicle.currentStatus === "IN_TRANSIT_TO" || vehicle.vehicle.currentStatus === "STOPPED_AT") {
-
                 if (!vehicle || !vehicle.vehicle || !vehicle.vehicle.trip) {
                     console.error('Invalid vehicle data format:', vehicle);
                     continue; // Skip this iteration because the structure is not as expected
                 }
 
-                // Now you can safely check for 'tripId'
                 if (!vehicle.vehicle.trip.tripId) {
                     console.error('Trip ID is undefined for vehicle:', vehicle);
                     continue; // Skip this iteration because tripId is undefined
                 }
-
-                // Check if the trip exists in the database
 
                     console.log("vehicleID", vehicle);
                     const existingTrip = await Trip.findOne({trip_id: vehicle.vehicle.trip.tripId});
@@ -61,23 +56,18 @@ async function setupConsumerForCity(topic,city) {
                     const existingPosition = await VehiclePositions.findOne({currentTrip_id: existingTrip._id});
                      console.log("existing position", existingPosition);
                      if (existingPosition) {
+
                     // Update existing entry
-
                     await processor.updateVehicle(vehicle, existingPosition, existingTrip);
-
                     await existingPosition.save();
 
 
                 } else {
                     // Create new entry
                     const route = await Route.findOne({_id: existingTrip.route_id});
-
-                    const newPosition = processor.createNewVehicle(vehicle.vehicle, existingTrip, route, city);
+                    const newPosition = processor.createNewVehicle(vehicle, existingTrip, route, city);
                     await newPosition.save();
                 }
-                     // }
-
-
             }
             console.log("done");
 

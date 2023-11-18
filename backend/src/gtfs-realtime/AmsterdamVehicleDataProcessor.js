@@ -1,8 +1,9 @@
 import {VehiclePositions} from "../DBmodels/vehiclepositions.js";
 import {Route} from "../DBmodels/busline.js";
 import {congestionLevel} from "../utils/congestionLevel.js";
+import {IVehicleDataProcessor} from "./IVehicleDataProcessor.js";
 
-class AmsterdamVehicleDataProcessor extends IVehicleDataProcessor {
+export class AmsterdamVehicleDataProcessor extends IVehicleDataProcessor {
     createNewVehicle(vehicle,existingTrip,route,city) {
         return new VehiclePositions({
             city: city,
