@@ -6,7 +6,7 @@ import {StopTime} from "../DBmodels/busline.js";
  * @param currentStop
  * @returns {Promise<number|null>}
  */
- export async function segmentAvgSpeedCalculator(previousStop, currentStop ) {
+ export async function calculatorScheduledSpeedAmsterdam(previousStop, currentStop ) {
   try {
 
       const distance = calculateDistance(previousStop.location.longitude, previousStop.location.latitude, currentStop.location.longitude, currentStop.location.latitude);
@@ -36,10 +36,8 @@ import {StopTime} from "../DBmodels/busline.js";
         const currentTimestamp = parseInt(vehiclePositions[1].timestamp, 10); // In Sekunden
         const previousTimestamp = parseInt(vehiclePositions[0].timestamp, 10); // In Sekunden
 
-
         //console.log("currentTimestamp",currentTimestamp)
         //console.log("previousTimestamp",previousTimestamp)
-
 
         const distance = calculateDistance(
             previousPosition.longitude,
@@ -131,7 +129,14 @@ export async function calculateScheduledSpeedStockholm(tripId, latitude, longitu
 
 }
 
-function calculateBearing(currentStop, nextStop) {
+/**
+ * Method to calculate the bearing between two stops
+ * @param currentStop
+ * @param nextStop
+ * @returns {number}
+ */
+
+export function calculateBearing(currentStop, nextStop) {
     const toRadians = degree => degree * Math.PI / 180;
     const toDegrees = radian => radian * 180 / Math.PI;
 
@@ -156,14 +161,27 @@ function calculateBearing(currentStop, nextStop) {
     return (toDegrees(Math.atan2(y, x)) + 360) % 360; // Normalize the angle into the range 0° to 360°
 }
 
-function isMovingTowards(nextStopBearing, vehicleBearing, tolerance = 10) {
+/**
+ * Method to check if the vehicle is moving towards the next nearest stop
+ * @param nextStopBearing
+ * @param vehicleBearing
+ * @param tolerance
+ * @returns {boolean}
+ */
+export function isMovingTowards(nextStopBearing, vehicleBearing, tolerance = 10) {
     // Check if the vehicle's bearing is within a certain range (tolerance) of the next stop's bearing
     const diff = Math.abs(vehicleBearing - nextStopBearing);
     return diff <= tolerance || diff >= 360 - tolerance;
 }
 
-
-function findNearestStop(stopTimes, lat, lon) {
+/**
+ * Method to find the nearest stop based on latitude and longitude
+ * @param stopTimes
+ * @param lat
+ * @param lon
+ * @returns {null}
+ */
+export function findNearestStop(stopTimes, lat, lon) {
     let nearestStop = null;
     let smallestDistance = Infinity;
 
@@ -178,7 +196,15 @@ function findNearestStop(stopTimes, lat, lon) {
     return nearestStop;
 }
 
-function haversineDistance(lat1, lon1, lat2, lon2) {
+/**\
+ * Method to calculate the distance between two points on a sphere
+ * @param lat1
+ * @param lon1
+ * @param lat2
+ * @param lon2
+ * @returns {number}
+ */
+export function haversineDistance(lat1, lon1, lat2, lon2) {
     const R = 6371e3; // meters
     const d1 = lat1 * Math.PI / 180;
     const d2 = lat2 * Math.PI / 180;
@@ -257,7 +283,14 @@ function haversineDistance(lat1, lon1, lat2, lon2) {
     date.setSeconds(seconds);
     return date;
 }
-function timeDifferenceInSeconds(startTime, endTime) {
+
+/**
+ * Method to calculate the time difference between two timestamps
+ * @param startTime
+ * @param endTime
+ * @returns {number}
+ */
+export function timeDifferenceInSeconds(startTime, endTime) {
     const start = parseTime(startTime);
     const end = parseTime(endTime);
     return (end - start) / 1000; // Convert milliseconds to seconds

@@ -1,5 +1,5 @@
 import {calculateScheduledSpeedStockholm, realtimeAvgSpeedCalculator} from "./speedCalculator.js";
-import { fetchAverageSpeedFromDB } from "../queryData/queryDbData.js";
+import { fetchAverageSpeed } from "../queryData/queryDbData.js";
 
 /**
  * Method to calculate the congestion level of a route segment
@@ -11,7 +11,7 @@ export async function congestionLevel(routeID, vehiclePosition) {
 
 
     // Fetch scheduled average speed for the current segment
-    const speedObject = await fetchAverageSpeedFromDB(routeID, vehiclePosition.trip_id, vehiclePosition.stopSequence);
+    const speedObject = await fetchAverageSpeed(routeID, vehiclePosition.trip_id, vehiclePosition.stopSequence);
     const scheduleSpeed = speedObject.speedEntry;
     const previousStop = speedObject.previousStop;
     const currentStop = speedObject.currentStop;
