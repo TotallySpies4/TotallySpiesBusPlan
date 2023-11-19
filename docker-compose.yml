@@ -105,6 +105,8 @@ services:
       - .:/code
     depends_on:
       - sonarqube
+    networks:
+      - sonarnet
   db:
     image: postgres:latest
     networks:
