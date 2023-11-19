@@ -42,6 +42,18 @@ services:
       - shared_volume:/app/shared
     depends_on:
       - mongodb
+
+  lstm-model:
+    build: ./lstmModel
+    image: lstm_model_image
+    ports:
+      - "5050:5050"
+    volumes:
+      - ./lstmModel:/app
+      - shared_volume:/app/shared
+    depends_on:
+      - mongodb
+
   mongodb:
     image: "mongo:latest"
     ports:

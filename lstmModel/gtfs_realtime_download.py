@@ -4,13 +4,16 @@ import py7zr
 from google.transit import gtfs_realtime_pb2
 
 # Define the API endpoint
-api_url = "https://api.koda.trafiklab.se/KoDa/api/v2/gtfs-rt/klt/VehiclePositions?date=2021-01-01&key=gQpNjugJMEZZKu69pw3Sbz4PrLhZ0K_hVDGH5RAGUqk"
+api_url = "https://api.koda.trafiklab.se/KoDa/api/v2/gtfs-rt/sl/VehiclePositions?date=2021-01-01&key=gQpNjugJMEZZKu69pw3Sbz4PrLhZ0K_hVDGH5RAGUqk"
 
 # Define the output directory for pb files
 output_directory = "output_pb_files"
 
+print("Downloading data from API...")
+print("Waiting for response...")
 # Make a request to the API
 response = requests.get(api_url)
+
 
 # Check if the request was successful
 if response.status_code == 200:

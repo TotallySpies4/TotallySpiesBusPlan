@@ -1,4 +1,4 @@
-import {StopTime} from "../DBmodels/busline.js";
+import {StopTime} from "../../shared/DBmodels/busline.js";
 
 /**
  * Method to calculate the average speed of a route

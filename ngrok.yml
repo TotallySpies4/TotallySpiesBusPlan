@@ -1,5 +1,6 @@
 version: 2
+authtoken: 2WZR2S6HVGENwRcIRdiwxerSTbm_9FCEayCuFM5TRLMUstbd
 tunnels:
   jenkins:
     proto: http
-    addr: 8080
+    addr: jenkins:8080

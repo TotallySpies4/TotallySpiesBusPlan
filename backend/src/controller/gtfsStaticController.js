@@ -1,6 +1,6 @@
 import * as GTFS from 'gtfs';
 import mongoose from "mongoose";
-import {Route, Shape, Speed, StopTime, Trip} from "../DBmodels/busline.js";
+import {Route, Shape, Speed, StopTime, Trip} from "../../shared/DBmodels/busline.js";
 
 
 export class GtfsStaticController {

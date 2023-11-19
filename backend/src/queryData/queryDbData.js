@@ -1,6 +1,6 @@
-import {Route, StopTime, Trip} from "../DBmodels/busline.js";
+import {Route, StopTime, Trip} from "../../shared/DBmodels/busline.js";
 import {calculatorScheduledSpeedAmsterdam} from "../utils/speedCalculator.js";
-import {VehiclePositions} from "../DBmodels/vehiclepositions.js";
+import {VehiclePositions} from "../../shared/DBmodels/vehiclepositions.js";
 import {getShapesBetweenStops} from "../utils/shapesUtilSet.js";
 import {agency} from "../utils/enum.js";
 

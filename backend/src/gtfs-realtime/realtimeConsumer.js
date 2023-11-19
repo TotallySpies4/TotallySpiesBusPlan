@@ -1,7 +1,7 @@
 import {Kafka} from "kafkajs";
 import mongoose from "mongoose";
-import {VehiclePositions} from "../DBmodels/vehiclepositions.js";
-import {Route, Trip} from "../DBmodels/busline.js";
+import {VehiclePositions} from "../../shared/DBmodels/vehiclepositions.js";
+import {Route, Trip} from "../../shared/DBmodels/busline.js";
 import {StockholmVehicleDataProcessor} from "./StockholmVehicleDataProcessor.js";
 import {AmsterdamVehicleDataProcessor} from "./AmsterdamVehicleDataProcessor.js";
 
