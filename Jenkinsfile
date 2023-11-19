@@ -4,15 +4,23 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
+                // Holt den neuesten Code aus dem Git-Repository
                 checkout scm
             }
         }
 
-        stage('SonarQube Analysis for Backend') {
+        stage('SonarQube Analysis') {
             steps {
+                // Führt die SonarQube-Analyse durch
                 script {
-                    echo 'Running SonarQube analysis for backend...'
-                    sh 'docker compose -f docker-compose.yml run sonar-scanner'
+                    sh """
+                    docker run \
+                        --rm \
+                        -e SONAR_HOST_URL=http://your-sonarqube-server:9000 \
+                        -e SONAR_LOGIN=squ_f87b63fdded0634fcedfedbf0867f18499a391c0 \
+                        -v $(pwd):/usr/src \
+                        sonarsource/sonar-scanner-cli
+                    """
                 }
             }
         }
@@ -20,8 +28,7 @@ pipeline {
 
     post {
         always {
-            echo 'Cleaning up...'
-            sh 'docker compose -f docker-compose.yml down'
+            echo 'Prozess abgeschlossen.'
         }
     }
 }
