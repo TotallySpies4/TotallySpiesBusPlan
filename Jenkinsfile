@@ -1,4 +1,4 @@
-pipeline {
+/**pipeline {
     agent any
 
     stages {
@@ -25,4 +25,15 @@ pipeline {
             echo 'Prozess abgeschlossen.'
         }
     }
+}**/
+node {
+  stage('SCM') {
+    checkout scm
+  }
+  stage('SonarQube Analysis') {
+    def scannerHome = tool 'SonarTotallySpies';
+    withSonarQubeEnv() {
+      sh "${scannerHome}/bin/sonar-scanner"
+    }
+  }
 }
