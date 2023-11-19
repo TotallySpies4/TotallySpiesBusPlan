@@ -63,7 +63,7 @@ export async function fetchAndSend(url, topic) {
 
 // City configurations
 const amsterdamConfig = {
-    url: 'http://gtfs.ovapi.nl/nl/vehiclePositions.pb',
+    url: 'https://gtfs.ovapi.nl/nl/vehiclePositions.pb',
     topic: 'gtfs-realtime-amsterdam'
 };
 

@@ -94,6 +94,8 @@ services:
       - sonarqube_extensions:/opt/sonarqube/extensions
       - sonarqube_bundled-plugins:/opt/sonarqube/lib/bundled-plugins
   sonar-scanner:
+    environment:
+      - SONAR_TOKEN
     image: sonarsource/sonar-scanner-cli
     command: >
       sh -c "sleep 30 && sonar-scanner

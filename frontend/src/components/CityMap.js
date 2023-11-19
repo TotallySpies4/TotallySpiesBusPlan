@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, Polyline } from 'react-leaflet';
 import L from 'leaflet';
 
-function Map({ selectedTrip, congestionShape, currentVehicle }) {
+function CityMap({ selectedTrip, congestionShape, currentVehicle }) {
     useEffect(() => {
         console.log("SelectedBusID in Map: " + selectedTrip)
     }, [selectedTrip]);
@@ -17,8 +17,6 @@ function Map({ selectedTrip, congestionShape, currentVehicle }) {
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                 />
-                // Drawing stopes and shapes
-
                 {selectedTrip && (
                     <Polyline
                         positions={selectedTrip.shapes.map(shape => [shape.shape_pt_lat, shape.shape_pt_lon])}
@@ -33,24 +31,21 @@ function Map({ selectedTrip, congestionShape, currentVehicle }) {
                         </div>
                 )}
 
-
-
                 {selectedTrip && selectedTrip.stop_times.map((stop, index) => (
                     <Marker key={index} position={[stop.location.latitude, stop.location.longitude]}>
                         <Popup>{stop.stop_name} (Arrival Time: {stop.arrival_time}, Departure Time: {stop.departure_time})</Popup>
                     </Marker>
                 ))}
 
-
-                // Drawing vehicle position
-                {currentVehicle &&  (
+                {//Draw the bus marker only if the bus is in operation
+                    currentVehicle &&  (
                     <Marker position={[currentVehicle.current_position.latitude, currentVehicle.current_position.longitude]}>
                         <Popup>Bus Position</Popup>
                     </Marker>
                 )}
 
-               // Drawing congestion shape
-                {congestionShape && (
+                {//Draw the congestion shape only if the bus is in operation
+                    congestionShape && (
                     <Polyline positions={congestionShape.map(shape => [shape.shape_pt_lat, shape.shape_pt_lon])} color={getCongestionColor(currentVehicle.congestion_level.level)} />
                 )}
 
@@ -73,5 +68,5 @@ function getCongestionColor(level) {
     }
 }
 
-export default Map;
+export default CityMap;
 

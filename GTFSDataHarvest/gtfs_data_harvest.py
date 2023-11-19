@@ -15,7 +15,7 @@ def collect_and_store_data():
         current_date = get_current_date()
         filename = get_filename_for_date(current_date)
 
-        url = "http://gtfs.ovapi.nl/nl/vehiclePositions.pb"
+        url = "https://gtfs.ovapi.nl/nl/vehiclePositions.pb"
 
         try:
             response = requests.get(url)

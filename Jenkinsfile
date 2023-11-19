@@ -8,10 +8,19 @@ pipeline {
             }
         }
 
+        stage('Start SonarQube and Database') {
+            steps {
+                script {
+
+                    sh 'docker-compose up -d sonarqube db'
+                }
+            }
+        }
+
         stage('SonarQube Analysis') {
             steps {
                 script {
-                    sh 'sleep 30' // Warten Sie 30 Sekunden
+
                     sh 'docker-compose up sonar-scanner'
                 }
             }
@@ -26,3 +35,4 @@ pipeline {
         }
     }
 }
+
