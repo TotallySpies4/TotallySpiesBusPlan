@@ -15,8 +15,7 @@ import {StopTime} from "../DBmodels/busline.js";
     return (distance / timeDifference) * 3600;
 
   } catch (error) {
-    console.error("Error calculating speed:", error);
-    return null;
+    throw new Error("Error calculating speed:");
   }
 }
 
