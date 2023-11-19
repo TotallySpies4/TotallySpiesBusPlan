@@ -22,7 +22,7 @@ function Map({ selectedTrip, congestionShape, currentVehicle }) {
                 {selectedTrip && (
                     <Polyline
                         positions={selectedTrip.shapes.map(shape => [shape.shape_pt_lat, shape.shape_pt_lon])}
-                        color={currentVehicle ? "green" : "blue"}
+                        color={currentVehicle ? "green" : "grey"}
                     />
                 )}
 
@@ -69,7 +69,7 @@ function getCongestionColor(level) {
         case 2:
             return "red";
         default:
-            return "blue";
+            return "grey";
     }
 }
 
