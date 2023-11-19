@@ -1,4 +1,3 @@
-
 import React, { useEffect } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, Polyline } from 'react-leaflet';
 import L from 'leaflet';
@@ -17,7 +16,7 @@ function Map({ selectedTrip, congestionShape, currentVehicle }) {
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                 />
-                // Drawing stopes and shapes
+                {/* Drawing stopes and shapes */}
 
                 {selectedTrip && (
                     <Polyline
@@ -33,8 +32,6 @@ function Map({ selectedTrip, congestionShape, currentVehicle }) {
                         </div>
                 )}
 
-
-
                 {selectedTrip && selectedTrip.stop_times.map((stop, index) => (
                     <Marker key={index} position={[stop.location.latitude, stop.location.longitude]}>
                         <Popup>{stop.stop_name} (Arrival Time: {stop.arrival_time}, Departure Time: {stop.departure_time})</Popup>
@@ -42,14 +39,14 @@ function Map({ selectedTrip, congestionShape, currentVehicle }) {
                 ))}
 
 
-                // Drawing vehicle position
+                {/* Drawing vehicle position */}
                 {currentVehicle &&  (
                     <Marker position={[currentVehicle.current_position.latitude, currentVehicle.current_position.longitude]}>
                         <Popup>Bus Position</Popup>
                     </Marker>
                 )}
 
-               // Drawing congestion shape
+               {/* Drawing congestion shape */}
                 {congestionShape && (
                     <Polyline positions={congestionShape.map(shape => [shape.shape_pt_lat, shape.shape_pt_lon])} color={getCongestionColor(currentVehicle.congestion_level.level)} />
                 )}
