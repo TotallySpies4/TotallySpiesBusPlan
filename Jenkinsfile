@@ -11,14 +11,8 @@ pipeline {
         stage('SonarQube Analysis') {
             steps {
                 script {
-                    sh """
-                    docker run \\
-                        --rm \\
-                        -e SONAR_HOST_URL=http://sonarqube:9000 \\
-                        -e SONAR_LOGIN=squ_f87b63fdded0634fcedfedbf0867f18499a391c0 \\
-                        -v \$(pwd):/usr/src \\
-                        sonarsource/sonar-scanner-cli
-                    """
+                    // Stellen Sie sicher, dass das Arbeitsverzeichnis die docker-compose.yml Datei enthält
+                    sh 'docker-compose up sonar-scanner'
                 }
             }
         }
@@ -26,6 +20,8 @@ pipeline {
 
     post {
         always {
+            // Fahren Sie die Docker Compose-Services herunter
+            sh 'docker-compose down'
             echo 'Prozess abgeschlossen.'
         }
     }
