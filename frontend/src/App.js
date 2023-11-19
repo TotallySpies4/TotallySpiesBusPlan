@@ -1,4 +1,4 @@
-import Map from "./components/Map.js";
+import CityMap from "./components/CityMap.js";
 import React, {useEffect, useState} from "react";
 import Sidebar from "./components/Sidebar.js";
 import useFetch from "./hooks/useFetch.js";
@@ -89,7 +89,7 @@ const App = () => {
 
   return (
     <div className="container">
-      <Map
+      <CityMap
           selectedTrip={selectedTrip}
           congestionShape={congestionShape}
             currentVehicle={currentVehicle}

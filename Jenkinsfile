@@ -8,10 +8,21 @@ pipeline {
             }
         }
 
+        stage('Build Docker Images') {
+            steps {
+                script {
+                    // Bauen Sie die Docker Images
+                    sh 'docker-compose build'
+                }
+            }
+        }
+
         stage('SonarQube Analysis') {
             steps {
                 script {
-                    sh 'sleep 30' // Warten Sie 30 Sekunden
+                    // Warten Sie kurz, um sicherzustellen, dass alle Dienste bereit sind
+                    sh 'sleep 30'
+                    // Führen Sie den Sonar-Scanner aus
                     sh 'docker-compose up sonar-scanner'
                 }
             }
@@ -26,3 +37,4 @@ pipeline {
         }
     }
 }
+

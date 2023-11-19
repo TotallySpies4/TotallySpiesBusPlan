@@ -4,7 +4,7 @@ import { Kafka } from 'kafkajs';
 
 const requestSettings = {
     method: 'GET',
-    url: 'http://gtfs.ovapi.nl/nl/vehiclePositions.pb',
+    url: 'https://gtfs.ovapi.nl/nl/vehiclePositions.pb',
     encoding: null
 };
 const INTERVAL_MS =  60 * 1000;

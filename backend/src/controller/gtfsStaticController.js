@@ -12,8 +12,8 @@ export class GtfsStaticController {
         return GTFS.importGtfs(config);
     }
 
-    async getRoutesWithStops( agencyConfig ) {
-        return new Promise(async (resolve, reject) => {
+    async getRoutesWithStops( agencyConfig )  {
+        return
             try {
                 await mongoose.connect(agencyConfig.agencies[0].mongoUrl, {
                     serverSelectionTimeoutMS: 60000
@@ -114,7 +114,6 @@ export class GtfsStaticController {
                 console.error("Error while importing data:", err);
                 reject(err);
             }
-        });
     }
 
 }
