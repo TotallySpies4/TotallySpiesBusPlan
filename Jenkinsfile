@@ -1,4 +1,4 @@
-/**pipeline {
+pipeline {
     agent any
 
     stages {
@@ -11,7 +11,7 @@
         stage('SonarQube Analysis') {
             steps {
                 script {
-                    // Stellen Sie sicher, dass das Arbeitsverzeichnis die docker-compose.yml Datei enthält
+                    sh 'sleep 30' // Warten Sie 30 Sekunden
                     sh 'docker-compose up sonar-scanner'
                 }
             }
@@ -25,15 +25,4 @@
             echo 'Prozess abgeschlossen.'
         }
     }
-}**/
-node {
-  stage('SCM') {
-    checkout scm
-  }
-  stage('SonarQube Analysis') {
-    def scannerHome = tool 'SonarTotallySpies';
-    withSonarQubeEnv() {
-      sh "${scannerHome}/bin/sonar-scanner"
-    }
-  }
 }
