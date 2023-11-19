@@ -8,11 +8,11 @@ pipeline {
             }
         }
 
-        stage('Build Docker Images') {
+        stage('Start SonarQube and Database') {
             steps {
                 script {
-                    // Bauen Sie die Docker Images
-                    sh 'docker-compose build'
+
+                    sh 'docker-compose up -d sonarqube db'
                 }
             }
         }
@@ -20,9 +20,7 @@ pipeline {
         stage('SonarQube Analysis') {
             steps {
                 script {
-                    // Warten Sie kurz, um sicherzustellen, dass alle Dienste bereit sind
-                    sh 'sleep 30'
-                    // Führen Sie den Sonar-Scanner aus
+
                     sh 'docker-compose up sonar-scanner'
                 }
             }
