@@ -13,7 +13,7 @@ with open(csv_file_path, "w", newline="") as csv_file:
     csv_writer = csv.writer(csv_file)
 
     # Write the header row to the CSV file
-    csv_writer.writerow(["Entity ID", "Timestamp", "Latitude", "Longitude", "Bearing", "Speed", "Vehicle ID"])
+    csv_writer.writerow(["Entity ID", "Timestamp", "Latitude", "Longitude", "Bearing", "Speed", "Vehicle ID", "Trip ID", "Schedule Relationship"])
 
     # Iterate through each file in the specified directory and its subdirectories
     for root, dirs, files in os.walk(pb_directory):
@@ -34,18 +34,21 @@ with open(csv_file_path, "w", newline="") as csv_file:
 
                     # Extract and write vehicle position data to the CSV file
                     for entity in feed_message.entity:
-                        if entity.HasField("vehicle") and entity.vehicle.HasField("position"):
-                            position = entity.vehicle.position
-                            csv_writer.writerow([
-                                entity.id,
-                                entity.vehicle.timestamp,
-                                position.latitude,
-                                position.longitude,
-                                position.bearing,
-                                position.speed,
-                                entity.vehicle.vehicle.id
-                            ])
-
+                        if entity.HasField("vehicle"):
+                            vehicle = entity.vehicle
+                            if vehicle.HasField("position"):
+                                position = vehicle.position
+                                csv_writer.writerow([
+                                    entity.id,
+                                    vehicle.timestamp,
+                                    position.latitude,
+                                    position.longitude,
+                                    position.bearing,
+                                    position.speed,
+                                    vehicle.vehicle.id,
+                                    vehicle.trip.trip_id if vehicle.HasField("trip") else "",
+                                    vehicle.trip.schedule_relationship if vehicle.HasField("trip") else ""
+                                ])
                 print(f"Processed {len(feed_message.entity)} entities from {pb_file_path}")
                 print()
 
