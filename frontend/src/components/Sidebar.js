@@ -3,7 +3,7 @@ import Select from "react-select";
 import React, { useState } from "react";
 import useFetch from "../hooks/useFetch.js";
 import {CitySelection} from "./CitySelection.js";
-import {BusllineSelection} from "./BusllineSelection.js";
+import BuslineSelection from "./BuslineSelection.js";
 
 const Sidebar = ({
     allroutes,
@@ -28,7 +28,7 @@ const Sidebar = ({
         {/* Bus line select dropdown and list */}
         <div className="space-y-4 w-full">
           <p>Bus line</p>
-          <BusllineSelection
+          <BuslineSelection
               selectedCity ={selectedCity}
               allroutes={allroutes}
               selectedTrip={selectedTrip}

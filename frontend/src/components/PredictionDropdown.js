@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Select from "react-select";
-import BuslineSelection from "./BuslineSelection.js";
+import { BuslineSelection } from "./BuslineSelection.js";
 import { CitySelection } from "./CitySelection.js";
 
 export const PredictionDropDown = ({ selectedBusline, selectedCity }) => {

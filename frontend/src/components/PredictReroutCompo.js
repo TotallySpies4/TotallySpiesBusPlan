@@ -1,5 +1,5 @@
-import { ReroutingButton } from "./ReroutingButton";
-import {PredictionDropDown} from "./PredictionDropdown";
+import { ReroutingButton } from "./ReroutingButton.js";
+import {PredictionDropDown} from "./PredictionDropdown.js";
 
 export const PredictRerouteCompo = () => {
     return ( 
