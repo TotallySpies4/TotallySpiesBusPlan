@@ -1,5 +1,7 @@
 import os
 import logging
+from datetime import datetime, timedelta
+
 from gtfs_realtime_decompressor import decompress_7z_file
 from gtfs_realtime_download import fs
 from gtfs_realtime_reader import process_pb_directory
@@ -40,3 +42,10 @@ def retrieve_and_decompress(date):
             logging.error(f"No data found for {date}")
     except Exception as e:
         logging.error(f"Error processing data for {date}: {e}")
+
+if __name__ == "__main__":
+    # Download data for a range of dates
+    start_date = datetime(2021, 1, 5)
+    for i in range(6):
+        date = (start_date + timedelta(days=i)).strftime("%Y-%m-%d")
+        retrieve_and_decompress(date)
