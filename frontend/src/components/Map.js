@@ -1,74 +1,98 @@
-import React, { useEffect } from 'react';
-import { MapContainer, TileLayer, Marker, Popup, Polyline } from 'react-leaflet';
-import L from 'leaflet';
+import React, { useEffect } from "react";
+import {
+  MapContainer,
+  TileLayer,
+  Marker,
+  Popup,
+  Polyline,
+} from "react-leaflet";
+import L from "leaflet";
 
 function Map({ selectedTrip, congestionShape, currentVehicle }) {
-    useEffect(() => {
-        console.log("SelectedBusID in Map: " + selectedTrip)
-    }, [selectedTrip]);
+  useEffect(() => {
+    console.log("SelectedBusID in Map: " + selectedTrip);
+  }, [selectedTrip]);
 
-    return (
-        <div className="map">
+  return (
+    <div className="map">
+      <MapContainer
+        center={[52.3676, 4.9041]}
+        zoom={13}
+        style={{ height: "100vh", width: "100vw" }}
+        zoomControl={false}>
+        <TileLayer
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        />
+        {/* Drawing stopes and shapes */}
 
-            <MapContainer center={[52.3676, 4.9041]} zoom={13} style={{ height: "100vh", width: "100vw" }} zoomControl={false}>
+        {selectedTrip && (
+          <Polyline
+            positions={selectedTrip.shapes.map((shape) => [
+              shape.shape_pt_lat,
+              shape.shape_pt_lon,
+            ])}
+            color={currentVehicle ? "green" : "grey"}
+          />
+        )}
 
-                <TileLayer
-                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                />
-                {/* Drawing stopes and shapes */}
+        {selectedTrip && !currentVehicle && (
+          <div className="bus-message">
+            <img src="/icon/info.png" alt="Info" className="bus-icon" />
+            The bus is currently not in operation.
+          </div>
+        )}
 
-                {selectedTrip && (
-                    <Polyline
-                        positions={selectedTrip.shapes.map(shape => [shape.shape_pt_lat, shape.shape_pt_lon])}
-                        color={currentVehicle ? "green" : "grey"}
-                    />
-                )}
+        {selectedTrip &&
+          selectedTrip.stop_times.map((stop, index) => (
+            <Marker
+              key={index}
+              position={[stop.location.latitude, stop.location.longitude]}>
+              <Popup>
+                <strong className="text-blue-500">{stop.stop_name}</strong>
+                <br /> <strong>Arrival Time: </strong> {stop.arrival_time},
+                <br /> <strong>Departure Time: </strong> {stop.departure_time})
+              </Popup>
+            </Marker>
+          ))}
 
-                {selectedTrip && !currentVehicle && (
-                    <div className="bus-message">
-                        <img src="/icon/info.png" alt="Info" className="bus-icon" />
-                            The bus is currently not in operation.
-                        </div>
-                )}
+        {/* Drawing vehicle position */}
+        {currentVehicle && (
+          <Marker
+            position={[
+              currentVehicle.current_position.latitude,
+              currentVehicle.current_position.longitude,
+            ]}>
+            <Popup>Bus Position</Popup>
+          </Marker>
+        )}
 
-                {selectedTrip && selectedTrip.stop_times.map((stop, index) => (
-                    <Marker key={index} position={[stop.location.latitude, stop.location.longitude]}>
-                        <Popup>{stop.stop_name} (Arrival Time: {stop.arrival_time}, Departure Time: {stop.departure_time})</Popup>
-                    </Marker>
-                ))}
-
-
-                {/* Drawing vehicle position */}
-                {currentVehicle &&  (
-                    <Marker position={[currentVehicle.current_position.latitude, currentVehicle.current_position.longitude]}>
-                        <Popup>Bus Position</Popup>
-                    </Marker>
-                )}
-
-               {/* Drawing congestion shape */}
-                {congestionShape && (
-                    <Polyline positions={congestionShape.map(shape => [shape.shape_pt_lat, shape.shape_pt_lon])} color={getCongestionColor(currentVehicle.congestion_level.level)} />
-                )}
-
-            </MapContainer>
-            </div>
-
-    );
+        {/* Drawing congestion shape */}
+        {congestionShape && (
+          <Polyline
+            positions={congestionShape.map((shape) => [
+              shape.shape_pt_lat,
+              shape.shape_pt_lon,
+            ])}
+            color={getCongestionColor(currentVehicle.congestion_level.level)}
+          />
+        )}
+      </MapContainer>
+    </div>
+  );
 }
 
 function getCongestionColor(level) {
-    switch (level) {
-        case 0:
-            return "green";
-        case 1:
-            return "orange";
-        case 2:
-            return "red";
-        default:
-            return "grey";
-    }
+  switch (level) {
+    case 0:
+      return "green";
+    case 1:
+      return "orange";
+    case 2:
+      return "red";
+    default:
+      return "grey";
+  }
 }
 
 export default Map;
-
