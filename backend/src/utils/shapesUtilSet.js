@@ -1,4 +1,4 @@
-import {Shape, StopTime} from "../../shared/DBmodels/busline.js";
+import {Shape, StopTime} from "../DBmodels/busline.js";
 
 export async function getShapesBetweenStops(shapes, previousStop, currentStop) {
     // Find all shapes with the given shape_id

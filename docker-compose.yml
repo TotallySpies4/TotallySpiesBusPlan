@@ -27,22 +27,6 @@ services:
       environment:
         - NODE_ENV=test
 
-  gtfs_data_harvest:
-    build: ./GTFSDataHarvest
-    container_name: gtfs_data_harvest_container
-    restart: always
-
-  ml-service:
-    build: ./ml-service
-    image: ml_service_image
-    ports:
-      - "6000:6000"
-    volumes:
-      - ./ml-service:/app
-      - shared_volume:/app/shared
-    depends_on:
-      - mongodb
-
   lstm-model:
     build: ./lstmModel
     image: lstm_model_image
@@ -70,26 +54,7 @@ services:
       - ME_CONFIG_BASICAUTH_PASSWORD=totallyspies
     depends_on:
       - mongodb
-  jenkins:
-    image: jenkins/jenkins:lts
-    ports:
-      - "8080:8080"
-    volumes:
-      - jenkins_home:/var/jenkins_home
-  ngrok:
-    image: ngrok/ngrok:latest
-    restart: unless-stopped
-    command:
-      - "start"
-      - "--all"
-      - "--config"
-      - "/etc/ngrok.yml"
-    volumes:
-      - ./ngrok.yml:/etc/ngrok.yml
-    ports:
-      - "4040:4040"
-    depends_on:
-      - jenkins
+
   sonarqube:
     image: sonarqube:latest
     ports:
@@ -105,24 +70,7 @@ services:
       - sonarqube_data:/opt/sonarqube/data
       - sonarqube_extensions:/opt/sonarqube/extensions
       - sonarqube_bundled-plugins:/opt/sonarqube/lib/bundled-plugins
-  sonar-scanner:
-    environment:
-      - SONAR_TOKEN
-    image: sonarsource/sonar-scanner-cli
-    command: >
-      sh -c "sleep 30 && sonar-scanner
-      -Dsonar.projectKey=totallyspies
-      -Dsonar.sources=/code
-      -Dsonar.projectBaseDir=/code
-      -Dsonar.exclusions=**/node_modules/**,**/bin/**,**/obj/**
-      -Dsonar.host.url=http://sonarqube:9000
-      -Dsonar.token=sqa_9a51af578ac964ae21b5328c503c87bc8b9c8ce4"
-    volumes:
-      - .:/code
-    depends_on:
-      - sonarqube
-    networks:
-      - sonarnet
+
   db:
     image: postgres:latest
     networks:

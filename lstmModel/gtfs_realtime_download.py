@@ -1,37 +1,35 @@
-import os
+from datetime import datetime, timedelta
 import requests
-import py7zr
-from google.transit import gtfs_realtime_pb2
+from pymongo import MongoClient
+from gridfs import GridFS
+import logging
 
-# Define the API endpoint
-api_url = "https://api.koda.trafiklab.se/KoDa/api/v2/gtfs-rt/sl/VehiclePositions?date=2021-01-01&key=gQpNjugJMEZZKu69pw3Sbz4PrLhZ0K_hVDGH5RAGUqk"
+# Logging configuration
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
-# Define the output directory for pb files
-output_directory = "output_pb_files"
-
-print("Downloading data from API...")
-print("Waiting for response...")
-# Make a request to the API
-response = requests.get(api_url)
+# MongoDB client setup
+client = MongoClient('mongodb:27017')
+db = client.TotallySpiesBusPlan
+fs = GridFS(db)  # GridFS instance
 
 
-# Check if the request was successful
-if response.status_code == 200:
-    # Ensure the output directory exists
-    os.makedirs(output_directory, exist_ok=True)
+def download_data_for_date(date):
+    api_url = f"https://api.koda.trafiklab.se/KoDa/api/v2/gtfs-rt/sl/VehiclePositions?date={date}&key=gQpNjugJMEZZKu69pw3Sbz4PrLhZ0K_hVDGH5RAGUqk"
+    logging.info(f"Downloading data for the date {date}")
+    response = requests.get(api_url)
 
-    # Save the 7z file
-    with open("history.7z", "wb") as f:
-        f.write(response.content)
-        print("7z file saved successfully.")
+    if response.status_code == 200:
+        logging.info(f"Storing data for the date {date}")
+        # Use GridFS to store the data
+        file_id = fs.put(response.content, filename=f"gtfs_{date}.bin")
+        logging.info(f"Successfully stored data for the date {date} with file_id {file_id}")
+    else:
+        logging.error(f"Error while downloading data for the date {date}. Status code: {response.status_code}")
+        return None
 
-    try:
-        # Extract contents of the 7z file
-        with py7zr.SevenZipFile("history.7z", mode="r") as archive:
-            archive.extractall(output_directory)
-        print("7z file extracted successfully.")
 
-    except py7zr.exceptions.Bad7zFile as e:
-        print(f"Error extracting 7z file: {e}")
-else:
-    print(f"Failed to retrieve data from API. Status code: {response.status_code}")
+# Download data for a range of dates
+start_date = datetime(2021, 1, 10)
+for i in range(1):
+    date = (start_date + timedelta(days=i)).strftime("%Y-%m-%d")
+    download_data_for_date(date)

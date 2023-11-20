@@ -1,5 +1,5 @@
-import {VehiclePositions} from "../../shared/DBmodels/vehiclepositions.js";
-import {Route} from "../../shared/DBmodels/busline.js";
+import {VehiclePositions} from "../DBmodels/vehiclepositions.js";
+import {Route} from "../DBmodels/busline.js";
 import {congestionLevel} from "../utils/congestionLevel.js";
 import {IVehicleDataProcessor} from "./IVehicleDataProcessor.js";
 

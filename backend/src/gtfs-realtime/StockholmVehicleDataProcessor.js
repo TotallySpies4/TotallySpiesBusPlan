@@ -1,4 +1,4 @@
-import {VehiclePositions} from "../../shared/DBmodels/vehiclepositions.js";
+import {VehiclePositions} from "../DBmodels/vehiclepositions.js";
 import {congestionLevelStockholm} from "../utils/congestionLevel.js";
 import {IVehicleDataProcessor} from "./IVehicleDataProcessor.js";
 
