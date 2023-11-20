@@ -29,7 +29,7 @@ def download_data_for_date(date):
 
 
 # Download data for a range of dates
-start_date = datetime(2021, 1, 10)
-for i in range(1):
+start_date = datetime(2021, 1, 4)
+for i in range(7):
     date = (start_date + timedelta(days=i)).strftime("%Y-%m-%d")
     download_data_for_date(date)
