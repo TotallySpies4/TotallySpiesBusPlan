@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Select from "react-select";
-import { formatTime } from "../utils/utils";
-import SingleStationInfo from "./SingleStationInfo";
+import { formatTime } from "../utils/utils.js";
+import SingleStationInfo from "./SingleStationInfo.js";
 
 const BuslineSelection = ({
   selectedCity,
