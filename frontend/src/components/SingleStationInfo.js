@@ -33,8 +33,7 @@ const SingleStationInfo = ({
                 <strong
                   style={{
                     color: getCongestionInfo(
-                      currentVehicle.congestion_level.level
-                    ).color,
+                      currentVehicle.congestion_level.level).color,
                   }}>
                   {formatTime(stop.arrival_time)}
                 </strong>
