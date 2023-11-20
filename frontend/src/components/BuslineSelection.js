@@ -78,7 +78,7 @@ const BuslineSelection = ({
         placeholder="-Choose a bus line-"
         className="w-full"
         styles={customStyles}
-      />
+        disabled={!selectedCity}/>
 
       {selectedCity && <SingleStationInfo />}
     </div>
