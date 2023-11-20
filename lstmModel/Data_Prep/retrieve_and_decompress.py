@@ -43,6 +43,7 @@ def retrieve_and_decompress(date):
     except Exception as e:
         logging.error(f"Error processing data for {date}: {e}")
 
+
 if __name__ == "__main__":
     # Download data for a range of dates
     start_date = datetime(2021, 1, 5)
