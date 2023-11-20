@@ -3,11 +3,8 @@ import Select from "react-select";
 import React, { useState } from "react";
 import useFetch from "../hooks/useFetch.js";
 import {CitySelection} from "./CitySelection.js";
-<<<<<<< HEAD
 import {BuslineSelection} from "./BuslineSelection.js";
-=======
-import BuslineSelection from "./BuslineSelection.js";
->>>>>>> dd48194e36c008cfdb2a433796acbb8078f23d93
+import SingleStationInfo from "./SingleStationInfo.js";
 
 const Sidebar = ({
     allroutes,
@@ -38,7 +35,7 @@ const Sidebar = ({
               selectedTrip={selectedTrip}
              setSelectedBusline={setSelectedBusline}
           />
-
+          <SingleStationInfo/>
         </div>
       </div>
     </div>
