@@ -1,4 +1,4 @@
-import Map from "./components/Map.js";
+import Map from "./components/CityMap.js";
 import React, { useEffect, useState } from "react";
 import {Sidebar} from "./components/Sidebar.js";
 import useFetch from "./hooks/useFetch.js";
