@@ -21,14 +21,22 @@ export const SingleStationInfo = ({
                   {congestionStatus && (
                     <div
                       style={{
-                        color: congestionInfo.color,
-                      }}
-                    >
-                      {congestionInfo.status}
+                        color: getCongestionInfo(
+                          currentVehicle.congestion_level.level
+                        ).color,
+                      }}>
+                      {
+                        getCongestionInfo(currentVehicle.congestion_level.level)
+                          .status
+                      }
                     </div>
                   )}
                 </div>
-                <strong style={{ color: congestionInfo.color }}>
+                <strong
+                  style={{
+                    color: getCongestionInfo(
+                      currentVehicle.congestion_level.level).color,
+                  }}>
                   {formatTime(stop.arrival_time)}
                 </strong>
               </div>
