@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Select from "react-select";
-import { formatTime } from "../utils/utils.js";
+import { formatTime } from "../utils/formatTime.js";
 import SingleStationInfo from "./SingleStationInfo.js";
 
 const BuslineSelection = ({
@@ -12,6 +12,7 @@ const BuslineSelection = ({
 }) => {
   let busOptions;
 
+  const isBuslineDisable = !selectedCity;
   const customStyles = {
     control: (provided, state) => ({
       ...provided,
@@ -78,7 +79,7 @@ const BuslineSelection = ({
         placeholder="-Choose a bus line-"
         className="w-full"
         styles={customStyles}
-        disabled={!selectedCity}/>
+        disabled={isBuslineDisable}/>
 
       {selectedCity && <SingleStationInfo />}
     </div>

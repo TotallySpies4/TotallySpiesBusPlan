@@ -1,9 +1,9 @@
-import { formatTime } from "../utils/utils.js";
+import { formatTime } from "../utils/formatTime.js";
 import Select from "react-select";
 import React, { useState } from "react";
 import useFetch from "../hooks/useFetch.js";
 import { CitySelection } from "./CitySelection.js";
-import { BuslineSelection } from "./BuslineSelection.js";
+import BuslineSelection from "./BuslineSelection.js";
 import SingleStationInfo from "./SingleStationInfo.js";
 
 const Sidebar = ({

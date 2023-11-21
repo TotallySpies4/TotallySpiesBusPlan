@@ -1,5 +1,5 @@
 import React from "react";
-import { formatTime } from "../utils/utils.js";
+import { formatTime } from "../utils/formatTime.js";
 
 const SingleStationInfo = ({
   selectedTrip,
