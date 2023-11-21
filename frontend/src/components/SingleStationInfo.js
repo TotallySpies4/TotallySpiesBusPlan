@@ -5,7 +5,9 @@ export const SingleStationInfo = ({
   selectedTrip,
   congestionStatus,
   currentVehicle,
+  congestionInfo, 
 }) => {
+
   return (
     selectedTrip &&
     selectedTrip.stop_times && (
@@ -19,22 +21,14 @@ export const SingleStationInfo = ({
                   {congestionStatus && (
                     <div
                       style={{
-                        color: getCongestionInfo(
-                          currentVehicle.congestion_level.level
-                        ).color,
-                      }}>
-                      {
-                        getCongestionInfo(currentVehicle.congestion_level.level)
-                          .status
-                      }
+                        color: congestionInfo.color,
+                      }}
+                    >
+                      {congestionInfo.status}
                     </div>
                   )}
                 </div>
-                <strong
-                  style={{
-                    color: getCongestionInfo(
-                      currentVehicle.congestion_level.level).color,
-                  }}>
+                <strong style={{ color: congestionInfo.color }}>
                   {formatTime(stop.arrival_time)}
                 </strong>
               </div>
