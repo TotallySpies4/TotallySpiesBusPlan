@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Select from "react-select";
-import {SingleStationInfo} from "./SingleStationInfo.js";
+import { SingleStationInfo } from "./SingleStationInfo.js";
 
 export const BuslineSelection = ({
   selectedCity,
@@ -12,30 +12,33 @@ export const BuslineSelection = ({
   let busOptions;
 
   const isButtonDisable = !selectedCity;
+
+  // Define custom styles for the control
   const customStyles = {
     control: (provided, state) => ({
       ...provided,
-      borderColor: isButtonDisable ? "grey":"#3b82f6",
+      borderColor: isButtonDisable ? "#9ca3af" : "#3b82f6",
       borderWidth: "2px",
       ":hover": {
-        borderColor: isButtonDisable ? "grey":"#3b82f6",
+        borderColor: isButtonDisable ? "#9ca3af" : "#3b82f6",
       },
     }),
     singleValue: (provided, state) => ({
       ...provided,
-      color: state.selectProps.value === null ? "grey" : "#3b82f6",
+      color: state.selectProps.value === null ? "#9ca3af" : "#3b82f6",
     }),
 
+    // Change the color of the dropdown button
     dropdownIndicator: (provided, state) => ({
       ...provided,
-      color: isButtonDisable ? "grey": "#3b82f6",
+      color: isButtonDisable ? "#9ca3af" : "#3b82f6",
       ":hover": {
-        color: isButtonDisable ? "grey": "#3b82f6",
+        color: isButtonDisable ? "#9ca3af" : "#3b82f6",
       },
     }),
   };
 
-  if (selectedCity === "Amsterdam, Netherlands") {
+  if (selectedCity === "Amsterdam") {
     busOptions = allroutes.amsterdam.map((bus) => ({
       value: bus.route_short_name,
       label: (
@@ -44,7 +47,7 @@ export const BuslineSelection = ({
         </div>
       ),
     }));
-  } else if (selectedCity === "Stockholm, Sweden") {
+  } else if (selectedCity === "Stockholm") {
     busOptions = allroutes.stockholm.map((bus) => ({
       value: bus.route_short_name,
       label: (
@@ -57,11 +60,11 @@ export const BuslineSelection = ({
 
   const handleBusSelection = (option) => {
     let bus;
-    if (selectedCity === "Amsterdam, Netherlands") {
+    if (selectedCity === "Amsterdam") {
       bus = allroutes.amsterdam.find(
         (b) => b.route_short_name === option.value
       );
-    } else if (selectedCity === "Stockholm, Sweden") {
+    } else if (selectedCity === "Stockholm") {
       bus = allroutes.stockholm.find(
         (b) => b.route_short_name === option.value
       );
@@ -70,15 +73,20 @@ export const BuslineSelection = ({
   };
 
   return (
-    <div>
+    <div className="space-y-4 w-72">
+      <div className="flex flex-row items-center">
+        {/* <img src="/icon/bus-station.png" alt="" /> */}
+        <p>Bus line</p>
+      </div>
+
       <Select
         options={busOptions}
         onChange={handleBusSelection}
         isSearchable
         placeholder="-Choose a bus line-"
-        className="w-full"
-        styles={customStyles}
-        isDisabled={isButtonDisable}/>
+        className={`w-full ${customStyles}`}
+        isDisabled={isButtonDisable}
+      />
 
       {selectedCity && <SingleStationInfo />}
     </div>

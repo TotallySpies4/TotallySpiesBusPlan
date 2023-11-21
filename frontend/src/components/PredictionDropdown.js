@@ -8,36 +8,35 @@ export const PredictionDropDown = ({ selectedBusline, selectedCity }) => {
   const customStyles = {
     control: (provided, state) => ({
       ...provided,
-      borderColor: isButtonDisable ? "grey":  "#3b82f6",
+      borderColor: isButtonDisable ? "#9ca3af":  "#3b82f6",
       borderWidth: "2px",
       ":hover": {
-        borderColor: isButtonDisable ? "grey": "#3b82f6",
+        borderColor: isButtonDisable ? "#9ca3af": "#3b82f6",
       },
     }),
     singleValue: (provided, state) => ({
       ...provided,
-      color: state.selectProps.value === null ? "grey" : "#3b82f6",
+      color: state.selectProps.value === null ? "#9ca3af" : "#3b82f6",
     }),
 
     dropdownIndicator: (provided, state) => ({
       ...provided,
-      color: isButtonDisable ? "grey": "#3b82f6",
+      color: isButtonDisable ? "#9ca3af": "#3b82f6",
       ":hover": {
-        color: isButtonDisable ? "grey":"#3b82f6",
+        color: isButtonDisable ? "#9ca3af":"#3b82f6",
       },
     }),
   };
   return (
-    <div className="flex flex-row justify-around items-center w-96 bg-[#FFF] shadow-xl rounded-2xl px-2">
-      <p>Congestion in</p>
+    <div className="flex flex-row justify-around items-center w-96 bg-[#FFF] shadow-2xl rounded-2xl px-2">
+      <p className="w-fit">Congestion in</p>
       {/* Dropdown for time options */}
-      <div className="rounded-lg w-full">
         <Select
           name="time-options"
           type="button"
-          disabled={isButtonDisable}
+          isDisabled={isButtonDisable}
           placeholder="-Choose predict time-"
-          className={`rounded-full py-2 px-4 w-48 ${customStyles}`}
+          className={`rounded-full text-center py-2 px-4 ${customStyles}`}
           onClick={() => {
             console.log("Clicked"); 
           }}
@@ -58,7 +57,6 @@ export const PredictionDropDown = ({ selectedBusline, selectedCity }) => {
           // }}
         />
       </div>
-    </div>
   );
 };
 

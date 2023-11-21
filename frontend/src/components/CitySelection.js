@@ -2,13 +2,13 @@ import Select from "react-select";
 import React, { useState } from "react";
 
 export const CitySelection = ({ setSelectedCity }) => {
-  let cityOptions = ["Amsterdam, Netherlands", "Stockholm, Sweden"].map((city) => ({
+  let cityOptions = ["Amsterdam", "Stockholm"].map((city) => ({
     value: city,
     label: city,
   }));
 
   const [selectedCity, setSelectedCityState] = useState(null);
-
+   
   // Define custom styles for the control
   const customStyles = {
     control: (provided, state) => ({
@@ -21,13 +21,9 @@ export const CitySelection = ({ setSelectedCity }) => {
     }),
     singleValue: (provided, state) => ({
       ...provided,
-      color: state.selectProps.value === null ? "grey" : "#3b82f6",
+      color: state.selectProps.value === null ? "#9ca3af" : "#3b82f6",
     }),
-    // Remove the divider
-    menu: (provided, state) => ({
-      ...provided,
-      borderWidth: 0,
-    }),
+
     // Change the color of the dropdown button
     dropdownIndicator: (provided, state) => ({
         ...provided,
@@ -41,7 +37,7 @@ export const CitySelection = ({ setSelectedCity }) => {
   return (
     <div className="space-y-4 w-72">
       <div className="flex flex-row items-center">
-        <img src="./public/CitySelection.png" alt="" />
+        {/* <img src="/icon/CitySelection.png" alt="" /> */}
         <p>City</p>
       </div>
 
@@ -54,10 +50,9 @@ export const CitySelection = ({ setSelectedCity }) => {
           setSelectedCity(city);
           setSelectedCityState(option);
         }}
-        // isSearchable
+        isSearchable
         placeholder="-Select a city-"
-        className="w-full"
-        styles={customStyles}
+        className={`${customStyles}`}
       />
     </div>
   );

@@ -14,8 +14,8 @@ const App = () => {
   const [congestionShape, setCongestionShape] = useState(null);
   const [selectedCity, setSelectedCity] = useState(null);
   const [selectedBusline, setSelectedBusline] = useState(null);
-  const [congestionStatus, setCongestionStatus] = useState(null);
-  const [isReroutingPressed, setReroutingPressed] = useState(false);
+    const [congestionStatus, setCongestionStatus] = useState(null);
+const [isReroutingPressed, setReroutingPressed] = useState(false);
   useEffect(() => {
     console.log("SelectedBusID in App: " + selectedTrip);
     console.log("SelectedCity in App: " + selectedCity);
@@ -101,7 +101,7 @@ const App = () => {
         selectedTrip={selectedTrip}
         congestionShape={congestionShape}
         currentVehicle={currentVehicle}
-      />
+              />
       <Sidebar
         allroutes={allroutes}
         selectedTrip={selectedTrip}
@@ -111,7 +111,7 @@ const App = () => {
         congestionStatus={congestionStatus}
         currentVehicle={currentVehicle}
       />
-      <div className="prediction absolute top-0 left-1/2 transform -translate-x-1/2 flex flex-row space-x-4">
+      <div className="prediction absolute top-0 left-1/2 transform -translate-x-1/2 flex flex-row items-center space-x-4">
         <PredictionDropDown
           // isButtonDisabled = {isButtonDisabled}
           selectedCity={selectedCity}

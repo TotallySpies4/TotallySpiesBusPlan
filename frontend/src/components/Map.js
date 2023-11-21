@@ -1,4 +1,4 @@
-import React, { useEffect , useState} from "react";
+import React, { useEffect } from "react";
 import {
   MapContainer,
   TileLayer,
@@ -8,28 +8,7 @@ import {
 } from "react-leaflet";
 import L from "leaflet";
 
-function Map({ selectedTrip, congestionShape, currentVehicle , selectedCity}) {
-  const [viewport, setViewport] = useState({
-    latitude: 52.3676,
-    longitude: 4.9041,
-    zoom: 13,
-  });
-  useEffect(() => {
-    if (selectedCity === "Stockholm") {
-      setViewport({
-        latitude: 59.3293,
-        longitude: 18.0686,
-        zoom: 13,
-      });
-    } else {
-      setViewport({
-        latitude: 52.3676,
-        longitude: 4.9041,
-        zoom: 13,
-      });
-    }
-  }, [selectedCity]);
-
+function Map({ selectedTrip, congestionShape, currentVehicle }) {
   useEffect(() => {
     console.log("SelectedBusID in Map: " + selectedTrip);
   }, [selectedTrip]);
@@ -37,8 +16,8 @@ function Map({ selectedTrip, congestionShape, currentVehicle , selectedCity}) {
   return (
     <div className="map">
       <MapContainer
-        center={[viewport.latitude, viewport.longitude]}
-        zoom={viewport.zoom}
+        center={[52.3676, 4.9041]}
+        zoom={13}
         style={{ height: "100vh", width: "100vw" }}
         zoomControl={false}>
         <TileLayer
@@ -53,8 +32,8 @@ function Map({ selectedTrip, congestionShape, currentVehicle , selectedCity}) {
               shape.shape_pt_lat,
               shape.shape_pt_lon,
             ])}
-            color={currentVehicle ? "green" : "grey"}
-          />
+            color={currentVehicle ? "#22c55e" : "#f0abfc"}
+            />
         )}
 
         {selectedTrip && !currentVehicle && (
@@ -106,13 +85,13 @@ function Map({ selectedTrip, congestionShape, currentVehicle , selectedCity}) {
 function getCongestionColor(level) {
   switch (level) {
     case 0:
-      return "green";
+      return "#22c55e";
     case 1:
-      return "orange";
+      return "#facc15";
     case 2:
-      return "red";
+      return "#dc2626";
     default:
-      return "grey";
+      return "#f0abfc";
   }
 }
 
