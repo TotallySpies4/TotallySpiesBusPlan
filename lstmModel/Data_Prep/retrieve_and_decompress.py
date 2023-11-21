@@ -46,7 +46,7 @@ def retrieve_and_decompress(date):
 
 if __name__ == "__main__":
     # Download data for a range of dates
-    start_date = datetime(2021, 1, 5)
-    for i in range(6):
-        date = (start_date + timedelta(days=i)).strftime("%Y-%m-%d")
-        retrieve_and_decompress(date)
+    # start_date = datetime(2021, 1, 5)
+    # for i in range(6):
+    # date = (start_date + timedelta(days=i)).strftime("%Y-%m-%d")
+    retrieve_and_decompress('2021-01-04')
