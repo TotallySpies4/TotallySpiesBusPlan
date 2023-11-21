@@ -2,7 +2,7 @@ import Select from "react-select";
 import React, { useState } from "react";
 
 export const CitySelection = ({ setSelectedCity }) => {
-  let cityOptions = ["Amsterdam", "Stockholm"].map((city) => ({
+  let cityOptions = ["Amsterdam, Netherlands", "Stockholm, Sweden"].map((city) => ({
     value: city,
     label: city,
   }));

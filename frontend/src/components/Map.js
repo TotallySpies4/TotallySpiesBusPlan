@@ -8,15 +8,21 @@ import {
 } from "react-leaflet";
 import L from "leaflet";
 
-function Map({ selectedTrip, congestionShape, currentVehicle }) {
+function Map({ selectedTrip, congestionShape, currentVehicle, selectedCity }) {
   useEffect(() => {
     console.log("SelectedBusID in Map: " + selectedTrip);
   }, [selectedTrip]);
 
+  const amsterdamCenter = [52.3676, 4.9041];
+  const stockholmCenter = [59.3293, 18.0686];
+
+  const selectedCityCenter =
+  selectedCity === "Amsterdam, Netherlands" ? amsterdamCenter : stockholmCenter;
+
   return (
     <div className="map">
       <MapContainer
-        center={[52.3676, 4.9041]}
+        center={selectedCityCenter}
         zoom={13}
         style={{ height: "100vh", width: "100vw" }}
         zoomControl={false}>
@@ -32,7 +38,7 @@ function Map({ selectedTrip, congestionShape, currentVehicle }) {
               shape.shape_pt_lat,
               shape.shape_pt_lon,
             ])}
-            color={currentVehicle ? "green" : "grey"}
+            color={currentVehicle ? "green" : "#add8e6"}
           />
         )}
 
@@ -91,7 +97,7 @@ function getCongestionColor(level) {
     case 2:
       return "red";
     default:
-      return "grey";
+      return "#add8e6";
   }
 }
 

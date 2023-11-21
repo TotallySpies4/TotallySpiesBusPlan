@@ -12,14 +12,14 @@ export const BuslineSelection = ({
 }) => {
   let busOptions;
 
-  const isBuslineDisable = !selectedCity;
+  const isButtonDisable = !selectedCity;
   const customStyles = {
     control: (provided, state) => ({
       ...provided,
-      borderColor: "#3b82f6",
+      borderColor: isButtonDisable ? "grey":"#3b82f6",
       borderWidth: "2px",
       ":hover": {
-        borderColor: "#3b82f6",
+        borderColor: isButtonDisable ? "grey":"#3b82f6",
       },
     }),
     singleValue: (provided, state) => ({
@@ -29,14 +29,14 @@ export const BuslineSelection = ({
 
     dropdownIndicator: (provided, state) => ({
       ...provided,
-      color: "#3b82f6",
+      color: isButtonDisable ? "grey": "#3b82f6",
       ":hover": {
-        color: "#3b82f6",
+        color: isButtonDisable ? "grey": "#3b82f6",
       },
     }),
   };
 
-  if (selectedCity === "Amsterdam") {
+  if (selectedCity === "Amsterdam, Netherlands") {
     busOptions = allroutes.amsterdam.map((bus) => ({
       value: bus.route_short_name,
       label: (
@@ -45,7 +45,7 @@ export const BuslineSelection = ({
         </div>
       ),
     }));
-  } else if (selectedCity === "Stockholm") {
+  } else if (selectedCity === "Stockholm, Sweden") {
     busOptions = allroutes.stockholm.map((bus) => ({
       value: bus.route_short_name,
       label: (
@@ -58,11 +58,11 @@ export const BuslineSelection = ({
 
   const handleBusSelection = (option) => {
     let bus;
-    if (selectedCity === "Amsterdam") {
+    if (selectedCity === "Amsterdam, Netherlands") {
       bus = allroutes.amsterdam.find(
         (b) => b.route_short_name === option.value
       );
-    } else if (selectedCity === "Stockholm") {
+    } else if (selectedCity === "Stockholm, Sweden") {
       bus = allroutes.stockholm.find(
         (b) => b.route_short_name === option.value
       );
@@ -79,7 +79,7 @@ export const BuslineSelection = ({
         placeholder="-Choose a bus line-"
         className="w-full"
         styles={customStyles}
-        disabled={isBuslineDisable}/>
+        isDisabled={isButtonDisable}/>
 
       {selectedCity && <SingleStationInfo />}
     </div>
