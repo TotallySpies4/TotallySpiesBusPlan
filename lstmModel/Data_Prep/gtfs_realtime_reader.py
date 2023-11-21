@@ -27,7 +27,6 @@ def process_pb_directory(pb_directory, csv_file_path):
 
 # Function to process a .pb file and write the data to a CSV file
 def process_pb_file(pb_file_path, csv_writer):
-
     try:
         # Read the content of the .pb file
         with open(pb_file_path, "rb") as f:
@@ -38,18 +37,16 @@ def process_pb_file(pb_file_path, csv_writer):
 
         # Extract and write vehicle position data to the CSV file
         for entity in feed_message.entity:
-            if entity.HasField("vehicle") and entity.vehicle.HasField("position"):
-                # Extract the position and other relevant data
-                position = entity.vehicle.position
-            csv_writer.writerow([
-                entity.vehicle.timestamp,
-                entity.vehicle.trip.tripId,  # Assuming trip ID is accessed this way
-                None,  # Default value for 'Segment', adjust as per your application logic
-                position.latitude,
-                position.longitude,
-                position.bearing,
-                position.speed
-            ])
+            if entity.HasField("vehicle") and entity.vehicle.HasField("position") and entity.vehicle.HasField("trip"):
+                csv_writer.writerow([
+                    entity.vehicle.timestamp,
+                    entity.vehicle.trip.trip_id,
+                    None,  # Default value for 'Segment', adjust as per your application logic
+                    entity.vehicle.position.latitude,
+                    entity.vehicle.position.longitude,
+                    entity.vehicle.position.bearing,
+                    entity.vehicle.position.speed
+                ])
 
         logging.info(f"Processed {len(feed_message.entity)} entities from {pb_file_path}")
 
