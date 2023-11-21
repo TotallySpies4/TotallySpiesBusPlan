@@ -3,6 +3,7 @@ import logging
 import csv
 from google.protobuf import text_format
 from google.transit import gtfs_realtime_pb2
+from pyasn1.compat.octets import null
 
 
 # Function to initiate the processing of .pb files
@@ -12,7 +13,7 @@ def process_pb_directory(pb_directory, csv_file_path):
         # Create a CSV writer
         csv_writer = csv.writer(csv_file)
         # Write the header row to the CSV file
-        csv_writer.writerow(["Entity ID", "Timestamp", "Latitude", "Longitude", "Bearing", "Speed", "Vehicle ID"])
+        csv_writer.writerow(["Timestamp", "Trip ID", "Segment", "Latitude", "Longitude", "Bearing", "Speed"])
 
         # Iterate through each .pb file in the directory
         for root, dirs, files in os.walk(pb_directory):
@@ -27,6 +28,7 @@ def process_pb_directory(pb_directory, csv_file_path):
 
 # Function to process a .pb file and write the data to a CSV file
 def process_pb_file(pb_file_path, csv_writer):
+
     try:
         # Read the content of the .pb file
         with open(pb_file_path, "rb") as f:
@@ -38,15 +40,17 @@ def process_pb_file(pb_file_path, csv_writer):
         # Extract and write vehicle position data to the CSV file
         for entity in feed_message.entity:
             if entity.HasField("vehicle") and entity.vehicle.HasField("position"):
+                # Extract the position and other relevant data
                 position = entity.vehicle.position
-                csv_writer.writerow([
-                    entity.vehicle.timestamp,
-                    position.latitude,
-                    position.longitude,
-                    position.bearing,
-                    position.speed,
-                    entity.vehicle.tripID
-                ])
+            csv_writer.writerow([
+                entity.vehicle.timestamp,
+                entity.vehicle.trip.tripId,  # Assuming trip ID is accessed this way
+                None,  # Default value for 'Segment', adjust as per your application logic
+                position.latitude,
+                position.longitude,
+                position.bearing,
+                position.speed
+            ])
 
         logging.info(f"Processed {len(feed_message.entity)} entities from {pb_file_path}")
 
