@@ -5,7 +5,9 @@ export const SingleStationInfo = ({
   selectedTrip,
   congestionStatus,
   currentVehicle,
+  congestionInfo, 
 }) => {
+
   return (
     selectedTrip &&
     selectedTrip.stop_times && (

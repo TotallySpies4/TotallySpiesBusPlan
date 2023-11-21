@@ -1,10 +1,7 @@
-import { formatTime } from "../utils/formatTime.js";
-import Select from "react-select";
-import React, { useState } from "react";
-import useFetch from "../hooks/useFetch.js";
+import React from "react";
 import { CitySelection } from "./CitySelection.js";
-import {BuslineSelection} from "./BuslineSelection.js";
-import {SingleStationInfo} from "./SingleStationInfo.js";
+import { BuslineSelection } from "./BuslineSelection.js";
+import { SingleStationInfo } from "./SingleStationInfo.js";
 
 export const Sidebar = ({
   allroutes,
@@ -46,5 +43,3 @@ export const Sidebar = ({
     </div>
   );
 };
-
-export default Sidebar;
