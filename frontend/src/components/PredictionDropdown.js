@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import Select from "react-select";
+import {BuslineSelection} from "./BuslineSelection.js";
+import {  CitySelection } from "./CitySelection.js";
 
 
 export const PredictionDropDown = ({ selectedBusline, selectedCity }) => {
@@ -21,9 +23,11 @@ export const PredictionDropDown = ({ selectedBusline, selectedCity }) => {
               ? "bg-gray-500 cursor-not-allowed"
               : "bg-blue-500 hover:bg-blue-700"
           }`}
+
           onClick={() => {
             console.log("Clicked"); 
           }}
+
           options={[
             { value: "now", label: "Now" },
             { value: 30, label: "30 mins" },
@@ -35,6 +39,10 @@ export const PredictionDropDown = ({ selectedBusline, selectedCity }) => {
             // const time = option.value;
           }}
           isSearchable
+          // onChange={(option) => {
+          //   console.log(option);
+          //   // const time = option.value;
+          // }}
         />
       </div>
     </div>
@@ -42,3 +50,4 @@ export const PredictionDropDown = ({ selectedBusline, selectedCity }) => {
 };
 
 export default PredictionDropDown;
+
