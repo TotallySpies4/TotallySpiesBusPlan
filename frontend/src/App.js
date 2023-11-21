@@ -111,16 +111,16 @@ const App = () => {
         congestionStatus={congestionStatus}
         currentVehicle={currentVehicle}
       />
-      <div className="absolute top-0 left-1/2 transform -translate-x-1/2 flex flex-row space-x-4">
-        <ReroutingButton
-          //  isReroutingPressed = {isReroutingPressed}
-          selectedCity={selectedCity}
-          selectedBusline={selectedBusline}
-        />
+      <div className="prediction absolute top-0 left-1/2 transform -translate-x-1/2 flex flex-row space-x-4">
         <PredictionDropDown
           // isButtonDisabled = {isButtonDisabled}
           selectedCity={selectedCity}
           selectedBusline={selectedBusline}
+        />
+        <ReroutingButton
+            //  isReroutingPressed = {isReroutingPressed}
+            selectedCity={selectedCity}
+            selectedBusline={selectedBusline}
         />
       </div>
     </div>
