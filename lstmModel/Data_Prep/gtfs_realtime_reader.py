@@ -40,13 +40,12 @@ def process_pb_file(pb_file_path, csv_writer):
             if entity.HasField("vehicle") and entity.vehicle.HasField("position"):
                 position = entity.vehicle.position
                 csv_writer.writerow([
-                    entity.id,
                     entity.vehicle.timestamp,
                     position.latitude,
                     position.longitude,
                     position.bearing,
                     position.speed,
-                    entity.vehicle.vehicle.id
+                    entity.vehicle.tripID
                 ])
 
         logging.info(f"Processed {len(feed_message.entity)} entities from {pb_file_path}")

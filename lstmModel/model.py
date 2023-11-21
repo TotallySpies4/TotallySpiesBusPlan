@@ -1,7 +1,6 @@
 import pandas as pd
 from sklearn.preprocessing import LabelEncoder, StandardScaler
 import tensorflow as tf
-from tensorflow import keras as keras
 from keras.models import Sequential
 from keras.layers import LSTM, Dense
 
