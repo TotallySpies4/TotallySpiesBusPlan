@@ -6,7 +6,7 @@ import { CitySelection } from "./CitySelection.js";
 import {BuslineSelection} from "./BuslineSelection.js";
 import {SingleStationInfo} from "./SingleStationInfo.js";
 
-const Sidebar = ({
+export const Sidebar = ({
   allroutes,
   setSelectedBusline,
   isSidebarOpen,
@@ -46,5 +46,3 @@ const Sidebar = ({
     </div>
   );
 };
-
-export default Sidebar;
