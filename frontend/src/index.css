@@ -102,3 +102,7 @@ width: 80%;
   margin-right: 10px;
   vertical-align: middle;
 }
+
+.prediction{
+  z-index: 50;
+}

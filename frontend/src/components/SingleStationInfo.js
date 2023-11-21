@@ -17,24 +17,12 @@ export const SingleStationInfo = ({
               <div className="flex flex-row justify-between items-center divide-y-2">
                 <div>
                   <strong>{stop.stop_name}</strong>
-                  {congestionStatus && (
-                    <div
-                      style={{
-                        color: getCongestionInfo(
-                          currentVehicle.congestion_level.level
-                        ).color,
-                      }}>
-                      {
-                        getCongestionInfo(currentVehicle.congestion_level.level)
-                          .status
-                      }
-                    </div>
-                  )}
+
                 </div>
                 <strong
                   style={{
-                    color: getCongestionInfo(
-                      currentVehicle.congestion_level.level).color,
+                    //color: getCongestionInfo(
+                      //currentVehicle.congestion_level.level).color,
                   }}>
                   {formatTime(stop.arrival_time)}
                 </strong>
