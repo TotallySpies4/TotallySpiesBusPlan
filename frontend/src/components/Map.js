@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect , useState} from "react";
 import {
   MapContainer,
   TileLayer,
@@ -8,22 +8,37 @@ import {
 } from "react-leaflet";
 import L from "leaflet";
 
-function Map({ selectedTrip, congestionShape, currentVehicle, selectedCity }) {
+function Map({ selectedTrip, congestionShape, currentVehicle , selectedCity}) {
+  const [viewport, setViewport] = useState({
+    latitude: 52.3676,
+    longitude: 4.9041,
+    zoom: 13,
+  });
+  useEffect(() => {
+    if (selectedCity === "Stockholm") {
+      setViewport({
+        latitude: 59.3293,
+        longitude: 18.0686,
+        zoom: 13,
+      });
+    } else {
+      setViewport({
+        latitude: 52.3676,
+        longitude: 4.9041,
+        zoom: 13,
+      });
+    }
+  }, [selectedCity]);
+
   useEffect(() => {
     console.log("SelectedBusID in Map: " + selectedTrip);
   }, [selectedTrip]);
 
-  const amsterdamCenter = [52.3676, 4.9041];
-  const stockholmCenter = [59.3293, 18.0686];
-
-  const selectedCityCenter =
-  selectedCity === "Amsterdam, Netherlands" ? amsterdamCenter : stockholmCenter;
-
   return (
     <div className="map">
       <MapContainer
-        center={selectedCityCenter}
-        zoom={13}
+        center={[viewport.latitude, viewport.longitude]}
+        zoom={viewport.zoom}
         style={{ height: "100vh", width: "100vw" }}
         zoomControl={false}>
         <TileLayer
@@ -38,7 +53,7 @@ function Map({ selectedTrip, congestionShape, currentVehicle, selectedCity }) {
               shape.shape_pt_lat,
               shape.shape_pt_lon,
             ])}
-            color={currentVehicle ? "green" : "#add8e6"}
+            color={currentVehicle ? "green" : "grey"}
           />
         )}
 
@@ -97,7 +112,7 @@ function getCongestionColor(level) {
     case 2:
       return "red";
     default:
-      return "#add8e6";
+      return "grey";
   }
 }
 

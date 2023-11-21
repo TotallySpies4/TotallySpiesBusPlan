@@ -1,7 +1,5 @@
 import React, { useState } from "react";
 import Select from "react-select";
-import {BuslineSelection} from "./BuslineSelection.js";
-import {  CitySelection } from "./CitySelection.js";
 
 export const PredictionDropDown = ({ selectedBusline, selectedCity }) => {
   // const [selectTime, setSelectTime] = useState(null);
@@ -30,7 +28,7 @@ export const PredictionDropDown = ({ selectedBusline, selectedCity }) => {
     }),
   };
   return (
-    <div className="flex flex-row justify-around items-center w-96 bg-[#FFF] drop-shadow-xl rounded-2xl px-2">
+    <div className="flex flex-row justify-around items-center w-96 bg-[#FFF] shadow-xl rounded-2xl px-2">
       <p>Congestion in</p>
       {/* Dropdown for time options */}
       <div className="rounded-lg w-full">
@@ -39,7 +37,7 @@ export const PredictionDropDown = ({ selectedBusline, selectedCity }) => {
           type="button"
           disabled={isButtonDisable}
           placeholder="-Choose predict time-"
-          className={`py-2 px-4 w-48 ${customStyles}`}
+          className={`rounded-full py-2 px-4 w-48 ${customStyles}`}
           onClick={() => {
             console.log("Clicked"); 
           }}
@@ -64,5 +62,4 @@ export const PredictionDropDown = ({ selectedBusline, selectedCity }) => {
   );
 };
 
-export default PredictionDropDown;
 
