@@ -12,7 +12,7 @@ export const ReroutingButton = () => {
   
   //     try {
   //       const response = await fetch(
-  //         `http://localhost:5000/reroute?city=${selectedCity}&busLine=${selectedBusLine}`
+  //         http://localhost:5000/reroute?city=${selectedCity}&busLine=${selectedBusLine}
   //       );
   //       const data = await response.json();
   //       console.log(data);

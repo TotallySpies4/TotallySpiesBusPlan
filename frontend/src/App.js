@@ -1,6 +1,6 @@
 import Map from "./components/Map.js";
 import React, { useEffect, useState } from "react";
-import Sidebar from "./components/Sidebar.js";
+import {Sidebar} from "./components/Sidebar.js";
 import useFetch from "./hooks/useFetch.js";
 import { ReroutingButton } from "./components/ReroutingButton.js";
 import { PredictionDropDown } from "./components/PredictionDropdown.js";
@@ -112,16 +112,16 @@ const App = () => {
         currentVehicle={currentVehicle}
       />
       <div className="absolute top-0 left-1/2 transform -translate-x-1/2 flex flex-row space-x-4">
-        <ReroutingButton 
-        //  isReroutingPressed = {isReroutingPressed}
-         selectedCity={selectedCity}
-         selectedBusline={selectedBusline}
-          />
+        <ReroutingButton
+          //  isReroutingPressed = {isReroutingPressed}
+          selectedCity={selectedCity}
+          selectedBusline={selectedBusline}
+        />
         <PredictionDropDown
-        // isButtonDisabled = {isButtonDisabled}
-        selectedCity={selectedCity}
-        selectedBusline={selectedBusline}
-         />
+          // isButtonDisabled = {isButtonDisabled}
+          selectedCity={selectedCity}
+          selectedBusline={selectedBusline}
+        />
       </div>
     </div>
   );

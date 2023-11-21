@@ -1,7 +1,7 @@
 import React from "react";
 import { formatTime } from "../utils/formatTime.js";
 
-const SingleStationInfo = ({
+export const SingleStationInfo = ({
   selectedTrip,
   congestionStatus,
   currentVehicle,
@@ -58,5 +58,3 @@ function getCongestionInfo(level) {
       return { status: "Bus is not in operation", color: "grey" };
   }
 }
-
-export default SingleStationInfo;

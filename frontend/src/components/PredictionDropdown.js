@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Select from "react-select";
-import BuslineSelection from "./BuslineSelection.js";
-import { CitySelection } from "./CitySelection.js";
+import {BuslineSelection} from "./BuslineSelection.js";
+import {  CitySelection } from "./CitySelection.js";
 
 export const PredictionDropDown = ({ selectedBusline, selectedCity }) => {
   // const [selectTime, setSelectTime] = useState(null);
@@ -37,5 +37,3 @@ export const PredictionDropDown = ({ selectedBusline, selectedCity }) => {
     </div>
   );
 };
-
-export default PredictionDropDown;

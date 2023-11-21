@@ -3,7 +3,7 @@ import Select from "react-select";
 import { formatTime } from "../utils/formatTime.js";
 import SingleStationInfo from "./SingleStationInfo.js";
 
-const BuslineSelection = ({
+export const BuslineSelection = ({
   selectedCity,
   setSelectedBusline,
   allroutes,
@@ -85,5 +85,3 @@ const BuslineSelection = ({
     </div>
   );
 };
-
-export default BuslineSelection;
