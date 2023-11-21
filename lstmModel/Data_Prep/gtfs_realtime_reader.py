@@ -3,7 +3,6 @@ import logging
 import csv
 from google.protobuf import text_format
 from google.transit import gtfs_realtime_pb2
-from pyasn1.compat.octets import null
 
 
 # Function to initiate the processing of .pb files
