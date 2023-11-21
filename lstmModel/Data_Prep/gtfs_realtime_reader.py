@@ -12,7 +12,7 @@ def process_pb_directory(pb_directory, csv_file_path):
         # Create a CSV writer
         csv_writer = csv.writer(csv_file)
         # Write the header row to the CSV file
-        csv_writer.writerow(["Entity ID", "Timestamp", "Latitude", "Longitude", "Bearing", "Speed", "Vehicle ID"])
+        csv_writer.writerow(["Timestamp", "Trip ID", "Segment", "Latitude", "Longitude", "Bearing", "Speed"])
 
         # Iterate through each .pb file in the directory
         for root, dirs, files in os.walk(pb_directory):
@@ -37,15 +37,15 @@ def process_pb_file(pb_file_path, csv_writer):
 
         # Extract and write vehicle position data to the CSV file
         for entity in feed_message.entity:
-            if entity.HasField("vehicle") and entity.vehicle.HasField("position"):
-                position = entity.vehicle.position
+            if entity.HasField("vehicle") and entity.vehicle.HasField("position") and entity.vehicle.HasField("trip"):
                 csv_writer.writerow([
                     entity.vehicle.timestamp,
-                    position.latitude,
-                    position.longitude,
-                    position.bearing,
-                    position.speed,
-                    entity.vehicle.tripID
+                    entity.vehicle.trip.trip_id,
+                    None,  # Default value for 'Segment', adjust as per your application logic
+                    entity.vehicle.position.latitude,
+                    entity.vehicle.position.longitude,
+                    entity.vehicle.position.bearing,
+                    entity.vehicle.position.speed
                 ])
 
         logging.info(f"Processed {len(feed_message.entity)} entities from {pb_file_path}")
