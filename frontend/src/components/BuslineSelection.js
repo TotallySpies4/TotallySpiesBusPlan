@@ -11,16 +11,16 @@ export const BuslineSelection = ({
 }) => {
   let busOptions;
 
-  const isButtonDisable = !selectedCity;
+  const isSelectDisable = !selectedCity;
 
   // Define custom styles for the control
   const customStyles = {
     control: (provided, state) => ({
       ...provided,
-      borderColor: isButtonDisable ? "#9ca3af" : "#3b82f6",
+      borderColor: isSelectDisable ? "#9ca3af" : "#3b82f6",
       borderWidth: "2px",
       ":hover": {
-        borderColor: isButtonDisable ? "#9ca3af" : "#3b82f6",
+        borderColor: isSelectDisable ? "#9ca3af" : "#3b82f6",
       },
     }),
     singleValue: (provided, state) => ({
@@ -31,9 +31,9 @@ export const BuslineSelection = ({
     // Change the color of the dropdown button
     dropdownIndicator: (provided, state) => ({
       ...provided,
-      color: isButtonDisable ? "#9ca3af" : "#3b82f6",
+      color: isSelectDisable ? "#9ca3af" : "#3b82f6",
       ":hover": {
-        color: isButtonDisable ? "#9ca3af" : "#3b82f6",
+        color: isSelectDisable ? "#9ca3af" : "#3b82f6",
       },
     }),
   };
@@ -85,7 +85,7 @@ export const BuslineSelection = ({
         isSearchable
         placeholder="-Choose a bus line-"
         className={`w-full ${customStyles}`}
-        isDisabled={isButtonDisable}
+        isDisabled={isSelectDisable}
       />
 
       {selectedCity && <SingleStationInfo />}
