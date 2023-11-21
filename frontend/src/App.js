@@ -1,8 +1,9 @@
 import Map from "./components/Map.js";
 import React, {useEffect, useState} from "react";
 import Sidebar from "./components/Sidebar.js";
-import useFetch from "./hooks/useFetch.js";
-import { PredictRerouteCompo } from "./components/PredictRerouteCompo.js";
+import {PredictRerouteCompo} from "./components/PredicReroutCompo.js";
+
+
 const App = () => {
 
     const url = "ws://localhost:4000";
