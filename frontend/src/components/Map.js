@@ -91,7 +91,7 @@ function getCongestionColor(level) {
     case 2:
       return "#dc2626";
     default:
-      return "#f0abfc";
+      return "#e879f9";
   }
 }
 
