@@ -8,6 +8,17 @@ import {
 } from "react-leaflet";
 import L from "leaflet";
 
+// create custom icon
+const busIcon = new L.Icon({
+    iconUrl: "/icon/busStop.png",
+    iconSize: [25, 25],
+    iconSize: [25, 41],
+    iconAnchor: [12, 41],
+    popupAnchor: [1, -34]
+});
+
+L.Marker.prototype.options.icon = busIcon;
+
 function Map({ selectedTrip, congestionShape, currentVehicle }) {
   useEffect(() => {
     console.log("SelectedBusID in Map: " + selectedTrip);
@@ -32,7 +43,7 @@ function Map({ selectedTrip, congestionShape, currentVehicle }) {
               shape.shape_pt_lat,
               shape.shape_pt_lon,
             ])}
-            color={currentVehicle ? "#22c55e" : "#f0abfc"}
+            color={currentVehicle ? "#22c55e" : "#1d4ed8"}
             />
         )}
 
@@ -62,7 +73,9 @@ function Map({ selectedTrip, congestionShape, currentVehicle }) {
             position={[
               currentVehicle.current_position.latitude,
               currentVehicle.current_position.longitude,
-            ]}>
+            ]}
+            icon = {busIcon}
+            >
             <Popup>Bus Position</Popup>
           </Marker>
         )}
@@ -91,7 +104,7 @@ function getCongestionColor(level) {
     case 2:
       return "#dc2626";
     default:
-      return "#e879f9";
+      return "#1d4ed8";
   }
 }
 
