@@ -49,4 +49,4 @@ if __name__ == "__main__":
     # start_date = datetime(2021, 1, 5)
     # for i in range(6):
     # date = (start_date + timedelta(days=i)).strftime("%Y-%m-%d")
-    retrieve_and_decompress('2021-01-04')
+    retrieve_and_decompress('2023-01-02')
