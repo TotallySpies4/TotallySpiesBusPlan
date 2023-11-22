@@ -14,8 +14,8 @@ export const SingleStationInfo = ({
         <ul>
           {selectedTrip.stop_times.map((stop, index) => (
             <li key={index}>
-              <div className="flex flex-row justify-between items-center divide-y-2">
-                <div>
+              <div className="flex flex-row justify-between items-center">
+              
                   <strong>{stop.stop_name}</strong>
                   <strong
                     style={
@@ -27,7 +27,7 @@ export const SingleStationInfo = ({
                     {formatTime(stop.arrival_time)}
                   </strong>
                 </div>
-              </div>
+            
             </li>
           ))}
         </ul>
