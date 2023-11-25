@@ -37,7 +37,7 @@ def process_pb_file(pb_file_path, csv_writer):
 
         # Extract and write vehicle position data to the CSV file
         for entity in feed_message.entity:
-            print(entity)
+
             if entity.HasField("vehicle") and entity.vehicle.HasField("position") and entity.vehicle.HasField("trip"):
                 csv_writer.writerow([
                     entity.vehicle.timestamp,

@@ -7,6 +7,7 @@ db = client.TotallySpiesBusPlan
 stoptimes = db['stoptimes']
 trip = db['trips']
 
+
 def calculate_current_segment(latitude, longitude, vehicle_bearing, trip_id):
     trip_object_id = db.trips.find_one({'trip_id': trip_id})['_id']
     stop_times_cursor = db.stoptimes.find({'trip_id': str(trip_object_id)}).sort('stop_sequence')
@@ -17,7 +18,7 @@ def calculate_current_segment(latitude, longitude, vehicle_bearing, trip_id):
         print("Keine Haltestelle gefunden.")
     for index in range(nearest_stop_index, len(stop_times_df) - 1):
         next_stop = stop_times_df.iloc[index + 1]
-        #print(f'next stop {next_stop}')
+        # print(f'next stop {next_stop}')
 
         bearing_to_next_stop = calculate_bearing(current_location, next_stop)
         if is_moving_towards(vehicle_bearing, bearing_to_next_stop):
@@ -73,7 +74,4 @@ def haversine_distance(lat1, lon1, lat2, lon2):
     c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
 
     return R * c  # Distanz in Metern
-
-segement = calculate_current_segment(59.3099250793457, 18.097824096679688, 13, "14010000648621468")
-print(f'current segment {segement}')
 
