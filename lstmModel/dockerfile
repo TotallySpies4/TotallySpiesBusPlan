@@ -9,7 +9,7 @@ RUN apt-get update && apt-get install -y gcc python3-dev
 
 # Install required Python packages
 RUN pip install --upgrade pip
-RUN pip install requests py7zr gtfs-realtime-bindings pyspark pymongo pandas
+RUN pip install requests py7zr gtfs-realtime-bindings pyspark pymongo pandas keras tensorflow scikit-learn matplotlib
 
 # Copy the current directory contents into the container at /app
 COPY . /app

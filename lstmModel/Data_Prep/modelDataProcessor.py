@@ -76,7 +76,7 @@ resampled_df = processed_df.resample('1T').agg({
     'Latitude': 'mean',
     'Longitude': 'mean',
     'Bearing': 'mean',
-    'Speed': ['mean', 'max']
+    'Speed': 'mean'
 })
 
 resampled_df.columns = ['_'.join(col) if type(col) is tuple else col for col in resampled_df.columns]
