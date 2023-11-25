@@ -15,7 +15,7 @@ trip_collection = db['trips']
 
 processed_df = pd.DataFrame()
 
-chunk_size = 10000000  # Adjust this size to a suitable value for your system's memory
+chunk_size = 10000000
 
 logging.info(f" Start processing file: {csv}")
 for chunk in pd.read_csv(csv, chunksize=chunk_size):

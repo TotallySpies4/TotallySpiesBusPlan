@@ -7,7 +7,6 @@ from gtfs_realtime_download import fs
 from gtfs_realtime_reader import process_pb_directory
 from store_csv_to_db import store_csv_in_db
 
-
 def retrieve_and_decompress(date):
     logging.info(f"Start processing data for {date}")
     filename = f"gtfs_{date}.bin"

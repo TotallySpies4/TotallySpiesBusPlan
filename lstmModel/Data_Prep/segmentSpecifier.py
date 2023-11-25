@@ -7,7 +7,6 @@ db = client.TotallySpiesBusPlan
 stoptimes = db['stoptimes']
 trip = db['trips']
 
-
 def calculate_current_segment(latitude, longitude, vehicle_bearing, trip_id):
     trip_object_id = db.trips.find_one({'trip_id': trip_id})['_id']
     stop_times_cursor = db.stoptimes.find({'trip_id': str(trip_object_id)}).sort('stop_sequence')
