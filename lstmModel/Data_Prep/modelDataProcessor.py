@@ -4,6 +4,7 @@ import logging
 from gtfs_realtime_download import fs
 from segmentSpecifier import calculate_current_segment
 
+
 client = MongoClient('mongodb:27017')
 db = client.TotallySpiesBusPlan
 
@@ -62,14 +63,14 @@ for chunk in pd.read_csv(csv, chunksize=chunk_size):
     logging.info(f"Finished processing chunk of size {chunk_size}")
 
 logging.info(f"Finished processing file: {csv}")
-logging.info(f'Aggregate data point to 10min frames')
+logging.info(f'Aggregate data point to 1min frames')
 
 # Convert the timestamp to a datetime object and set it as the index
 processed_df['Timestamp'] = pd.to_datetime(processed_df['Timestamp'], unit='s')
 processed_df.set_index('Timestamp', inplace=True)
 
 # Resample the data in 10-minute steps
-resampled_df = processed_df.resample('10T').agg({
+resampled_df = processed_df.resample('1T').agg({
     'Trip ID': 'first',  # Assuming 'Trip ID' is a column in processed_df
     'Segment': 'first',  # Assuming 'Segment' is a column in processed_df
     'Latitude': 'mean',
@@ -80,25 +81,12 @@ resampled_df = processed_df.resample('10T').agg({
 
 resampled_df.columns = ['_'.join(col) if type(col) is tuple else col for col in resampled_df.columns]
 
-# Assuming N is defined
-N = 5  # Number of past segments to consider for the prediction
 
-X, y = [], []
-# Group by 'Trip ID'
-for trip_id, group in resampled_df.groupby('Trip ID_first'):
-    # Make sure group is sorted by 'Segment'
-    group = group.sort_values(by='Segment')
+# temp store the data to the file system
+resampled_df.to_csv('resampled_df1.csv')
 
-    # Now create sequences for LSTM
-    for i in range(N, len(group) - N):
-        # Create sequences using the mean values of the features
-        seq = group.iloc[i - N:i][['Latitude_mean', 'Longitude_mean', 'Bearing_mean', 'Speed_mean']].values
-        # Predict the speed of the next segment using the max value
-        target = group.iloc[i + N]['Speed_max']
-        X.append(seq)
-        y.append(target)
-        print(f'X {X}')
-        print(f'y {y}')
 
-print(resampled_df.head(5))
-print(resampled_df.tail(5))
+# Load the data from the file system
+#resampled_df = pd.read_csv('resampled_df.csv')
+#print (resampled_df.head(5))
+

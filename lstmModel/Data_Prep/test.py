@@ -1,11 +1,12 @@
-from pymongo import MongoClient
+import pandas
 
-#client = MongoClient('mongodb://mongodb:27017/TotallySpiesBusPlan')
-client = MongoClient('mongodb:27017')
-db = client.TotallySpiesBusPlan
-print(db['trips'])
-trip_id= "14010000648621468"
-trip_object_id = db.trips.find_one({'trip_id': trip_id})
-print(
-    f'Yeahhhh it works{trip_object_id}'
-)
+resampled_df = pandas.read_csv('resampled_df1.csv')
+t = pandas.read_csv('trainData.csv')
+
+trainData = pandas.concat([t, resampled_df])
+trainData.to_csv('trainData1.csv')
+
+
+
+
+print (trainData.shape[0])
