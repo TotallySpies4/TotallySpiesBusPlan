@@ -28,6 +28,7 @@ async function setupConsumerForCity(topic,city) {
     }
 
 
+
     await consumer.run({
         eachMessage: async ({topic, partition, message}) => {
             const rawData = message.value.toString();
@@ -58,6 +59,7 @@ async function setupConsumerForCity(topic,city) {
                      if (existingPosition) {
 
                     // Update existing entry
+
                     await processor.updateVehicle(vehicle, existingPosition, existingTrip);
                     await existingPosition.save();
 
