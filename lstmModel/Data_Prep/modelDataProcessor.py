@@ -81,9 +81,17 @@ def process_resample_data_from_file(date, chunk_size):
     })
 
     resampled_df.columns = ['_'.join(col) if type(col) is tuple else col for col in resampled_df.columns]
-
+    resampled_df.rename(columns={
+        'Trip ID': 'Trip ID_first',
+        'Segment': 'Segment_first',
+        'Latitude': 'Latitude_mean',
+        'Longitude': 'Longitude_mean',
+        'Bearing': 'Bearing_mean',
+        'Speed': 'Speed_mean'
+    }, inplace=True)
     return resampled_df
 
 # Load the data from the file system
 # resampled_df = pd.read_csv('resampled_df.csv')
 # print (resampled_df.head(5))
+

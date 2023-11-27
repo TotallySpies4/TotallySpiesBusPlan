@@ -14,7 +14,12 @@ const stopTimeSchema = new Schema({
     stop_name: String,
     shape_dist_traveled: Number,
     route: String,
-    trip_id: String
+    trip_id: String,
+    prediction: {
+        predLevelThirty : Number,
+        predLevelSixty : Number
+
+    }
 });
 
 const shapeSchema = new Schema({

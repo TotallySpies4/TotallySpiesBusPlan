@@ -20,9 +20,34 @@ const vehiclePositionsSchema = new Schema({
     congestion_level: {
         timestamp: Date,
         level: Number,
-        previousStop: { type: Schema.Types.ObjectId, ref: 'StopTime' },
+        previousStop: { type: Schema.Types.ObjectId, ref: 'StopTime'},
         currentStop: { type: Schema.Types.ObjectId, ref: 'StopTime' },
+        previousStopTimeUpdate: {
+            stopSequence: Number,
+            arrival: {
+                delay: Number,
+                time: String,
+            },
+            departure: {
+                delay: Number,
+                time: String,
+            },
+            stopId: String,
+        },
+        currentStopTimeUpdate: {
+            stopSequence: Number,
+            arrival: {
+                delay: Number,
+                time: String,
+            },
+            departure: {
+                delay: Number,
+                time: String,
+            },
+            stopId: String,
+        },
     }
+
 })
 
 const VehiclePositions = mongoose.model('VehiclePositions', vehiclePositionsSchema);
