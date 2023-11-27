@@ -72,9 +72,23 @@ const stockholmConfig = {
     topic: 'gtfs-realtime-stockholm'
 };
 
+const amsterdamConfigTripUpdates = {
+    url: 'https://gtfs.ovapi.nl/nl/tripUpdates.pb',
+    topic: 'gtfs-realtime-amsterdam-tripUpdates'
+};
+
+const stockholmConfigTripUpdates = {
+    url: "https://opendata.samtrafiken.se/gtfs-rt/sl/TripUpdates.pb?key=dace0c5b6dc643c898caf86761be7e86",
+    topic: 'gtfs-realtime-stockholm-tripUpdates'
+}
+
 // Fetch and send data for each city
 fetchAndSend(amsterdamConfig.url, amsterdamConfig.topic);
 setInterval(() => fetchAndSend(amsterdamConfig.url, amsterdamConfig.topic), INTERVAL_MS);
 
 fetchAndSend(stockholmConfig.url, stockholmConfig.topic);
 setInterval(() => fetchAndSend(stockholmConfig.url, stockholmConfig.topic), INTERVAL_MS);
+fetchAndSend(amsterdamConfigTripUpdates.url, amsterdamConfigTripUpdates.topic);
+setInterval(() => fetchAndSend(amsterdamConfigTripUpdates.url, amsterdamConfigTripUpdates.topic), INTERVAL_MS);
+fetchAndSend(stockholmConfigTripUpdates.url, stockholmConfigTripUpdates.topic);
+setInterval(() => fetchAndSend(stockholmConfigTripUpdates.url, stockholmConfigTripUpdates.topic), INTERVAL_MS);

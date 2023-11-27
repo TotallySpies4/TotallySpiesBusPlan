@@ -83,6 +83,8 @@ async function run() {
     try {
         await setupConsumerForCity('gtfs-realtime-amsterdam','amsterdam');
         await setupConsumerForCity('gtfs-realtime-stockholm','stockholm');
+        await setupConsumerForCity('gtfs-realtime-amsterdam-tripUpdates','amsterdam');
+        await setupConsumerForCity('gtfs-realtime-stockholm-tripUpdates','stockholm');
         // Add more cities as needed
     } catch (error) {
         console.error(error);
