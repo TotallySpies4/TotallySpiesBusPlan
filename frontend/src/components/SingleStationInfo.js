@@ -18,12 +18,11 @@ export const SingleStationInfo = ({
                 <div>
                   <strong>{stop.stop_name}</strong>
                   <strong
-                    style={
-                      {
-                        //color: getCongestionInfo(
-                        //currentVehicle.congestion_level.level).color,
-                      }
-                    }>
+                    style={{
+                      color: getCongestionInfo(
+                        currentVehicle.congestion_level.level
+                      ).color,
+                    }}>
                     {formatTime(stop.arrival_time)}
                   </strong>
                 </div>

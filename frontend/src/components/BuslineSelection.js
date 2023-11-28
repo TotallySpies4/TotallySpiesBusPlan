@@ -17,23 +17,23 @@ export const BuslineSelection = ({
   const customStyles = {
     control: (provided, state) => ({
       ...provided,
-      borderColor: isSelectDisable ? "#9ca3af" : "#3b82f6",
+      borderColor: isSelectDisable ? "grey" : "#3b82f6",
       borderWidth: "2px",
       ":hover": {
-        borderColor: isSelectDisable ? "#9ca3af" : "#3b82f6",
+        borderColor: isSelectDisable ? "grey" : "#3b82f6",
       },
     }),
     singleValue: (provided, state) => ({
       ...provided,
-      color: state.selectProps.value === null ? "#9ca3af" : "#3b82f6",
+      color: state.selectProps.value === null ? "grey" : "#3b82f6",
     }),
 
     // Change the color of the dropdown button
     dropdownIndicator: (provided, state) => ({
       ...provided,
-      color: isSelectDisable ? "#9ca3af" : "#3b82f6",
+      color: isSelectDisable ? "grey" : "#3b82f6",
       ":hover": {
-        color: isSelectDisable ? "#9ca3af" : "#3b82f6",
+        color: isSelectDisable ? "grey" : "#3b82f6",
       },
     }),
   };
@@ -73,7 +73,7 @@ export const BuslineSelection = ({
   };
 
   return (
-    <div className="space-y-4 w-72">
+    <div className="px-4 space-y-4 w-full">
       <div className="flex flex-row items-center">
         {/* <img src="/icon/bus-station.png" alt="" /> */}
         <p>Bus line</p>
@@ -84,7 +84,8 @@ export const BuslineSelection = ({
         onChange={handleBusSelection}
         isSearchable
         placeholder="-Choose a bus line-"
-        className={`w-full ${customStyles}`}
+        // className="w-full-width"
+        styles={customStyles}
         isDisabled={isSelectDisable}
       />
 

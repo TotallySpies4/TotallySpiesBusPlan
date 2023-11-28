@@ -8,22 +8,22 @@ export const PredictionDropDown = ({ selectedBusline, selectedCity }) => {
   const customStyles = {
     control: (provided, state) => ({
       ...provided,
-      borderColor: isButtonDisable ? "#9ca3af":  "#3b82f6",
+      borderColor: isButtonDisable ? "grey":  "#3b82f6",
       borderWidth: "2px",
       ":hover": {
-        borderColor: isButtonDisable ? "#9ca3af": "#3b82f6",
+        borderColor: isButtonDisable ? "grey": "#3b82f6",
       },
     }),
     singleValue: (provided, state) => ({
       ...provided,
-      color: state.selectProps.value === null ? "#9ca3af" : "#3b82f6",
+      color: state.selectProps.value === null ? "grey" : "#3b82f6",
     }),
 
     dropdownIndicator: (provided, state) => ({
       ...provided,
-      color: isButtonDisable ? "#9ca3af": "#3b82f6",
+      color: isButtonDisable ? "grey": "#3b82f6",
       ":hover": {
-        color: isButtonDisable ? "#9ca3af":"#3b82f6",
+        color: isButtonDisable ? "grey":"#3b82f6",
       },
     }),
   };
@@ -36,7 +36,7 @@ export const PredictionDropDown = ({ selectedBusline, selectedCity }) => {
           type="button"
           isDisabled={isButtonDisable}
           placeholder="-Choose predict time-"
-          className={`rounded-full text-center w-48 py-2 px-4 ${customStyles}`}
+          className={`rounded-full text-center w-60 py-2 ${customStyles}`}
           onClick={() => {
             console.log("Clicked"); 
           }}
