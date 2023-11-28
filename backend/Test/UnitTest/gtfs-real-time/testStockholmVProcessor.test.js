@@ -63,53 +63,114 @@ describe('StockholmVehicleDataProcessor', () => {
   });
 
   describe('updateVehicle', () => {
-    it('should update the existing VehiclePositions instance', async () => {
-      const vehicle = {
-        vehicle: {
-          timestamp: new Date(),
-          position: {
-            latitude: 59.3293,
-            longitude: 18.0686,
-            speed: 30,
-            bearing: 45,
+      it('should update the existing vehicle position and congestion level', async () => {
+        // Mock data
+        const vehicle = {
+          vehicle: {
+            timestamp: new Date(),
+            position: {
+              latitude: 1.234,
+              longitude: 5.678,
+              speed: 50, // Replace with actual speed value
+              bearing: 90, // Replace with actual bearing value
+            },
           },
-        },
-      };
-      const existingPosition = {
-        timestamp: new Date(),
-        current_position: {
-          latitude: 59.3293,
-          longitude: 18.0686,
-        },
-        congestion_level: {
+        };
+        const existingPosition = {
           timestamp: new Date(),
-          level: 0,
-          previousStop: null,
-          currentStop: null,
-        },
-      };
-      const existingTrip = {
-        _id: 'existingTripId',
-        trip_id: 'existingTripId',
-      };
+          current_position: {
+            latitude: 0,
+            longitude: 0,
+          },
+          congestion_level: {
+            timestamp: new Date(),
+            level: 0,
+            previousStop: null,
+            currentStop: null,
+          },
+        };
+        const existingTrip = {
+          _id: 'existingTripId',
+        };
 
-      // Mock the congestionLevelStockholm function
-      congestionLevelStockholm.mockResolvedValue({
-        congestionLevel: 1,
-        currentStop: 'CurrentStop',
-        nextStop: 'NextStop',
+        // Mock the congestionLevelStockholm function
+        congestionLevelStockholm.mockResolvedValue({
+          congestionLevel: 1,
+          nextStop: 'nextStopId',
+          currentStop: 'currentStopId',
+        });
+
+        // Call the updateVehicle method
+        await processor.updateVehicle(vehicle, existingPosition, existingTrip);
+
+        // Assertions
+        expect(existingPosition.timestamp).toBe(vehicle.vehicle.timestamp);
+        expect(existingPosition.current_position.latitude).toBe(1.234);
+        expect(existingPosition.current_position.longitude).toBe(5.678);
+
+        // Check if congestionLevelStockholm has been called with the expected arguments
+        expect(congestionLevelStockholm).toHaveBeenCalledWith(
+          'existingTripId',
+          50, // Replace with actual speed value
+          1.234, // Replace with actual latitude value
+          5.678, // Replace with actual longitude value
+          90 // Replace with actual bearing value
+        );
+
+        // Check if congestion level and stops are updated
+        expect(existingPosition.congestion_level.timestamp).toBeInstanceOf(Date);
+        expect(existingPosition.congestion_level.level).toBe(1);
+        expect(existingPosition.congestion_level.currentStop).toBe('currentStopId');
+        expect(existingPosition.congestion_level.previousStop).toBe('nextStopId');
       });
-
-      await processor.updateVehicle(vehicle, existingPosition, existingTrip);
-
-      // Check if the existingPosition object was updated correctly
-      expect(existingPosition.timestamp).toEqual(expect.any(Date));
-      expect(existingPosition.current_position.latitude).toBeCloseTo(59.3293);
-      expect(existingPosition.current_position.longitude).toBeCloseTo(18.0686);
-      expect(existingPosition.congestion_level.timestamp).toEqual(expect.any(Date));
-      expect(existingPosition.congestion_level.level).toBe(1);
-      expect(existingPosition.congestion_level.currentStop).toBe('NextStop');
-      expect(existingPosition.congestion_level.previousStop).toBe('CurrentStop');
     });
-  });
+
+    describe('createNewTripUpdate', () => {
+      it('should create a new TripUpdate instance', () => {
+        // Mock data
+        const tripUpdate = {
+          tripUpdate: {
+            trip: {
+              tripId: 'someTripId',
+            },
+            stopTimeUpdate: ['stopTimeUpdate1', 'stopTimeUpdate2'],
+          },
+        };
+        const city = 'Stockholm';
+
+        // Call the createNewTripUpdate method
+        const result = processor.createNewTripUpdate(tripUpdate, city);
+
+        // Assertions
+        expect(TripUpdate).toHaveBeenCalledWith({
+          city: 'Stockholm',
+          trip_id: 'someTripId',
+          stopTimeUpdates: ['stopTimeUpdate1', 'stopTimeUpdate2'],
+        });
+
+        // Check if the returned result is an instance of TripUpdate
+        expect(result).toBeInstanceOf(TripUpdate);
+      });
+    });
+
+    describe('updateTrip', () => {
+      it('should update the existing TripUpdate', () => {
+        // Mock data
+        const existingTripUpdate = {
+          stopTimeUpdates: ['existingStopTimeUpdate'],
+        };
+
+        const tripUpdate = {
+          tripUpdate: {
+            stopTimeUpdate: ['newStopTimeUpdate1', 'newStopTimeUpdate2'],
+          },
+        };
+
+        // Call the updateTrip method
+        processor.updateTrip(existingTripUpdate, tripUpdate);
+
+        // Assertions
+        expect(existingTripUpdate.stopTimeUpdates).toEqual(['newStopTimeUpdate1', 'newStopTimeUpdate2']);
+      });
+    });
 });

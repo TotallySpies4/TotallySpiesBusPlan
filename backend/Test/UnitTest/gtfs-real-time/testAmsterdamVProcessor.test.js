@@ -163,6 +163,34 @@ describe('AmsterdamVehicleDataProcessor', () => {
         });
       });
 
+      describe('createNewTripUpdate', () => {
+          it('should create a new TripUpdate instance', () => {
+            // Mock data
+            const tripUpdate = {
+              tripUpdate: {
+                trip: {
+                  tripId: 'someTripId',
+                },
+                stopTimeUpdate: ['stopTimeUpdate1', 'stopTimeUpdate2'],
+              },
+            };
+            const city = 'Amsterdam';
+
+            // Call the createNewTripUpdate method
+            const result = processor.createNewTripUpdate(tripUpdate, city);
+
+            // Assertions
+            expect(TripUpdate).toHaveBeenCalledWith({
+              city: 'Amsterdam',
+              trip_id: 'someTripId',
+              stopTimeUpdates: ['stopTimeUpdate1', 'stopTimeUpdate2'],
+            });
+
+            // Check if the returned result is an instance of TripUpdate
+            expect(result).toBeInstanceOf(TripUpdate);
+          });
+        });
+
       describe('updateTrip', () => {
         it('should update the existing TripUpdate', () => {
           // Mock data
