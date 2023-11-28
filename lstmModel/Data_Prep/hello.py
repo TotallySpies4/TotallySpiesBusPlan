@@ -11,7 +11,7 @@ fs = GridFS(db)
 
 chunk_size = 10000000
 
-file_name = 'gtfs_2023-11-24.csv'
+file_name = 'gtfs_2023-01-09.csv'
 csv = fs.find_one({'filename': file_name})
 print(csv)
 trip_collection = db['trips']
@@ -89,4 +89,4 @@ resampled_df.rename(columns={
     'Speed': 'Speed_mean'
 }, inplace=True)
 
-resampled_df.to_csv('./2023-11-24_resampled.csv')
+resampled_df.to_csv('./2023-01-09_resampled.csv')
