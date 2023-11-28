@@ -1,6 +1,5 @@
 import React from "react";
 import { formatTime } from "../utils/formatTime.js";
-
 export const SingleStationInfo = ({
   selectedTrip,
   congestionStatus,
@@ -17,15 +16,16 @@ export const SingleStationInfo = ({
               <div className="flex flex-row justify-between items-center divide-y-2">
                 <div>
                   <strong>{stop.stop_name}</strong>
-                  <strong
-                    style={{
-                      color: getCongestionInfo(
-                        currentVehicle.congestion_level.level
-                      ).color,
-                    }}>
-                    {formatTime(stop.arrival_time)}
-                  </strong>
                 </div>
+                <strong
+                  style={
+                    {
+                      //color: getCongestionInfo(
+                      //currentVehicle.congestion_level.level).color,
+                    }
+                  }>
+                  {formatTime(stop.arrival_time)}
+                </strong>
               </div>
             </li>
           ))}

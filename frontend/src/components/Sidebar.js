@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { CitySelection } from "./CitySelection.js";
 import { BuslineSelection } from "./BuslineSelection.js";
 import { SingleStationInfo } from "./SingleStationInfo.js";
@@ -17,8 +17,15 @@ export const Sidebar = ({
   // const handleCloseSidebar = () => {
   //   closeSidebar();
   // };
+  const [isBuslineSelectionOpen, setIsBuslineSelectionOpen] = useState(false);
 
-  const sidebarHeight = selectedTrip ? "h-3/4" : "h-fit";
+  const handleBuslineSelectionToggle = () => {
+    setIsBuslineSelectionOpen((prevState) => !prevState);
+  };
+
+  const sidebarHeight =
+    selectedTrip || isBuslineSelectionOpen ? "h-3/4" : "h-fit";
+  // const sidebarHeight = selectedTrip  ? "h-3/4" : "h-fit";
   // const sidebarTop = selectedTrip ? "top-12" : "top-1/2 transform -translate-y-1/2";
   const sidebarDividerShadow = selectedTrip ? "shadow-bottom" : "";
 
@@ -37,20 +44,21 @@ export const Sidebar = ({
         </div> */}
         {/* City select dropdown and list */}
         <div className={`h-fit ${sidebarDividerShadow}`}>
-        <CitySelection
-          selectedCity={selectedCity}
-          setSelectedCity={setSelectedCity}
-        />
+          <CitySelection
+            selectedCity={selectedCity}
+            setSelectedCity={setSelectedCity}
+          />
 
-        {/* Bus line select dropdown and list */}
-        <BuslineSelection
-          selectedCity={selectedCity}
-          allroutes={allroutes}
-          selectedTrip={selectedTrip}
-          setSelectedBusline={setSelectedBusline}
-        />
+          {/* Bus line select dropdown and list */}
+          <BuslineSelection
+            selectedCity={selectedCity}
+            allroutes={allroutes}
+            selectedTrip={selectedTrip}
+            setSelectedBusline={setSelectedBusline}
+            isOpen={isBuslineSelectionOpen}
+            onToggle={handleBuslineSelectionToggle}
+          />
         </div>
-        
       </div>
 
       <SingleStationInfo
