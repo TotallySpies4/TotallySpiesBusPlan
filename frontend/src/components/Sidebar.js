@@ -36,7 +36,7 @@ export const Sidebar = ({
           </button>
         </div> */}
         {/* City select dropdown and list */}
-        <div className={`w-fit ${sidebarDividerShadow}`}>
+        <div className={`h-fit ${sidebarDividerShadow}`}>
         <CitySelection
           selectedCity={selectedCity}
           setSelectedCity={setSelectedCity}
