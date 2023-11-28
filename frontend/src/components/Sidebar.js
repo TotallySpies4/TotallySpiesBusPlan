@@ -24,7 +24,7 @@ export const Sidebar = ({
   };
 
   const sidebarHeight =
-    selectedTrip || isBuslineSelectionOpen ? "h-3/4" : "h-fit";
+    selectedCity? "h-3/4" : "h-fit";
   // const sidebarHeight = selectedTrip  ? "h-3/4" : "h-fit";
   // const sidebarTop = selectedTrip ? "top-12" : "top-1/2 transform -translate-y-1/2";
   const sidebarDividerShadow = selectedTrip ? "shadow-bottom" : "";

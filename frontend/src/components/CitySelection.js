@@ -35,6 +35,12 @@ export const CitySelection = ({ setSelectedCity }) => {
       }),
   };
 
+  const handleChange = (option) => {
+    setSelectedCityState(option);
+    const city = option.value;
+    setSelectedCity(city); // Directly update the selectedCity state
+  };
+
   return (
     <div className="space-y-4 px-4 w-full">
       <div className="flex flex-row items-center">
@@ -45,12 +51,7 @@ export const CitySelection = ({ setSelectedCity }) => {
       <Select
         options={cityOptions}
         value={selectedCity}
-        onChange={(option) => {
-          console.log(option);
-          const city = option.value;
-          setSelectedCity(city);
-          setSelectedCityState(option);
-        }}
+        onChange={handleChange}
         isSearchable
         placeholder="-Select a city-"
         className="w-full-width"

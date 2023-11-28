@@ -15,14 +15,21 @@ function Map({ selectedTrip, congestionShape, currentVehicle, selectedCity }) {
   useEffect(() => {
     console.log("SelectedBusID in Map: " + selectedTrip);
   }, [selectedTrip]);
-  useEffect(() => {
-    // Update map center based on the selected city
+
+  // Update map center based on the selected city
+  const handleCityChange = () => {
     if (selectedCity === "Stockholm") {
-      setMapCenter([59.3293, 18.0686]);
+      setMapCenter([59.3293, 18.0686]); // Set center for Stockholm
     } else if (selectedCity === "Amsterdam") {
-      setMapCenter([52.3676, 4.9041]);
+      setMapCenter([52.3676, 4.9041]); // Reset center for Amsterdam
     }
+  };
+
+  React.useEffect(() => {
+    // Handle initial city change
+    handleCityChange();
   }, [selectedCity]);
+  
 const customIcon = new L.icon({
   iconUrl: "/icon/BusMarker.png",
   iconSize: [20, 20],
