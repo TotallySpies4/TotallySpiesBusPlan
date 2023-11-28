@@ -38,7 +38,7 @@ export const PredictionDropDown = ({ selectedBusline, selectedCity }) => {
           type="button"
           isDisabled={isButtonDisable}
           placeholder="-Choose predict time-"
-          className={`rounded-full text-center w-60 py-2 ${customStyles}`}
+          className={`rounded-full text-center w-48 py-2 px-4 ${customStyles}`}
           onClick={() => {
             console.log("Clicked"); 
           }}

@@ -13,14 +13,11 @@ export const CitySelection = ({ setSelectedCity }) => {
   const customStyles = {
     control: (provided, state) => ({
       ...provided,
-      borderColor: "#grey",
+      borderColor: "#3b82f6",
       borderWidth: "2px",
       ':hover': {
         borderColor: "#3b82f6",
       }, 
-      ':focus':{
-        borderColor: "#3b82f6"
-      }
     }),
     singleValue: (provided, state) => ({
       ...provided,
@@ -34,18 +31,15 @@ export const CitySelection = ({ setSelectedCity }) => {
     // Change the color of the dropdown button
     dropdownIndicator: (provided, state) => ({
         ...provided,
-        color: "",
+        color: "#3b82f6",
         ':hover': {
           color: "#3b82f6", // Set the hover color to the same as the normal color
         },
-        ':focus':{
-          borderColor: "#3b82f6"
-        }
       }),
   };
 
   return (
-    <div className="space-y-4 px-4 w-full">
+    <div className="space-y-4 w-72">
       <div className="flex flex-row items-center">
         <img src="./public/CitySelection.png" alt="" />
         <p>City</p>
@@ -62,7 +56,7 @@ export const CitySelection = ({ setSelectedCity }) => {
         }}
         // isSearchable
         placeholder="-Select a city-"
-        className="w-full-width"
+        className="w-full"
         styles={customStyles}
       />
     </div>

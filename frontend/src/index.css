@@ -22,7 +22,7 @@ code {
   display: flex;
 }
 
-/* .BusButton {
+.BusButton {
   background-color: #4caf50;
   border: none;
   color: white;
@@ -40,7 +40,7 @@ code {
 .BusButton:active {
   background-color: #3e8e41;
   transform: translateY(4px);
-} */
+}
 
 .container {
   position: relative;
@@ -72,13 +72,16 @@ code {
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19) ;
 } */
 
+
+
+
 #map {
   height: 0 !important;
 }
 
-/* .css-b62m3t-container{
+.css-b62m3t-container{
 width: 80%;
-} */
+}
 
 .bus-message {
   position: absolute;

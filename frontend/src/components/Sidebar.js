@@ -17,7 +17,7 @@ export const Sidebar = ({
     <div
       className={`sidebar ${
         isSidebarOpen ? "open" : ""
-      } absolute top-12 left-2 py-10 w-96 h-3/4 z-50 bg-[#FFFF] overflow-hidden flex flex-col rounded-3xl shadow-lg divide-y-2`}>
+      } absolute top-12 left-0 p-10 w-96 h-3/4 z-50 bg-white overflow-hidden flex flex-col items-center rounded-xl shadow-lg`}>
       <div className="space-y-4">
         <CitySelection
           selectedCity={selectedCity}
@@ -25,19 +25,21 @@ export const Sidebar = ({
         />
 
         {/* Bus line select dropdown and list */}
+        <div className="space-y-4 w-full">
+          <p>Bus line</p>
           <BuslineSelection
             selectedCity={selectedCity}
             allroutes={allroutes}
             selectedTrip={selectedTrip}
             setSelectedBusline={setSelectedBusline}
           />
-      </div>
-          <SingleStationInfo className="divide-x-2"
+          <SingleStationInfo
             selectedTrip={selectedTrip}
             congestionStatus={congestionStatus}
             currentVehicle={currentVehicle}
           />
-      
+        </div>
+      </div>
     </div>
   );
 };
