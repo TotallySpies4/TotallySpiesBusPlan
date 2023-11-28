@@ -17,29 +17,29 @@ export const Sidebar = ({
     <div
       className={`sidebar ${
         isSidebarOpen ? "open" : ""
-      } absolute top-12 left-0 p-10 w-96 h-3/4 z-50 bg-white overflow-hidden flex flex-col items-center rounded-xl shadow-lg`}>
+      } absolute top-12 left-0 p-3 w-96 h-3/4 z-50 bg-white overflow-y-hidden flex flex-col items-center rounded-r-xl shadow-2xl`}>
       <div className="space-y-4">
-        <CitySelection
-          selectedCity={selectedCity}
-          setSelectedCity={setSelectedCity}
-        />
-
-        {/* Bus line select dropdown and list */}
-        <div className="space-y-4 w-full">
-          <p>Bus line</p>
-          <BuslineSelection
+        <div>
+          <CitySelection 
             selectedCity={selectedCity}
-            allroutes={allroutes}
-            selectedTrip={selectedTrip}
-            setSelectedBusline={setSelectedBusline}
+            setSelectedCity={setSelectedCity}
           />
+
+          {/* Bus line select dropdown and list */}
+            <BuslineSelection
+              selectedCity={selectedCity}
+              allroutes={allroutes}
+              selectedTrip={selectedTrip}
+              setSelectedBusline={setSelectedBusline}
+            />
+          </div>
+
           <SingleStationInfo
             selectedTrip={selectedTrip}
-            congestionStatus={congestionStatus}
+            // congestionStatus={congestionStatus}
             currentVehicle={currentVehicle}
           />
         </div>
       </div>
-    </div>
   );
 };

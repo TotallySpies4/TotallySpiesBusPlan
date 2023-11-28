@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import Select from "react-select";
-import { formatTime } from "../utils/formatTime.js";
-import {SingleStationInfo} from "./SingleStationInfo.js";
+import { SingleStationInfo } from "./SingleStationInfo.js";
 
 export const BuslineSelection = ({
   selectedCity,
@@ -12,26 +11,29 @@ export const BuslineSelection = ({
 }) => {
   let busOptions;
 
-  const isBuslineDisable = !selectedCity;
+  const isSelectDisable = !selectedCity;
+
+  // Define custom styles for the control
   const customStyles = {
     control: (provided, state) => ({
       ...provided,
-      borderColor: "#3b82f6",
+      borderColor: isSelectDisable ? "#9ca3af" : "#3b82f6",
       borderWidth: "2px",
       ":hover": {
-        borderColor: "#3b82f6",
+        borderColor: isSelectDisable ? "#9ca3af" : "#3b82f6",
       },
     }),
     singleValue: (provided, state) => ({
       ...provided,
-      color: state.selectProps.value === null ? "grey" : "#3b82f6",
+      color: state.selectProps.value === null ? "#9ca3af" : "#3b82f6",
     }),
 
+    // Change the color of the dropdown button
     dropdownIndicator: (provided, state) => ({
       ...provided,
-      color: "#3b82f6",
+      color: isSelectDisable ? "#9ca3af" : "#3b82f6",
       ":hover": {
-        color: "#3b82f6",
+        color: isSelectDisable ? "#9ca3af" : "#3b82f6",
       },
     }),
   };
@@ -71,15 +73,20 @@ export const BuslineSelection = ({
   };
 
   return (
-    <div>
+    <div className="space-y-4 w-72">
+      <div className="flex flex-row items-center">
+        {/* <img src="/icon/bus-station.png" alt="" /> */}
+        <p>Bus line</p>
+      </div>
+
       <Select
         options={busOptions}
         onChange={handleBusSelection}
         isSearchable
         placeholder="-Choose a bus line-"
-        className="w-full"
-        styles={customStyles}
-        disabled={isBuslineDisable}/>
+        className={`w-full ${customStyles}`}
+        isDisabled={isSelectDisable}
+      />
 
       {selectedCity && <SingleStationInfo />}
     </div>
