@@ -3,7 +3,7 @@ import logging
 import csv
 from google.protobuf import text_format
 from google.transit import gtfs_realtime_pb2
-
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 # Function to initiate the processing of .pb files
 def process_pb_directory(pb_directory, csv_file_path):

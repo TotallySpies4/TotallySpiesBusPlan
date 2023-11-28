@@ -11,6 +11,7 @@ def createSequence(N, features_to_scale, resampled_df):
         print(f"Trip ID: {trip_id}, Group size: {len(group)}")
 
         for i in range(N, len(group)):
+
             if i + 30 < len(group) and i + 60 < len(group):
                 seq = group.iloc[i - N:i][features_to_scale].values
                 if len(seq) == N:

@@ -3,9 +3,8 @@ from gridfs import GridFS
 from pymongo import MongoClient
 import logging
 
-from .segmentSpecifier import calculate_current_segment
-
-
+from segmentSpecifier import calculate_current_segment
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 client = MongoClient('mongodb:27017')
 db = client.TotallySpiesBusPlan
 fs = GridFS(db)
@@ -91,7 +90,7 @@ def process_resample_data_from_file(date, chunk_size):
     }, inplace=True)
     return resampled_df
 
+
 # Load the data from the file system
 # resampled_df = pd.read_csv('resampled_df.csv')
 # print (resampled_df.head(5))
-

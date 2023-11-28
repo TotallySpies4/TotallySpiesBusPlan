@@ -2,6 +2,7 @@ import {VehiclePositions} from "../DBmodels/vehiclepositions.js";
 import {Route} from "../DBmodels/busline.js";
 import {congestionLevel} from "../utils/congestionLevel.js";
 import {IVehicleDataProcessor} from "./IVehicleDataProcessor.js";
+import {TripUpdate} from "../DBmodels/tripUpdate.js";
 
 export class AmsterdamVehicleDataProcessor extends IVehicleDataProcessor {
     createNewVehicle(vehicle,existingTrip,route,city) {
@@ -64,5 +65,19 @@ export class AmsterdamVehicleDataProcessor extends IVehicleDataProcessor {
         existingPosition.current_status = vehicle.vehicle.current_status;
         existingPosition.stop_id = vehicle.vehicle.stopId;
 
+    }
+
+    createNewTripUpdate(tripUpdate, city){
+
+        return new TripUpdate({
+            city: city,
+            trip_id: tripUpdate.tripUpdate.trip.tripId,
+            stopTimeUpdates: tripUpdate.tripUpdate.stopTimeUpdate
+        })
+    }
+
+
+    updateTrip(existingTripUpdate, tripUpdate){
+        existingTripUpdate.stopTimeUpdates = tripUpdate.tripUpdate.stopTimeUpdate
     }
 }

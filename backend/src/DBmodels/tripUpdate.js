@@ -20,3 +20,6 @@ const tripUpdateSchema = new Schema({
     trip_id: String,
     stopTimeUpdates: [stopTimeUpdateSchema]
 })
+
+const TripUpdate = mongoose.model("TripUpdate", tripUpdateSchema);
+export {TripUpdate};
