@@ -1,6 +1,7 @@
 import {VehiclePositions} from "../DBmodels/vehiclepositions.js";
 import {congestionLevelStockholm} from "../utils/congestionLevel.js";
 import {IVehicleDataProcessor} from "./IVehicleDataProcessor.js";
+import {TripUpdate} from "../DBmodels/tripUpdate.js";
 
 
 export class StockholmVehicleDataProcessor extends IVehicleDataProcessor {
@@ -42,6 +43,20 @@ export class StockholmVehicleDataProcessor extends IVehicleDataProcessor {
         existingPosition.congestion_level.level = congestionLevelObject.congestionLevel;
         existingPosition.congestion_level.currentStop = congestionLevelObject.nextStop;
         existingPosition.congestion_level.previousStop = congestionLevelObject.currentStop;
+    }
+
+    createNewTripUpdate(tripUpdate, city){
+
+        return new TripUpdate({
+            city: city,
+            trip_id: tripUpdate.tripUpdate.trip.tripId,
+            stopTimeUpdates: tripUpdate.tripUpdate.stopTimeUpdate
+        })
+        }
+
+
+    updateTrip(existingTripUpdate, tripUpdate){
+        existingTripUpdate.stopTimeUpdates = tripUpdate.tripUpdate.stopTimeUpdate
     }
 
 }

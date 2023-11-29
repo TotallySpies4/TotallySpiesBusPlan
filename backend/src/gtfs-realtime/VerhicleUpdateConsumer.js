@@ -1,16 +1,16 @@
 import {Kafka} from "kafkajs";
 import mongoose from "mongoose";
 import {VehiclePositions} from "../DBmodels/vehiclepositions.js";
-import {Route, Trip} from "../DBmodels/busline.js";
-import {StockholmVehicleDataProcessor} from "./StockholmVehicleDataProcessor.js";
 import {AmsterdamVehicleDataProcessor} from "./AmsterdamVehicleDataProcessor.js";
+import {StockholmVehicleDataProcessor} from "./StockholmVehicleDataProcessor.js";
+import {Route, Trip} from "../DBmodels/busline.js";
 
 const kafka = new Kafka({
     clientId: 'my-app',
     brokers: ['kafka:19092']
 });
 
-export async function setupConsumerForCity(topic,city) {
+async function setupConsumerForCity(topic,city) {
     const consumer = kafka.consumer({groupId: `gtfs-realtime-group-${topic}`});
 
     await mongoose.connect('mongodb://mongodb:27017/TotallySpiesBusPlan', {
@@ -27,64 +27,55 @@ export async function setupConsumerForCity(topic,city) {
         processor = new StockholmVehicleDataProcessor();
     }
 
-
-
     await consumer.run({
         eachMessage: async ({topic, partition, message}) => {
             const rawData = message.value.toString();
             const data = JSON.parse(rawData);
 
 
-            for (const vehicle of data) {
-                if (!vehicle || !vehicle.vehicle || !vehicle.vehicle.trip) {
+            for (const tripUpdate of data) {
+                if (!tripUpdate || !tripUpdate.tripUpdate || !tripUpdate.tripUpdate.trip) {
                     //console.error('Invalid vehicle data format:', vehicle);
                     continue; // Skip this iteration because the structure is not as expected
                 }
 
-                if (!vehicle.vehicle.trip.tripId) {
+                if (!tripUpdate.tripUpdate.trip.tripId) {
                     //console.error('Trip ID is undefined for vehicle:', vehicle);
                     continue; // Skip this iteration because tripId is undefined
                 }
 
-                    //console.log("vehicleID", vehicle);
-                    const existingTrip = await Trip.findOne({trip_id: vehicle.vehicle.trip.tripId});
-                    //console.log("existing trip", existingTrip);
-                    if (!existingTrip) {
-                        //console.log(`Trip ID ${vehicle.vehicle.trip.tripId} not in the database.`);
-                        continue;  // Skip this vehicle
-                    }
+                //console.log("vehicleID", vehicle);
+                const existingTrip = await Trip.findOne({trip_id: tripUpdate.tripUpdate.trip.tripId});
+                //console.log("existing trip", existingTrip);
+                if (!existingTrip) {
+                    //console.log(`Trip ID ${vehicle.vehicle.trip.tripId} not in the database.`);
+                    continue;  // Skip this vehicle
+                }
 
-                    const existingPosition = await VehiclePositions.findOne({currentTrip_id: existingTrip._id});
-                     //console.log("existing position", existingPosition);
-                     if (existingPosition) {
+                const existingTripUpdate = await VehiclePositions.findOne({currentTrip_id: existingTrip._id});
+                //console.log("existing position", existingPosition);
+                if (existingTripUpdate) {
 
                     // Update existing entry
 
-                    await processor.updateVehicle(vehicle, existingPosition, existingTrip);
-                    await existingPosition.save();
+                    await processor.updateTrip(existingTripUpdate, tripUpdate);
+                    await existingTripUpdate.save();
 
 
                 } else {
                     // Create new entry
-                    const route = await Route.findOne({_id: existingTrip.route_id});
-                    const newPosition = processor.createNewVehicle(vehicle, existingTrip, route, city);
-                    await newPosition.save();
+                    const newTripUpdate = processor.createNewTripUpdate(tripUpdate, city);
+                    await newTripUpdate.save();
                 }
             }
             console.log("done");
 
 
-        }
-
-    });
-
-}
-
+        }})
+    }
 
 async function run() {
     try {
-        await setupConsumerForCity('gtfs-realtime-amsterdam','amsterdam');
-        await setupConsumerForCity('gtfs-realtime-stockholm','stockholm');
         await setupConsumerForCity('gtfs-realtime-amsterdam-tripUpdates','amsterdam');
         await setupConsumerForCity('gtfs-realtime-stockholm-tripUpdates','stockholm');
         // Add more cities as needed
@@ -94,5 +85,3 @@ async function run() {
 }
 
 run();
-
-

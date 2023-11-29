@@ -7,7 +7,7 @@
             {
                 "agency_id": "GVB",
                 "mongoUrl": "mongodb://mongodb:27017/TotallySpiesBusPlan",
-                "path": "./gtfs/nl.zip",
+                "path": "./gtfsZip/nl.zip",
                 "country": "Netherlands"
             }
         ]
@@ -18,7 +18,7 @@
                 {
                     "agency_id": "14010000000001001",
                     "mongoUrl": "mongodb://mongodb:27017/TotallySpiesBusPlan",
-                    "path": "./gtfs/sl.zip",
+                    "path": "./gtfsZip/sl.zip",
                     "country": "Sweden"
                 }
             ]

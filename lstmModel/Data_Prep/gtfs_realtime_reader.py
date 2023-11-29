@@ -3,7 +3,7 @@ import logging
 import csv
 from google.protobuf import text_format
 from google.transit import gtfs_realtime_pb2
-
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 # Function to initiate the processing of .pb files
 def process_pb_directory(pb_directory, csv_file_path):
@@ -37,6 +37,7 @@ def process_pb_file(pb_file_path, csv_writer):
 
         # Extract and write vehicle position data to the CSV file
         for entity in feed_message.entity:
+
             if entity.HasField("vehicle") and entity.vehicle.HasField("position") and entity.vehicle.HasField("trip"):
                 csv_writer.writerow([
                     entity.vehicle.timestamp,

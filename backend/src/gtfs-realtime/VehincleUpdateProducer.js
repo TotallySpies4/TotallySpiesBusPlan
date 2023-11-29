@@ -1,6 +1,6 @@
-import axios from 'axios';
-import * as GtfsRealtimeBindings from 'gtfs-realtime-bindings';
-import { Kafka } from 'kafkajs';
+import GtfsRealtimeBindings from 'gtfs-realtime-bindings';
+import {Kafka} from "kafkajs";
+import axios from "axios";
 
 const INTERVAL_MS = 60 * 1000;
 const kafka = new Kafka({ brokers: ['kafka:19092'] });
@@ -47,10 +47,9 @@ export async function fetchAndSend(url, topic) {
 
 
         if (response.status === 200) {
-            const feed = GtfsRealtimeBindings.default.transit_realtime.FeedMessage.decode(response.data);
+            const feed = GtfsRealtimeBindings.transit_realtime.FeedMessage.decode(response.data);
             const entities = feed.entity.map(entity => entity);
-
-            console.log(entities[0])
+            console.log(entities[0].tripUpdate)
             await createTopic(topic);
             await sendToKafka(topic, entities);
             console.log(`Data sent to Kafka on topic: ${topic}`);
@@ -61,21 +60,18 @@ export async function fetchAndSend(url, topic) {
 }
 
 
-// City configurations
-const amsterdamConfig = {
-    url: 'https://gtfs.ovapi.nl/nl/vehiclePositions.pb',
-    topic: 'gtfs-realtime-amsterdam'
+const amsterdamConfigTripUpdates = {
+    url: 'http://gtfs.ovapi.nl/nl/tripUpdates.pb',
+    topic: 'gtfs-realtime-amsterdam-tripUpdates'
 };
 
-const stockholmConfig = {
-    url: 'https://opendata.samtrafiken.se/gtfs-rt/sl/VehiclePositions.pb?key=dace0c5b6dc643c898caf86761be7e86',
-    topic: 'gtfs-realtime-stockholm'
-};
+const stockholmConfigTripUpdates = {
+    url: "https://opendata.samtrafiken.se/gtfs-rt/sl/TripUpdates.pb?key=dace0c5b6dc643c898caf86761be7e86",
+    topic: 'gtfs-realtime-stockholm-tripUpdates'
+}
 
+//fetchAndSend(amsterdamConfigTripUpdates.url, amsterdamConfigTripUpdates.topic);
+//setInterval(() => fetchAndSend(amsterdamConfigTripUpdates.url, amsterdamConfigTripUpdates.topic), INTERVAL_MS);
+fetchAndSend(stockholmConfigTripUpdates.url, stockholmConfigTripUpdates.topic);
+setInterval(() => fetchAndSend(stockholmConfigTripUpdates.url, stockholmConfigTripUpdates.topic), INTERVAL_MS);
 
-// Fetch and send data for each city
-fetchAndSend(amsterdamConfig.url, amsterdamConfig.topic);
-setInterval(() => fetchAndSend(amsterdamConfig.url, amsterdamConfig.topic), INTERVAL_MS);
-
-fetchAndSend(stockholmConfig.url, stockholmConfig.topic);
-setInterval(() => fetchAndSend(stockholmConfig.url, stockholmConfig.topic), INTERVAL_MS);
