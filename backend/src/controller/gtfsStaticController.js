@@ -21,6 +21,7 @@ export class GtfsStaticController {
 
                 let count = 0;
                 let busRouteType;
+                let routeSL = ["25M", "26C", "968", "969", "961", "25F", "26M"];
                 const agencyOfInterest = agencyConfig.agencies[0].agency_id;
                 if(agencyOfInterest === "GVB"){
                     busRouteType = 3;
@@ -36,11 +37,17 @@ export class GtfsStaticController {
                 await Trip.deleteMany({agency_id: agencyOfInterest});
 
 
+
                 const routesForAgency = await GTFS.getRoutes({ agency_id: agencyOfInterest });
 
-                const filteredRoutes = routesForAgency.filter(route =>
+                let filteredRoutes = routesForAgency.filter(route =>
                     route.route_type === busRouteType && route.route_long_name
                 );
+                if(agencyOfInterest === "14010000000001001"){
+                    filteredRoutes = filteredRoutes.filter(route =>
+                        route.route_short_name && routeSL.includes(route.route_short_name))
+
+                }
 
                 const routes = filteredRoutes.slice(0, 10);
                 const numberOfRoutes = routes.length;
