@@ -94,3 +94,5 @@ def process_resample_data_from_file(date, chunk_size):
 # Load the data from the file system
 # resampled_df = pd.read_csv('resampled_df.csv')
 # print (resampled_df.head(5))
+r = process_resample_data_from_file('2023-11-20', 10000000)
+r.to_csv('2023-11-20_resampled.csv')

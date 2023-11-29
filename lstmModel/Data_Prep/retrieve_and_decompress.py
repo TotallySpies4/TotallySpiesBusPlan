@@ -50,4 +50,4 @@ def retrieve_and_decompress(date):
     # start_date = datetime(2021, 1, 5)
     # for i in range(6):
     # date = (start_date + timedelta(days=i)).strftime("%Y-%m-%d")
-retrieve_and_decompress('2023-11-22')
+retrieve_and_decompress('2023-11-20')
