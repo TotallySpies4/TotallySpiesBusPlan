@@ -2,7 +2,6 @@ import mongoose from "mongoose";
 
 const segmentSpeedPredictionSchema = new mongoose.Schema({
     trip_id: String,
-    current_stop_id: String,
     previous_stop_id: String,
     next_stop_id: String,
     segment_number: Number,
