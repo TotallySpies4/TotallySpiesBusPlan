@@ -73,10 +73,10 @@ export const BuslineSelection = ({
   };
 
   return (
-    <div className="px-4 space-y-4 w-full">
-      <div className="flex flex-row items-center">
-        {/* <img src="/icon/bus-station.png" alt="" /> */}
-        <p>Bus line</p>
+    <div className="px-8 space-y-4 w-full">
+      <div className=" flex flex-row space-x-4 items-center">
+        <img src="/icon/BusSelectIcon.png" alt="" className="w-10 h-10" />     
+        <p className="text-[20px]">Bus line</p>
       </div>
 
       <Select

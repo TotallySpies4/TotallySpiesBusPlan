@@ -55,7 +55,7 @@ const customIcon = new L.icon({
               shape.shape_pt_lat,
               shape.shape_pt_lon,
             ])}
-            color={currentVehicle ? "#22c55e" : "#f0abfc"}
+            color={currentVehicle ? "#4FB453" : "#708090"}
             />
         )}
 
@@ -109,13 +109,13 @@ const customIcon = new L.icon({
 function getCongestionColor(level) {
   switch (level) {
     case 0:
-      return "#22c55e";
+      return "#4FB453";
     case 1:
-      return "#facc15";
+      return "#EAB059";
     case 2:
-      return "#dc2626";
+      return "#B44F4F";
     default:
-      return "#e879f9";
+      return "#708090";
   }
 }
 

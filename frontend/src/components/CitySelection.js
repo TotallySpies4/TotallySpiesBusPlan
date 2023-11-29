@@ -42,10 +42,10 @@ export const CitySelection = ({ setSelectedCity }) => {
   };
 
   return (
-    <div className="space-y-4 px-4 w-full">
-      <div className="flex flex-row items-center">
-        {/* <img src="/icon/CitySelection.png" alt="" /> */}
-        <p>City</p>
+    <div className="space-y-4 px-8 w-full">
+      <div className="ml-3 space-x-4 flex flex-row items-center">
+        <img src="/icon/CitySelection.png" alt=""  />
+        <p className="text-[20px]">City</p>
       </div>
 
       <Select

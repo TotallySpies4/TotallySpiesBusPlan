@@ -35,7 +35,7 @@ export const ReroutingButton = () => {
     <button
       type="button"
       id="rerouting-button"
-      className={`flex h-10 items-center text-white py-2 px-4 rounded-full shadow-xl ${buttonColor}`}
+      className={`flex h-10 items-center text-white text-[18px] py-2 px-4 rounded-full shadow-xl ${buttonColor}`}
       // onClick={handleRerouting}
       disabled={isReroutingPressed || !selectedCity || !selectedBusLine}>
       Rerouting

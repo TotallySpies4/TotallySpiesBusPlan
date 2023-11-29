@@ -23,8 +23,7 @@ export const Sidebar = ({
     setIsBuslineSelectionOpen((prevState) => !prevState);
   };
 
-  const sidebarHeight =
-    selectedCity? "h-3/4" : "h-fit";
+  const sidebarHeight = selectedCity ? "-translate-y-12 h-3/4" : "top-24 h-fit";
   // const sidebarHeight = selectedTrip  ? "h-3/4" : "h-fit";
   // const sidebarTop = selectedTrip ? "top-12" : "top-1/2 transform -translate-y-1/2";
   const sidebarDividerShadow = selectedTrip ? "shadow-bottom" : "";
@@ -33,7 +32,7 @@ export const Sidebar = ({
     <div
       className={`sidebar ${
         isSidebarOpen ? "open" : ""
-      } absolute top-12 left-2 py-10 w-96 ${sidebarHeight} z-50 bg-[#FFFF] overflow-hidden flex flex-col rounded-3xl shadow-lg divide-y-2`}>
+      } absolute left-2 py-10 w-96 ${sidebarHeight} z-50 bg-[#FFFF] overflow-hidden flex flex-col rounded-3xl shadow-lg`}>
       <div className="space-y-4">
         {/* <div className="flex justify-end px-8">
           <button className="close-button" onClick={handleCloseSidebar}>
@@ -43,7 +42,7 @@ export const Sidebar = ({
           </button>
         </div> */}
         {/* City select dropdown and list */}
-        <div className={`h-fit ${sidebarDividerShadow}`}>
+        <div className={`space-y-4 h-fit ${sidebarDividerShadow}`}>
           <CitySelection
             selectedCity={selectedCity}
             setSelectedCity={setSelectedCity}
@@ -59,14 +58,13 @@ export const Sidebar = ({
             onToggle={handleBuslineSelectionToggle}
           />
         </div>
+        <SingleStationInfo
+          className="divide-x-2"
+          selectedTrip={selectedTrip}
+          // congestionStatus={congestionStatus}
+          currentVehicle={currentVehicle}
+        />
       </div>
-
-      <SingleStationInfo
-        className="divide-x-2"
-        selectedTrip={selectedTrip}
-        // congestionStatus={congestionStatus}
-        currentVehicle={currentVehicle}
-      />
     </div>
   );
 };

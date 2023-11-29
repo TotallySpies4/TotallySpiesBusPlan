@@ -28,15 +28,15 @@ export const PredictionDropDown = ({ selectedBusline, selectedCity }) => {
     }),
   };
   return (
-    <div className="flex flex-row justify-around items-center w-96 bg-[#FFF] shadow-2xl rounded-2xl px-2">
-      <p className="w-fit">Congestion in</p>
+    <div className="flex flex-row justify-around items-center w-[400px] bg-[#FFF] shadow-2xl rounded-2xl px-4">
+      <p className="w-fit text-[19px]">Congestion in</p>
       {/* Dropdown for time options */}
         <Select
           name="time-options"
           type="button"
           isDisabled={isButtonDisable}
           placeholder="-Choose predict time-"
-          className={`rounded-full text-center w-60 py-2 ${customStyles}`}
+          className={`rounded-full text-center w-56 py-2 ${customStyles}`}
           onClick={() => {
             console.log("Clicked"); 
           }}
