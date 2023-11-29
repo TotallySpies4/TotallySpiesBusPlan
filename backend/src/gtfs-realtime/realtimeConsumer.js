@@ -10,7 +10,7 @@ const kafka = new Kafka({
     brokers: ['kafka:19092']
 });
 
-async function setupConsumerForCity(topic,city) {
+export async function setupConsumerForCity(topic,city) {
     const consumer = kafka.consumer({groupId: `gtfs-realtime-group-${topic}`});
 
     await mongoose.connect('mongodb://mongodb:27017/TotallySpiesBusPlan', {
