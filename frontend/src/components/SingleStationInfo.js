@@ -9,10 +9,10 @@ export const SingleStationInfo = ({
   return (
     selectedTrip &&
     selectedTrip.stop_times && (
-      <div className="list" style={{ maxHeight: "300px", overflowY: "auto" }}>
+      <div className="list px-8" style={{ maxHeight: "300px", overflowY: "auto" }}>
         <ul>
           {selectedTrip.stop_times.map((stop, index) => (
-            <li key={index} className="divide-y-2">
+            <li key={index} className="border-b border-zinc-900">
               <div className="flex flex-row justify-between items-center">
                 <strong>{stop.stop_name}</strong>
                 <strong
