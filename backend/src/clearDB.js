@@ -8,3 +8,4 @@ mongoose.connect('mongodb://mongodb:27017/TotallySpiesBusPlan', {
         //mongoose.connection.db.dropDatabase()
             })
     .catch(err => console.error('Could not connect to MongoDB:', err));
+
