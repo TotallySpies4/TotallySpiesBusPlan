@@ -103,7 +103,6 @@ export class GtfsStaticController {
                                 });
                                 await segmentSpeedPrediction.save();
                             }
-
                             tripInstance.stop_times.push(newStopTime._id);
                         }
 
