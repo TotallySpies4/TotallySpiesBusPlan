@@ -92,7 +92,17 @@ export class GtfsStaticController {
                             let newStopTime = new StopTime(stopTime);
                             await newStopTime.save();
 
-
+                            for (let i = 0; i < stopTimes.length - 1; i++) {
+                                let segmentSpeedPrediction = new SegmentSpeedPrediction({
+                                    trip_id: tripData.trip_id,
+                                    previous_stop_id: i === 0 ? null : stopTimes[i - 1].stop_id,
+                                    next_stop_id: stopTimes[i + 1].stop_id,
+                                    segment_number: i + 1,
+                                    speed_30_min_prediction: null,
+                                    speed_60_min_prediction: null
+                                });
+                                await segmentSpeedPrediction.save();
+                            }
                             tripInstance.stop_times.push(newStopTime._id);
                         }
 

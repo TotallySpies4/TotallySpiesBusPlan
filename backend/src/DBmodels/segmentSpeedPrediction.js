@@ -10,3 +10,5 @@ const segmentSpeedPredictionSchema = new mongoose.Schema({
 })
 
 const SegmentSpeedPrediction = mongoose.model("SegmentSpeedPrediction", segmentSpeedPredictionSchema);
+
+export {SegmentSpeedPrediction};
