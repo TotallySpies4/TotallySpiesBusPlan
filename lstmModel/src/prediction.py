@@ -3,7 +3,7 @@ from keras.models import load_model
 from joblib import load
 import logging
 import numpy as np
-from Data_Prep.createSequence import createSequence
+from src.Data_Prep.createSequence import createSequence
 import tensorflow as tf
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
