@@ -56,8 +56,7 @@ pipeline {
                 
     //         }
     //     }
-    // }
-
+    }
     post {
         always {
             // Fahren Sie die Docker Compose-Services herunter
