@@ -55,7 +55,7 @@ pipeline {
             steps {
                 script{
                     withDockerRegistry([credentialsId: 'docker_hub', url: 'https://index.docker.io/v1/']) {
-                        sh 'docker push khanhlinh02/app:latest'
+                        sh 'docker push khanhlinh02/app:latest . '
                     }
                 }
             }
