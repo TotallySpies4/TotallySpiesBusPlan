@@ -41,21 +41,25 @@ pipeline {
             }
         }
 
-    // stage('Build Docker Image') {
-    //         steps {
-    //             script{
-    //                 withDockerRegistry([credentialsId: 'dockerhub', url: '']) {
-    //                     sh 'docker build -t totallyspiesbusplan/app:latest . '
-    //                 }
-    //             }
-    //         }
-    //     }
+        stage('Build Docker Image') {
+            steps {
+                script{
+                    withDockerRegistry([credentialsId: 'docker_hub', url: 'https://index.docker.io/v1/']) {
+                        sh 'docker build -t khanhlinh02/app:latest . '
+                    }
+                }
+            }
+        }
 
-    // stage('Push to Docker Hub') {
-    //         steps {
-                
-    //         }
-    //     }
+        stage('Push to Docker Hub') {
+            steps {
+                script{
+                    withDockerRegistry([credentialsId: 'docker_hub', url: 'https://index.docker.io/v1/']) {
+                        sh 'docker push khanhlinh02/app:latest . '
+                    }
+                }
+            }
+        }
     }
     post {
         always {
