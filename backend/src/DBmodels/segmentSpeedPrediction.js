@@ -5,6 +5,7 @@ const segmentSpeedPredictionSchema = new mongoose.Schema({
     previous_stop_id: String,
     next_stop_id: String,
     segment_number: Number,
+    average_speed: Number,
     speed_30_min_prediction: Number,
     speed_60_min_prediction: Number
 })

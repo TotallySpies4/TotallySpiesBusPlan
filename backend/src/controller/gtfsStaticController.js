@@ -1,6 +1,8 @@
 import * as GTFS from 'gtfs';
 import mongoose from "mongoose";
 import {Route, Shape, Speed, StopTime, Trip} from "../DBmodels/busline.js";
+import {SegmentSpeedPrediction} from "../DBmodels/segmentSpeedPrediction.js";
+import {calculateScheduledSpeed} from "../utils/speedCalculator.js";
 
 
 export class GtfsStaticController {
@@ -93,11 +95,15 @@ export class GtfsStaticController {
                             await newStopTime.save();
 
                             for (let i = 0; i < stopTimes.length - 1; i++) {
+                                const previousStop = stopTimes[i];
+                                const currentStop = stopTimes[i + 1];
+                                const averageSpeed = calculateScheduledSpeed(previousStop, currentStop);
                                 let segmentSpeedPrediction = new SegmentSpeedPrediction({
                                     trip_id: tripData.trip_id,
                                     previous_stop_id: i === 0 ? null : stopTimes[i - 1].stop_id,
                                     next_stop_id: stopTimes[i + 1].stop_id,
                                     segment_number: i + 1,
+                                    average_speed: averageSpeed,
                                     speed_30_min_prediction: null,
                                     speed_60_min_prediction: null
                                 });
