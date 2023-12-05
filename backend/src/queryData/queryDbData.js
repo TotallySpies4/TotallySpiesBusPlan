@@ -62,7 +62,7 @@ export async function getBusDetails(routeID){
 
 
 function formatTimeAndDelayOf(stopTimeUpdates) {
-    if(stopTimeUpdates){
+    if(stopTimeUpdates && stopTimeUpdates.length > 0){
         stopTimeUpdates.forEach(stopTimeUpdate => {
             stopTimeUpdate.arrival.delay = formatDelay(stopTimeUpdate.arrival.delay);
             stopTimeUpdate.departure.delay = formatDelay(stopTimeUpdate.departure.delay);

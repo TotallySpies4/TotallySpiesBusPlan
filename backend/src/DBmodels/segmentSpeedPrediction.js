@@ -6,8 +6,8 @@ const segmentSpeedPredictionSchema = new mongoose.Schema({
     next_stop_id: String,
     segment_number: Number,
     average_speed: Number,
-    speed_30_min_prediction: Number,
-    speed_60_min_prediction: Number,
+    speed_30_min_prediction: {speed: Number, level: Number},
+    speed_60_min_prediction: {speed: Number, level: Number},
     shapes: [{ type: Schema.Types.ObjectId, ref: 'Shape' }]
 })
 

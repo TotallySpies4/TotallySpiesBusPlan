@@ -8,6 +8,8 @@ from pymongo import MongoClient
 from Data_Prep.createSequence import createSequence
 import tensorflow as tf
 
+from src.util import calculate_level
+
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 tf.config.run_functions_eagerly(True)
 
@@ -64,10 +66,20 @@ logging.info("Start storing predictions in database")
 
 for index, row in prediction_df.iterrows():
 
-    segmentsPred.update_one(
-        {'trip_id': str(int(row['Trip_ID'])), 'segment_number': int(row['Segment'])},
-        {'$set': {'speed_30_min_prediction': int(row['30_min_prediction']), 'speed_60_min_prediction': int(row['60_min_prediction'])}}
-    )
+    for index, row in prediction_df.iterrows():
+        # Calculate level based on speed prediction and average speed
+        level_30_min = calculate_level(row['30_min_prediction'], route_avg_speed)
+        level_60_min = calculate_level(row['60_min_prediction'], route_avg_speed)
+
+        segmentsPred.update_one(
+            {'trip_id': str(int(row['Trip_ID'])), 'segment_number': int(row['Segment'])},
+            {'$set': {
+                'speed_30_min_prediction.speed': int(row['30_min_prediction']),
+                'speed_30_min_prediction.level': level_30_min,
+                'speed_60_min_prediction.speed': int(row['60_min_prediction']),
+                'speed_60_min_prediction.level': level_60_min
+            }}
+        )
 
 logging.info("Done. Stored predictions in database")
 
