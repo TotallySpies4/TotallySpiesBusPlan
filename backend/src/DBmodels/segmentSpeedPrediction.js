@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, {Schema} from "mongoose";
 
 const segmentSpeedPredictionSchema = new mongoose.Schema({
     trip_id: String,
@@ -7,7 +7,8 @@ const segmentSpeedPredictionSchema = new mongoose.Schema({
     segment_number: Number,
     average_speed: Number,
     speed_30_min_prediction: Number,
-    speed_60_min_prediction: Number
+    speed_60_min_prediction: Number,
+    shapes: [{ type: Schema.Types.ObjectId, ref: 'Shape' }]
 })
 
 const SegmentSpeedPrediction = mongoose.model("SegmentSpeedPrediction", segmentSpeedPredictionSchema);

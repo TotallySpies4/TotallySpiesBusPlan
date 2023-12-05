@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 import {Route, Shape, Speed, StopTime, Trip} from "../DBmodels/busline.js";
 import {SegmentSpeedPrediction} from "../DBmodels/segmentSpeedPrediction.js";
 import {calculateScheduledSpeed} from "../utils/speedCalculator.js";
+import {getShapesBetweenStops} from "../utils/shapesUtilSet.js";
 
 
 export class GtfsStaticController {
@@ -103,25 +104,6 @@ export class GtfsStaticController {
                             tripInstance.stop_times.push(newStopTime._id);
                         }
 
-                        if(prediction){
-                            for (let i = 0; i < stopTimes.length - 1; i++) {
-                                const previousStop = stopTimes[i];
-                                const currentStop = stopTimes[i + 1];
-
-                                const averageSpeed = calculateScheduledSpeed(previousStop, currentStop);
-                                console.log("averageSpeed",averageSpeed)
-                                let segmentSpeedPrediction = new SegmentSpeedPrediction({
-                                    trip_id: tripData.trip_id,
-                                    previous_stop_id: i === 0 ? stopTimes[0].stop_id : stopTimes[i - 1].stop_id,
-                                    next_stop_id: stopTimes[i + 1].stop_id,
-                                    segment_number: i + 1,
-                                    average_speed: averageSpeed,
-                                    speed_30_min_prediction: null,
-                                    speed_60_min_prediction: null
-                                });
-                                await segmentSpeedPrediction.save();
-                            }
-                        }
 
                         const shapes = await GTFS.getShapes({trip_id: tripData.trip_id});
                         for (let shape of shapes) {
@@ -132,6 +114,30 @@ export class GtfsStaticController {
 
                             tripInstance.shapes.push(newShape._id);
                         }
+
+                        if(prediction){
+                            for (let i = 0; i < stopTimes.length - 1; i++) {
+                                const previousStop = stopTimes[i];
+                                const currentStop = stopTimes[i + 1];
+
+                                const averageSpeed = calculateScheduledSpeed(previousStop, currentStop);
+                                console.log("averageSpeed",averageSpeed)
+                                const prev = i === 0 ? stopTimes[0].stop_id : stopTimes[i - 1].stop_id
+                                const next = stopTimes[i + 1].stop_id
+                                let segmentSpeedPrediction = new SegmentSpeedPrediction({
+                                    trip_id: tripData.trip_id,
+                                    previous_stop_id: prev,
+                                    next_stop_id: next,
+                                    segment_number: i + 1,
+                                    average_speed: averageSpeed,
+                                    speed_30_min_prediction: null,
+                                    speed_60_min_prediction: null,
+                                    shapes: getShapesBetweenStops(shapes, prev, next)
+                                });
+                                await segmentSpeedPrediction.save();
+                            }
+                        }
+
 
                         await tripInstance.save();
 
