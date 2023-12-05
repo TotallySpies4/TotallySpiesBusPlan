@@ -53,10 +53,10 @@ export async function getBusDetails(routeID){
     const updateStoptime = tripUpdate ? tripUpdate.stopTimeUpdates : null;
 
     //Prediction
-    const segmentSpeedPrediction = await SegmentSpeedPrediction.find({trip_id: trip.trip_id}).sort('segment_number');
+    const segmentSpeedPrediction = await SegmentSpeedPrediction.find({trip_id: trip.trip_id}).sort('segment_number').populate('shapes');
 
 
-   return {currentVehicle:currentVehicle, trip: trip,  congestionShape:congestionShape, updateStoptime: formatTimeAndDelayOf(updateStoptime)};
+   return {currentVehicle:currentVehicle, trip: trip,  congestionShape:congestionShape, updateStoptime: formatTimeAndDelayOf(updateStoptime), segmentSpeedPrediction: segmentSpeedPrediction};
 }
 
 
