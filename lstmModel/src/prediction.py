@@ -3,13 +3,19 @@ from keras.models import load_model
 from joblib import load
 import logging
 import numpy as np
-from src.Data_Prep.createSequence import createSequence
+from pymongo import MongoClient
+
+from Data_Prep.createSequence import createSequence
 import tensorflow as tf
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
-
-
 tf.config.run_functions_eagerly(True)
+
+client = MongoClient('mongodb:27017')
+db = client.TotallySpiesBusPlan
+trips = db['trips']
+segmentsPred = db['segmentspeedpredictions']
+
 # Model and scaler
 model = load_model('model.h5')
 scaler = load('scaler.joblib')
@@ -52,6 +58,17 @@ prediction_df = pd.DataFrame({
     '60_min_prediction': pred_60_denormalized.flatten()
 })
 prediction_df.to_csv('predictedData.csv', index=False)
+
+# Store in database
+logging.info("Start storing predictions in database")
+for index, row in prediction_df.iterrows():
+
+    segmentsPred.update_one(
+        {'trip_id': str(int(row['Trip_ID'])), 'segment': int(row['Segment'])},
+        {'$set': {'speed_30_min_prediction': int(row['30_min_prediction']), 'speed_60_min_prediction': int(row['60_min_prediction'])}}
+    )
+
+logging.info("Done. Stored predictions in database")
 
 print(predictions)
 print(set(prediction_df['Trip_ID']))

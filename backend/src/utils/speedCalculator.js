@@ -124,16 +124,14 @@ export async function calculateScheduledSpeedStockholm(tripId, latitude, longitu
  * Method to calculate the scheduled speed of a route segment
  * @param previousStop
  * @param currentStop
- * @returns {Promise<number|null>}
+ * @returns {number}
  */
-export async function calculateScheduledSpeed(previousStop, currentStop) {
+export function calculateScheduledSpeed(previousStop, currentStop) {
     try {
         const distance = calculateDistance(previousStop.location.latitude, previousStop.location.longitude, currentStop.location.latitude, currentStop.location.longitude);
         const timeDifferenceSeconds = timeDifferenceInSeconds(previousStop.departure_time, currentStop.arrival_time);
         const timeDifferenceHours = timeDifferenceSeconds / 3600;
-        const speedSchedule = distance / timeDifferenceHours;
-        console.log("speedSchedule", speedSchedule)
-        return speedSchedule
+        return distance / timeDifferenceHours
     } catch (error) {
         throw new Error("Error calculating speed:");
     }
@@ -154,10 +152,6 @@ export function calculateBearing(currentStop, nextStop) {
     const startLng = currentStop.location.longitude;
     const destLat = nextStop.location.latitude;
     const destLng = nextStop.location.longitude;
-    console.log("startLat", startLat)
-    console.log("startLng", startLng)
-    console.log("destLat", destLat)
-    console.log("destLng", destLng)
 
     const startLatRad = toRadians(startLat);
     const startLngRad = toRadians(startLng);
@@ -239,6 +233,10 @@ export function haversineDistance(lat1, lon1, lat2, lon2) {
  */
 
  export function calculateDistance(lat1, lon1, lat2, lon2) {
+     console.log("lat1", lat1)
+        console.log("lon1", lon1)
+        console.log("lat2", lat2)
+        console.log("lon2", lon2)
     const R = 6371; // Radius of the Earth in kilometers
     const dLat = ((lat2 - lat1) * Math.PI) / 180;
     const dLon = ((lon2 - lon1) * Math.PI) / 180;
