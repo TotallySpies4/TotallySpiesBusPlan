@@ -1,9 +1,9 @@
 import {Kafka} from "kafkajs";
 import mongoose from "mongoose";
-import {VehiclePositions} from "../DBmodels/vehiclepositions.js";
 import {AmsterdamVehicleDataProcessor} from "./AmsterdamVehicleDataProcessor.js";
 import {StockholmVehicleDataProcessor} from "./StockholmVehicleDataProcessor.js";
 import {Route, Trip} from "../DBmodels/busline.js";
+import {TripUpdate} from "../DBmodels/tripUpdate.js";
 
 const kafka = new Kafka({
     clientId: 'my-app',
@@ -16,7 +16,7 @@ async function setupConsumerForCity(topic,city) {
     await mongoose.connect('mongodb://mongodb:27017/TotallySpiesBusPlan', {
         serverSelectionTimeoutMS: 60000
     });
-    await VehiclePositions.deleteMany();
+    await TripUpdate.deleteMany();
     await consumer.connect();
     await consumer.subscribe({topic});
 
@@ -52,7 +52,7 @@ async function setupConsumerForCity(topic,city) {
                     continue;  // Skip this vehicle
                 }
 
-                const existingTripUpdate = await VehiclePositions.findOne({currentTrip_id: existingTrip._id});
+                const existingTripUpdate = await TripUpdate.findOne({trip_id: existingTrip.trip_id});
                 //console.log("existing position", existingPosition);
                 if (existingTripUpdate) {
 

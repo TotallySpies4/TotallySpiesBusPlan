@@ -35,6 +35,8 @@ export async function getBusDetails(routeID){
         return {currentVehicle: null, trip: trip, congestionShape: null};
     }
 
+
+
     const trip = await Trip.findOne({_id: currentVehicle.currentTrip_id}).populate('stop_times').populate('shapes');
    if (!trip) {
     throw new Error('No matching trip found in database.');
@@ -56,14 +58,16 @@ export async function getBusDetails(routeID){
     const segmentSpeedPrediction = await SegmentSpeedPrediction.find({trip_id: trip.trip_id}).sort('segment_number').populate('shapes');
 
 
-   return {currentVehicle:currentVehicle, trip: trip,  congestionShape:congestionShape, updateStoptime: formatTimeAndDelayOf(updateStoptime), segmentSpeedPrediction: segmentSpeedPrediction};
+   return {currentVehicle:currentVehicle, trip: trip,  congestionShape: congestionShape, updateStoptime: updateStoptime, segmentSpeedPrediction: segmentSpeedPrediction};
 }
 
 
 
 function formatTimeAndDelayOf(stopTimeUpdates) {
+    console.log("stopTimeUpdates",stopTimeUpdates)
     if(stopTimeUpdates && stopTimeUpdates.length > 0){
         stopTimeUpdates.forEach(stopTimeUpdate => {
+            console.log("stopTimeUpdate",stopTimeUpdate)
             stopTimeUpdate.arrival.delay = formatDelay(stopTimeUpdate.arrival.delay);
             stopTimeUpdate.departure.delay = formatDelay(stopTimeUpdate.departure.delay);
 

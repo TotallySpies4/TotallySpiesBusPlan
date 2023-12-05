@@ -1,7 +1,7 @@
 function formatDelay(delay) {
     const minutes = Math.floor(delay / 60);
     const seconds = delay % 60;
-    return `${minutes} Minuten und ${seconds} Sekunden`;
+    return minutes;
 }
 
 function convertUnixTimeToReadable(time) {
