@@ -3,6 +3,7 @@ import {calculatorScheduledSpeedAmsterdam} from "../utils/speedCalculator.js";
 import {VehiclePositions} from "../DBmodels/vehiclepositions.js";
 import {getShapesBetweenStops} from "../utils/shapesUtilSet.js";
 import {agency} from "../utils/enum.js";
+import {TripUpdate} from "../DBmodels/tripUpdate.js";
 
 /**
  * Method to get all bus lines from Amsterdam
@@ -41,11 +42,28 @@ export async function getBusDetails(routeID){
     console.log("currentVehicle after getting the route_Id",currentVehicle)
 
     const shapes = trip.shapes
-   const previousStopTime = currentVehicle.congestion_level.previousStop;
+    const previousStopTime = currentVehicle.congestion_level.previousStop;
     const currentStopTime = currentVehicle.congestion_level.currentStop;
-
     const  congestionShape = await getShapesBetweenStops(shapes, previousStopTime, currentStopTime)
-   return {currentVehicle:currentVehicle, trip: trip,  congestionShape:congestionShape};
+
+    const tripUpdate = await TripUpdate.findOne({trip_id: trip.trip_id});
+    const updateStoptime = tripUpdate ? tripUpdate.stopTimeUpdates : null;
+
+
+   return {currentVehicle:currentVehicle, trip: trip,  congestionShape:congestionShape, updateStoptime: formatTimeAndDelayOf(updateStoptime)};
+}
+
+function formatTimeAndDelayOf(stopTimeUpdates) {
+    if(stopTimeUpdates){
+        stopTimeUpdates.forEach(stopTimeUpdate => {
+            stopTimeUpdate.arrival.delay = formatDelay(stopTimeUpdate.arrival.delay);
+            stopTimeUpdate.departure.delay = formatDelay(stopTimeUpdate.departure.delay);
+
+            stopTimeUpdate.arrival.time = convertUnixTimeToReadable(stopTimeUpdate.arrival.time);
+            stopTimeUpdate.departure.time = convertUnixTimeToReadable(stopTimeUpdate.departure.time);
+        });
+    }
+    return stopTimeUpdates;
 }
 
 /**

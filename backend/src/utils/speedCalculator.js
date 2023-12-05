@@ -233,10 +233,6 @@ export function haversineDistance(lat1, lon1, lat2, lon2) {
  */
 
  export function calculateDistance(lat1, lon1, lat2, lon2) {
-     console.log("lat1", lat1)
-        console.log("lon1", lon1)
-        console.log("lat2", lat2)
-        console.log("lon2", lon2)
     const R = 6371; // Radius of the Earth in kilometers
     const dLat = ((lat2 - lat1) * Math.PI) / 180;
     const dLon = ((lon2 - lon1) * Math.PI) / 180;

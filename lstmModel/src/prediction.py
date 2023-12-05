@@ -61,16 +61,17 @@ prediction_df.to_csv('predictedData.csv', index=False)
 
 # Store in database
 logging.info("Start storing predictions in database")
+
 for index, row in prediction_df.iterrows():
 
     segmentsPred.update_one(
-        {'trip_id': str(int(row['Trip_ID'])), 'segment': int(row['Segment'])},
+        {'trip_id': str(int(row['Trip_ID'])), 'segment_number': int(row['Segment'])},
         {'$set': {'speed_30_min_prediction': int(row['30_min_prediction']), 'speed_60_min_prediction': int(row['60_min_prediction'])}}
     )
 
 logging.info("Done. Stored predictions in database")
 
-print(predictions)
-print(set(prediction_df['Trip_ID']))
-print(len(set(prediction_df['Trip_ID'])))
-print(prediction_df)
+#print(predictions)
+#print(set(prediction_df['Trip_ID']))
+#print(len(set(prediction_df['Trip_ID'])))
+#print(prediction_df)
