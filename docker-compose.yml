@@ -19,21 +19,25 @@ services:
     depends_on:
       - mongodb
 
-  gtfs_data_harvest:
-    build: ./GTFSDataHarvest
-    container_name: gtfs_data_harvest_container
-    restart: always
+  backend-tests:
+      build: ./backend
+      command: npm test
+      volumes:
+        - ./:/app
+      environment:
+        - NODE_ENV=test
 
-  ml-service:
-    build: ./ml-service
-    image: ml_service_image
+  lstm-model:
+    build: ./lstmModel
+    image: lstm_model_image
     ports:
-      - "6000:6000"
+      - "5050:5050"
     volumes:
-      - ./ml-service:/app
+      - ./lstmModel:/app
       - shared_volume:/app/shared
     depends_on:
       - mongodb
+
   mongodb:
     image: "mongo:latest"
     ports:
@@ -50,26 +54,7 @@ services:
       - ME_CONFIG_BASICAUTH_PASSWORD=totallyspies
     depends_on:
       - mongodb
-  jenkins:
-    image: jenkins/jenkins:lts
-    ports:
-      - "8080:8080"
-    volumes:
-      - jenkins_home:/var/jenkins_home
-  ngrok:
-    image: ngrok/ngrok:latest
-    restart: unless-stopped
-    command:
-      - "start"
-      - "--all"
-      - "--config"
-      - "/etc/ngrok.yml"
-    volumes:
-      - ./ngrok.yml:/etc/ngrok.yml
-    ports:
-      - "4040:4040"
-    depends_on:
-      - jenkins
+
   sonarqube:
     image: sonarqube:latest
     ports:
@@ -135,6 +120,7 @@ volumes:
   postgresql:
   postgresql_data:
   shared_volume:
+
 
 
 

@@ -1,6 +1,9 @@
 import * as GTFS from 'gtfs';
 import mongoose from "mongoose";
 import {Route, Shape, Speed, StopTime, Trip} from "../DBmodels/busline.js";
+import {SegmentSpeedPrediction} from "../DBmodels/segmentSpeedPrediction.js";
+import {calculateScheduledSpeed} from "../utils/speedCalculator.js";
+import {getShapesBetweenStops} from "../utils/shapesUtilSet.js";
 
 
 export class GtfsStaticController {
@@ -12,9 +15,8 @@ export class GtfsStaticController {
         return GTFS.importGtfs(config);
     }
 
-    async getRoutesWithStops( agencyConfig ) {
-        return new Promise(async (resolve, reject) => {
-            try {
+    async getRoutesWithStops( agencyConfig )  {
+        try {
                 await mongoose.connect(agencyConfig.agencies[0].mongoUrl, {
                     serverSelectionTimeoutMS: 60000
                 }).then(() => console.log("Connected to MongoDB"))
@@ -22,12 +24,16 @@ export class GtfsStaticController {
 
                 let count = 0;
                 let busRouteType;
+                let prediction;
+                let routeSL = ["25M", "26C", "968", "969", "961", "25F", "26M"];
                 const agencyOfInterest = agencyConfig.agencies[0].agency_id;
                 if(agencyOfInterest === "GVB"){
                     busRouteType = 3;
+                    prediction = false;
                 }
                 else if(agencyOfInterest === "14010000000001001"){
                     busRouteType = 700;
+                    prediction = true;
                 }
 
                 await Route.deleteMany({agency_id: agencyOfInterest});
@@ -35,13 +41,20 @@ export class GtfsStaticController {
                 await Shape.deleteMany({agency_id: agencyOfInterest});
                 await Speed.deleteMany({agency_id: agencyOfInterest});
                 await Trip.deleteMany({agency_id: agencyOfInterest});
+                await SegmentSpeedPrediction.deleteMany();
+
 
 
                 const routesForAgency = await GTFS.getRoutes({ agency_id: agencyOfInterest });
 
-                const filteredRoutes = routesForAgency.filter(route =>
+                let filteredRoutes = routesForAgency.filter(route =>
                     route.route_type === busRouteType && route.route_long_name
                 );
+                if(agencyOfInterest === "14010000000001001"){
+                    filteredRoutes = filteredRoutes.filter(route =>
+                        route.route_short_name && routeSL.includes(route.route_short_name))
+
+                }
 
                 const routes = filteredRoutes.slice(0, 10);
                 const numberOfRoutes = routes.length;
@@ -87,8 +100,10 @@ export class GtfsStaticController {
                             await newStopTime.save();
 
 
+
                             tripInstance.stop_times.push(newStopTime._id);
                         }
+
 
                         const shapes = await GTFS.getShapes({trip_id: tripData.trip_id});
                         for (let shape of shapes) {
@@ -100,6 +115,30 @@ export class GtfsStaticController {
                             tripInstance.shapes.push(newShape._id);
                         }
 
+                        if(prediction){
+                            for (let i = 0; i < stopTimes.length - 1; i++) {
+                                const previousStop = stopTimes[i];
+                                const currentStop = stopTimes[i + 1];
+
+                                const averageSpeed = calculateScheduledSpeed(previousStop, currentStop);
+                                console.log("averageSpeed",averageSpeed)
+                                const predShape = await getShapesBetweenStops(shapes, previousStop, currentStop);
+                                const predShapeID = predShape.map(shape => new mongoose.Types.ObjectId(shape._id));
+                                let segmentSpeedPrediction = new SegmentSpeedPrediction({
+                                    trip_id: tripData.trip_id,
+                                    previous_stop_id: i === 0 ? stopTimes[0].stop_id : stopTimes[i - 1].stop_id,
+                                    next_stop_id: stopTimes[i + 1].stop_id,
+                                    segment_number: i + 1,
+                                    average_speed: averageSpeed,
+                                    speed_30_min_prediction: {speed: null, level: null},
+                                    speed_60_min_prediction: {speed: null, level: null},
+                                    shapes: predShapeID
+                                });
+                                await segmentSpeedPrediction.save();
+                            }
+                        }
+
+
                         await tripInstance.save();
 
                         console.log(`Imported trip ${tripData.trip_id} in to the database`);
@@ -108,13 +147,10 @@ export class GtfsStaticController {
 
                     await Route.updateOne({_id: newRoute._id}, newRoute);
                 }
-                resolve();
 
             } catch (err) {
                 console.error("Error while importing data:", err);
-                reject(err);
             }
-        });
     }
 
 }

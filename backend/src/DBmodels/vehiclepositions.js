@@ -2,6 +2,7 @@ import mongoose from 'mongoose';
 const Schema = mongoose.Schema;
 
 const vehiclePositionsSchema = new Schema({
+    city: String,
     currentTrip_id: { type: Schema.Types.ObjectId, ref: 'Trip' },
     route: { type: Schema.Types.ObjectId, ref: 'Route' },
     timestamp: String,
@@ -19,9 +20,11 @@ const vehiclePositionsSchema = new Schema({
     congestion_level: {
         timestamp: Date,
         level: Number,
-        previousStop: { type: Schema.Types.ObjectId, ref: 'StopTime' },
+        previousStop: { type: Schema.Types.ObjectId, ref: 'StopTime'},
         currentStop: { type: Schema.Types.ObjectId, ref: 'StopTime' },
+
     }
+
 })
 
 const VehiclePositions = mongoose.model('VehiclePositions', vehiclePositionsSchema);

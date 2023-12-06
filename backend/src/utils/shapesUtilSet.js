@@ -6,11 +6,20 @@ export async function getShapesBetweenStops(shapes, previousStop, currentStop) {
     console.log("previousStop", previousStop)
     console.log("currentStop", currentStop)
 
-    const previousStopQuery = await StopTime.findOne({_id: previousStop._id});
-    const currentStopQuery = await StopTime.findOne({_id: currentStop._id});
+    let previousStopQuery = null;
+    let currentStopQuery = null;
+
+    previousStopQuery = await StopTime.findOne({_id: previousStop._id});
+    currentStopQuery = await StopTime.findOne({_id: currentStop._id});
     console.log("previousStopShape",previousStopQuery)
     console.log("currentStopShape",currentStopQuery)
 
+    if(!previousStopQuery || !currentStopQuery){
+        previousStopQuery = await StopTime.findOne({stop_id: previousStop.stop_id});
+        currentStopQuery = await StopTime.findOne({stop_id: currentStop.stop_id});
+        console.log("previousStopShape",previousStopQuery)
+        console.log("currentStopShape",currentStopQuery)
+    }
 
     console.log("start finding the shapes between the stops")
     // Filter out shapes that are not between the start and end distances

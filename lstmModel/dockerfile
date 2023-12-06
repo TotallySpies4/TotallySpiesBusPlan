@@ -1,0 +1,19 @@
+# Use an official Python runtime as a parent image
+FROM python:3.8-slim
+
+# Set the working directory to /app
+WORKDIR /app
+
+# Update the package list and install gcc and python3 development headers
+RUN apt-get update && apt-get install -y gcc python3-dev
+
+# Install required Python packages
+RUN pip install --upgrade pip
+RUN pip install requests py7zr gtfs-realtime-bindings pyspark pymongo pandas keras tensorflow scikit-learn matplotlib
+
+# Copy the current directory contents into the container at /app
+COPY . /app
+
+# Run your script when the container launches
+CMD ["sh", "-c", "while true; do sleep 1000; done"]
+

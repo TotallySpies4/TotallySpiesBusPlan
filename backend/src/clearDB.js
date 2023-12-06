@@ -5,5 +5,7 @@ mongoose.connect('mongodb://mongodb:27017/TotallySpiesBusPlan', {
 })
     .then(() => {
         console.log('Connected to MongoDB')
-        mongoose.connection.db.dropDatabase()})
+        //mongoose.connection.db.dropDatabase()
+            })
     .catch(err => console.error('Could not connect to MongoDB:', err));
+
