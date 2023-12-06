@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   MapContainer,
   TileLayer,
@@ -8,15 +8,38 @@ import {
 } from "react-leaflet";
 import L from "leaflet";
 
-function Map({ selectedTrip, congestionShape, currentVehicle }) {
+function Map({ selectedTrip, congestionShape, currentVehicle, selectedCity }) {
+
+  //Set default map center to Amsterdam
+  const [mapCenter, setMapCenter] = useState([52.3676, 4.9041]);
   useEffect(() => {
     console.log("SelectedBusID in Map: " + selectedTrip);
   }, [selectedTrip]);
 
+  // Update map center based on the selected city
+  const handleCityChange = () => {
+    if (selectedCity === "Stockholm") {
+      setMapCenter([59.3293, 18.0686]); // Set center for Stockholm
+    } else if (selectedCity === "Amsterdam") {
+      setMapCenter([52.3676, 4.9041]); // Reset center for Amsterdam
+    }
+  };
+
+  React.useEffect(() => {
+    // Handle initial city change
+    handleCityChange();
+  }, [selectedCity]);
+  
+const customIcon = new L.icon({
+  iconUrl: "/icon/BusMarker.png",
+  iconSize: [20, 20],
+  iconAnchor: [10, 10],
+  popupAnchor: [0, -10],
+})
   return (
     <div className="map">
       <MapContainer
-        center={[52.3676, 4.9041]}
+        center={mapCenter}
         zoom={13}
         style={{ height: "100vh", width: "100vw" }}
         zoomControl={false}>
@@ -32,8 +55,8 @@ function Map({ selectedTrip, congestionShape, currentVehicle }) {
               shape.shape_pt_lat,
               shape.shape_pt_lon,
             ])}
-            color={currentVehicle ? "green" : "grey"}
-          />
+            color={currentVehicle ? "#4FB453" : "#CE2273"}
+            />
         )}
 
         {selectedTrip && !currentVehicle && (
@@ -47,7 +70,8 @@ function Map({ selectedTrip, congestionShape, currentVehicle }) {
           selectedTrip.stop_times.map((stop, index) => (
             <Marker
               key={index}
-              position={[stop.location.latitude, stop.location.longitude]}>
+              position={[stop.location.latitude, stop.location.longitude]}
+              icon={customIcon}>
               <Popup>
                 <strong className="text-blue-500">{stop.stop_name}</strong>
                 <br /> <strong>Arrival Time: </strong> {stop.arrival_time},
@@ -85,13 +109,13 @@ function Map({ selectedTrip, congestionShape, currentVehicle }) {
 function getCongestionColor(level) {
   switch (level) {
     case 0:
-      return "green";
+      return "#4FB453";
     case 1:
-      return "orange";
+      return "#EAB059";
     case 2:
-      return "red";
+      return "#B44F4F";
     default:
-      return "grey";
+      return "#CE2273";
   }
 }
 

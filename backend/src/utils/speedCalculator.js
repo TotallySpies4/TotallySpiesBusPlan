@@ -115,17 +115,26 @@ export async function calculateScheduledSpeedStockholm(tripId, latitude, longitu
     }
 
     // Calculate distance and time difference
-    const distance = calculateDistance(currentStop.location.latitude, currentStop.location.longitude, nextStop.location.latitude, nextStop.location.longitude);
-    console.log("distance", distance)
-    const timeDifferenceSeconds = timeDifferenceInSeconds(currentStop.departure_time, nextStop.arrival_time);
-    console.log("timeDifferenceSeconds", timeDifferenceSeconds)
-    const timeDifferenceHours = timeDifferenceSeconds / 3600;
-    console.log("timeDifferenceHours", timeDifferenceHours)
-    const speedSchedule = distance / timeDifferenceHours;
-    console.log("speedSchedule", speedSchedule)
-    console.log("root",speedSchedule,currentStop,nextStop)
+    const speedSchedule = calculateScheduledSpeed(currentStop, nextStop);
     return { scheduleSpeed: speedSchedule, currentStop: currentStop, nextStop: nextStop }
 
+}
+
+/**
+ * Method to calculate the scheduled speed of a route segment
+ * @param previousStop
+ * @param currentStop
+ * @returns {number}
+ */
+export function calculateScheduledSpeed(previousStop, currentStop) {
+    try {
+        const distance = calculateDistance(previousStop.location.latitude, previousStop.location.longitude, currentStop.location.latitude, currentStop.location.longitude);
+        const timeDifferenceSeconds = timeDifferenceInSeconds(previousStop.departure_time, currentStop.arrival_time);
+        const timeDifferenceHours = timeDifferenceSeconds / 3600;
+        return distance / timeDifferenceHours
+    } catch (error) {
+        throw new Error("Error calculating speed:");
+    }
 }
 
 /**
@@ -143,10 +152,6 @@ export function calculateBearing(currentStop, nextStop) {
     const startLng = currentStop.location.longitude;
     const destLat = nextStop.location.latitude;
     const destLng = nextStop.location.longitude;
-    console.log("startLat", startLat)
-    console.log("startLng", startLng)
-    console.log("destLat", destLat)
-    console.log("destLng", destLng)
 
     const startLatRad = toRadians(startLat);
     const startLngRad = toRadians(startLng);

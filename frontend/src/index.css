@@ -79,9 +79,9 @@ code {
   height: 0 !important;
 }
 
-.css-b62m3t-container{
+/* .css-b62m3t-container{
 width: 80%;
-}
+} */
 
 .bus-message {
   position: absolute;
@@ -89,11 +89,12 @@ width: 80%;
   right: 10px;
   background-color: rgba(70, 130, 180, 0.8);
   padding: 10px;
-  border-radius: 5px;
+  border-radius: 16px;
   z-index: 1000;
   display: flex;
   align-items: center;
   color: white;
+  text: 18px;
 }
 
 .bus-icon {

@@ -3,13 +3,21 @@ from keras.models import load_model
 from joblib import load
 import logging
 import numpy as np
-from src.Data_Prep.createSequence import createSequence
+from pymongo import MongoClient
+
+from Data_Prep.createSequence import createSequence
 import tensorflow as tf
 
+from util import calculate_level
+
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
-
-
 tf.config.run_functions_eagerly(True)
+
+client = MongoClient('mongodb:27017')
+db = client.TotallySpiesBusPlan
+trips = db['trips']
+segmentsPred = db['segmentspeedpredictions']
+
 # Model and scaler
 model = load_model('model.h5')
 scaler = load('scaler.joblib')
@@ -53,7 +61,31 @@ prediction_df = pd.DataFrame({
 })
 prediction_df.to_csv('predictedData.csv', index=False)
 
-print(predictions)
-print(set(prediction_df['Trip_ID']))
-print(len(set(prediction_df['Trip_ID'])))
-print(prediction_df)
+# Store in database
+logging.info("Start storing predictions in database")
+
+for index, row in prediction_df.iterrows():
+    segment = segmentsPred.find_one({'trip_id': str(int(row['Trip_ID'])), 'segment_number': int(row['Segment'])})
+    # Calculate level based on speed prediction and average speed
+    level_30_min = 0
+    level_60_min = 0
+    if segment:
+        level_30_min = calculate_level(row['30_min_prediction'], segment['average_speed'])
+        level_60_min = calculate_level(row['60_min_prediction'], segment['average_speed'])
+
+    segmentsPred.update_one(
+        {'trip_id': str(int(row['Trip_ID'])), 'segment_number': int(row['Segment'])},
+        {'$set': {
+            'speed_30_min_prediction.speed': int(row['30_min_prediction']),
+            'speed_30_min_prediction.level': level_30_min,
+            'speed_60_min_prediction.speed': int(row['60_min_prediction']),
+            'speed_60_min_prediction.level': level_60_min
+        }}
+    )
+
+logging.info("Done. Stored predictions in database")
+
+#print(predictions)
+#print(set(prediction_df['Trip_ID']))
+#print(len(set(prediction_df['Trip_ID'])))
+#print(prediction_df)
