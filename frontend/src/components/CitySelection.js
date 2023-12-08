@@ -42,9 +42,11 @@ export const CitySelection = ({ setSelectedCity }) => {
   };
 
   return (
+
     <div className="city-selection sidebar-selection space-y-4 px-8 w-full">
       <div className="ml-3 space-x-4 flex flex-row items-center">
         <img className="icon-city" src="/icon/CitySelection.png" alt=""  />
+
         <p className="text-[20px]">City</p>
       </div>
 
