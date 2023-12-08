@@ -6,7 +6,6 @@ pipeline {
                 steps {
                     sh 'docker pull sonarqube:latest'
                     sh 'docker pull postgres:latest'
-                    // Fügen Sie hier weitere Docker-Images hinzu, die vorgezogen werden sollen
                 }
             }
         stage('Checkout') {
