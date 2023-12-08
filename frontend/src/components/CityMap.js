@@ -29,7 +29,7 @@ function Map({ selectedTrip, congestionShape, currentVehicle, selectedCity }) {
     // Handle initial city change
     handleCityChange();
   }, [selectedCity]);
-  
+
 const customIcon = new L.icon({
   iconUrl: "/icon/BusMarker.png",
   iconSize: [20, 20],
@@ -44,8 +44,8 @@ const customIcon = new L.icon({
         style={{ height: "100vh", width: "100vw" }}
         zoomControl={false}>
         <TileLayer
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          url="https://tile.jawg.io/jawg-sunny/{z}/{x}/{y}.png?access-token=BTdIPPqKEPczbvNzaOq7YKmEhFiO71WOmYjwuBQWLZkXLSvJZIupQZF63M8hSn3B"
+          attribution='<a href="http://jawg.io" title="Tiles Courtesy of Jawg Maps" target="_blank" class="jawg-attrib">&copy; <b>Jawg</b>Maps</a> | <a href="https://www.openstreetmap.org/copyright" title="OpenStreetMap is open data licensed under ODbL" target="_blank" class="osm-attrib">&copy; OSM contributors</a>'
         />
         {/* Drawing stopes and shapes */}
 
