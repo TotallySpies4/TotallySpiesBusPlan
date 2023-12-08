@@ -2,20 +2,10 @@ pipeline {
     agent any
 
     stages {
-        stage('Prepull Docker Images') {
-                steps {
 
-                }
-            }
         stage('Checkout') {
             steps {
                 checkout scm
-            }
-        }
-
-        stage('Test') {
-            steps {
-
             }
         }
 
