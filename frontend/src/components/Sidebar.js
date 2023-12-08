@@ -23,7 +23,7 @@ export const Sidebar = ({
     setIsBuslineSelectionOpen((prevState) => !prevState);
   };
 
-  const sidebarHeight = selectedCity ? "translate-y-12 h-3/4" : "top-12 h-fit";
+  const sidebarHeight = selectedCity ? "translate-y-6 h-3/4" : "top-6 h-fit";
   // const sidebarHeight = selectedTrip  ? "h-3/4" : "h-fit";
   // const sidebarTop = selectedTrip ? "top-12" : "top-1/2 transform -translate-y-1/2";
   const sidebarDividerShadow = selectedTrip ? "shadow-bottom" : "";

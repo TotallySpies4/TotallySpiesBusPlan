@@ -73,9 +73,9 @@ export const BuslineSelection = ({
   };
 
   return (
-    <div className="px-8 space-y-4 w-full">
-      <div className=" flex flex-row space-x-4 items-center">
-        <img src="/icon/BusSelectIcon.png" alt="" className="w-10 h-10" />     
+    <div className="busline-selection sidebar-selection px-8 space-y-4 w-full">
+      <div className=" ml-3 flex flex-row space-x-4 items-center">
+        <img src="/icon/BusSelectIcon.png" alt="" className="icon-bus w-10 h-10" />
         <p className="text-[20px]">Bus line</p>
       </div>
 

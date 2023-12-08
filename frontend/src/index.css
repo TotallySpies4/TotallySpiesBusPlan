@@ -104,6 +104,90 @@ width: 80%;
   vertical-align: middle;
 }
 
+
+/********** Sidebar **********/
+
+.css-1u9des2-indicatorSeparator{
+  width: 0 !important;
+}
+.css-894a34-indicatorSeparator{
+  width: 0 !important;
+}
+.sidebar-selection .css-1wy0on6{
+  position: relative;
+  right: 20px;
+}
+
+.sidebar-selection .css-hlgwow {
+  padding: 10px 20px !important;
+}
+
+.css-1q7yupa-control{
+  border-radius: 17px !important;
+}
+.css-147yby3-control{
+  border-radius: 17px !important;
+}
+.css-cn09ku-control{
+  border-radius: 17px !important;
+}
+.css-1w0b5j1-control{
+  border-radius: 17px !important;
+}
+
+.css-zmfhxv-control{
+  border-radius: 17px !important;
+}
+.css-1xc6n93-control{
+  border-radius: 17px !important;
+}
+.css-1qto2x3-control{
+  border-radius: 17px !important;
+}
+
+.icon-bus{
+  width: 25px;
+  height: 25px;
+  margin-right: 10px;
+  vertical-align: middle;
+}
+
+.icon-city{
+  width: 22px;
+  height: 28px;
+  margin-right: 10px;
+  vertical-align: middle;
+}
+
+
+/********** Prediction **********/
 .prediction{
+  padding-top: 15px !important;
+  left: 46% !important;
   z-index: 50;
+  width: 340px;
+}
+.p-prediction{
+  width: 150px !important;
+}
+.css-16xfy0z-control{
+  border-radius: 50px !important;
+  width: 150px !important;
+}
+.css-13cymwt-control{
+  border-radius: 50px !important;
+    width: 150px !important;
+}
+.css-t3ipsp-control{
+  border-radius: 50px !important;
+    width: 150px !important;
+}
+.css-894a34-indicatorSeparator{
+  width: 0 !important;
+}
+
+
+.prediction .css-hlgwow{
+  padding: 0px 10px !important;
+
 }
