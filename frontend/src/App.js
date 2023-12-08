@@ -111,16 +111,13 @@ const [isReroutingPressed, setReroutingPressed] = useState(false);
         congestionStatus={congestionStatus}
         currentVehicle={currentVehicle}
       />
-      <div className="prediction absolute top-2 left-1/2 transform -translate-x-1/2 flex flex-row items-center space-x-4">
+
+      <div className="prediction absolute top-2 transform -translate-x-1/2 flex flex-row items-center space-x-4">
+
         <PredictionDropDown
           // isButtonDisabled = {isButtonDisabled}
           selectedCity={selectedCity}
           selectedBusline={selectedBusline}
-        />
-        <ReroutingButton
-            //  isReroutingPressed = {isReroutingPressed}
-            selectedCity={selectedCity}
-            selectedBusline={selectedBusline}
         />
       </div>
     </div>
