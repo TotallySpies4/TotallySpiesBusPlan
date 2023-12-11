@@ -52,6 +52,7 @@ export const PredictionDropDown = ({ selectedBusline, selectedCity, setPredictio
           onChange={(option) => {
             console.log(option);
             const time = option.value;
+            console.log(time);
             setPredictionTime(time);
           }}
         />

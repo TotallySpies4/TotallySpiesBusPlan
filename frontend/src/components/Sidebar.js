@@ -10,7 +10,6 @@ export const Sidebar = ({
   selectedTrip,
   selectedCity,
   setSelectedCity,
-  congestionStatus,
   currentVehicle,
   closeSidebar,
 }) => {

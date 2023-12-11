@@ -8,13 +8,14 @@ import {
 } from "react-leaflet";
 import L from "leaflet";
 
-function Map({ selectedTrip, congestionShape, currentVehicle, selectedCity }) {
+function Map({ selectedTrip, congestionShape, currentVehicle, selectedCity, predictionTime, segmentSpeedPrediction }) {
 
   //Set default map center to Amsterdam
   const [mapCenter, setMapCenter] = useState([52.3676, 4.9041]);
   useEffect(() => {
     console.log("SelectedBusID in Map: " + selectedTrip);
-  }, [selectedTrip]);
+    console.log("PredictionTime in Map was change: " + predictionTime)
+  }, [selectedTrip, predictionTime]);
 
   // Update map center based on the selected city
   const handleCityChange = () => {
@@ -28,7 +29,7 @@ function Map({ selectedTrip, congestionShape, currentVehicle, selectedCity }) {
   React.useEffect(() => {
     // Handle initial city change
     handleCityChange();
-  }, [selectedCity]);
+  }, [selectedCity])
 
 const customIcon = new L.icon({
   iconUrl: "/icon/BusMarker.png",
@@ -36,6 +37,24 @@ const customIcon = new L.icon({
   iconAnchor: [10, 10],
   popupAnchor: [0, -10],
 })
+
+  const drawSegmentSpeedPrediction = () => {
+    if(predictionTime !== "now"){
+      let level = segmentSpeedPrediction[0][`speed_${predictionTime}_min_prediction`].level;
+      let levelColor;
+      level === null ? levelColor = 0 : levelColor = level;
+      let color = getCongestionColor(levelColor);
+
+    return segmentSpeedPrediction.map(segment => {
+      console.log("shapes", segment.shapes)
+        segment.shapes.map(shape => (
+            <Polyline
+                positions={[shape.shape_pt_lat, shape.shape_pt_lon]}
+                color={color}
+            />
+        ))
+    });}
+  };
   return (
     <div className="map">
       <MapContainer
@@ -92,7 +111,7 @@ const customIcon = new L.icon({
         )}
 
         {/* Drawing congestion shape */}
-        {congestionShape && (
+        {(predictionTime === "now" || !segmentSpeedPrediction) && congestionShape &&  (
           <Polyline
             positions={congestionShape.map((shape) => [
               shape.shape_pt_lat,
@@ -101,6 +120,7 @@ const customIcon = new L.icon({
             color={getCongestionColor(currentVehicle.congestion_level.level)}
           />
         )}
+        {currentVehicle && predictionTime && segmentSpeedPrediction && drawSegmentSpeedPrediction()}
       </MapContainer>
     </div>
   );
