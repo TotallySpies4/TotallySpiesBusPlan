@@ -15,7 +15,7 @@ pipeline {
                  withSonarQubeEnv('Sonar') {
                        sh 'echo $sonar_scanner'
                        sh '''
-                         ${env.sonar_scanner}
+                         $sonar_scanner
                         -Dsonar.projectKey=totallyspies \
                         -Dsonar.projectName=totallyspies \
                         -Dsonar.projectVersion=1.0 \
