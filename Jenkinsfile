@@ -13,7 +13,7 @@ pipeline {
             steps {
                 script {
                  withSonarQubeEnv('Sonar') {
-                            sh '${env.sonar-scanner}'
+                            sh 'sonar-scanner'
                    }
                 }
             }
