@@ -123,7 +123,13 @@ export class GtfsStaticController {
                                 const averageSpeed = calculateScheduledSpeed(previousStop, currentStop);
                                 console.log("averageSpeed",averageSpeed)
                                 const predShape = await getShapesBetweenStops(shapes, previousStop, currentStop);
-                                const predShapeID = predShape.map(shape => new mongoose.Types.ObjectId(shape._id));
+                                const predShapeIDs = [];
+                                for (const shape of predShape) {
+                                    let newShape = new Shape(shape);
+                                    await newShape.save();
+                                    predShapeIDs.push(newShape._id);
+                                }
+
                                 let segmentSpeedPrediction = new SegmentSpeedPrediction({
                                     trip_id: tripData.trip_id,
                                     previous_stop_id: i === 0 ? stopTimes[0].stop_id : stopTimes[i - 1].stop_id,
@@ -132,7 +138,7 @@ export class GtfsStaticController {
                                     average_speed: averageSpeed,
                                     speed_30_min_prediction: {speed: null, level: null},
                                     speed_60_min_prediction: {speed: null, level: null},
-                                    shapes: predShapeID
+                                    shapes: predShapeIDs
                                 });
                                 await segmentSpeedPrediction.save();
                             }

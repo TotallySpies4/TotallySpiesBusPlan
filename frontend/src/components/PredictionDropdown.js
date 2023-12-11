@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import Select from "react-select";
 
-export const PredictionDropDown = ({ selectedBusline, selectedCity }) => {
-  // const [selectTime, setSelectTime] = useState(null);
+export const PredictionDropDown = ({ selectedBusline, selectedCity, setPredictionTime }) => {
   const isButtonDisable = !selectedCity || !selectedBusline;
   
   const customStyles = {
@@ -52,12 +51,9 @@ export const PredictionDropDown = ({ selectedBusline, selectedCity }) => {
           ]}
           onChange={(option) => {
             console.log(option);
-            // const time = option.value;
+            const time = option.value;
+            setPredictionTime(time);
           }}
-          // onChange={(option) => {
-          //   console.log(option);
-          //   // const time = option.value;
-          // }}
         />
       </div>
   );

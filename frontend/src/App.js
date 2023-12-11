@@ -14,8 +14,9 @@ const App = () => {
   const [congestionShape, setCongestionShape] = useState(null);
   const [selectedCity, setSelectedCity] = useState(null);
   const [selectedBusline, setSelectedBusline] = useState(null);
-    const [congestionStatus, setCongestionStatus] = useState(null);
-const [isReroutingPressed, setReroutingPressed] = useState(false);
+  const [congestionStatus, setCongestionStatus] = useState(null);
+  const [predictionTime, setPredictionTime] = useState(null);
+
   useEffect(() => {
     console.log("SelectedBusID in App: " + selectedTrip);
     console.log("SelectedCity in App: " + selectedCity);
@@ -118,6 +119,7 @@ const [isReroutingPressed, setReroutingPressed] = useState(false);
           // isButtonDisabled = {isButtonDisabled}
           selectedCity={selectedCity}
           selectedBusline={selectedBusline}
+          setPredictionTime={setPredictionTime}
         />
       </div>
     </div>
