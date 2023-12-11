@@ -14,7 +14,7 @@ pipeline {
                 script {
                  withSonarQubeEnv('Sonar') {
                        sh 'echo $sonar_scanner'
-                       sh '
+                       sh '''
                          ${env.sonar_scanner}
                         -Dsonar.projectKey=totallyspies \
                         -Dsonar.projectName=totallyspies \
@@ -22,7 +22,7 @@ pipeline {
                         -Dsonar.sources=backend/src,frontend/src,lstmModel/src \
                         -Dsonar.tests=backend/test,frontend/test,lstmModel/test \
                         -Dsonar.sourceEncoding=UTF-8
-                       '
+                       '''
 
 
                    }
