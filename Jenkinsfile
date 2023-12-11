@@ -14,7 +14,8 @@ pipeline {
                 script {
                  withSonarQubeEnv('Sonar') {
                        sh 'echo $sonar_scanner'
-                       sh 'sonar-scanner'
+                       sh '$sonar_scanner'
+
 
                    }
                 }
