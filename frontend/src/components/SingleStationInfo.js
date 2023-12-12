@@ -1,8 +1,13 @@
 import React from "react";
 import { formatTime } from "../utils/formatTime.js";
-export const SingleStationInfo = ({selectedTrip, tripUpdate}) => {
+export const SingleStationInfo = ({selectedTrip, tripUpdate,setSelectedCity}) => {
+  const cityToTimeZone = {
+    "Amsterdam": "Europe/Amsterdam",
+    "Stockholm": "Europe/Stockholm",
+  };
   const formatTime = (timestamp) => {
-    return new Date(timestamp * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    const tz = cityToTimeZone[cityName] || 'UTC';
+    return moment(timestamp * 1000).tz(tz).format('HH:mm');
   };
 
   // Diese Funktion formatiert die Verspätung als String
@@ -15,11 +20,15 @@ export const SingleStationInfo = ({selectedTrip, tripUpdate}) => {
   };
 
   return (
-      <div className="stop-list">
+      <div className="stop-list w-96">
         {selectedTrip && selectedTrip.stop_times.map((stop, index) => {
-          // Findet das zugehörige StopTimeUpdate-Objekt
-          const stopUpdate = tripUpdate ? tripUpdate.find(update => update.stopSequence === stop.stopSequence) : null;
+          console.log("TripUpdate",tripUpdate)
+          console.log(tripUpdate[0].stopSequence)
+
+          const stopUpdate = tripUpdate ? tripUpdate.find(update => update.stopSequence === stop.stop_sequence) : null;
+          console.log("Update",stopUpdate);
           const isDelayed = stopUpdate && stopUpdate.arrival.delay > 0;
+          console.log("isDelayed",isDelayed);
           const scheduledTimeStr = stop.arrival_time;
           const actualTimeStr = isDelayed ? formatTime(stopUpdate.arrival.time) : '';
           const delayStr = isDelayed ? formatDelay(stopUpdate.arrival.delay) : '';

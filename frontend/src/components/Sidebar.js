@@ -63,6 +63,7 @@ export const Sidebar = ({
           selectedTrip={selectedTrip}
           currentVehicle={currentVehicle}
             tripUpdate={tripUpdate}
+          setSelectedCity={setSelectedCity}
         />
       </div>
     </div>
