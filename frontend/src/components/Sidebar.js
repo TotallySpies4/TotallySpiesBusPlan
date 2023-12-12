@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import { CitySelection } from "./CitySelection.js";
 import { BuslineSelection } from "./BuslineSelection.js";
 import { SingleStationInfo } from "./SingleStationInfo.js";
@@ -16,6 +16,17 @@ export const Sidebar = ({
   //   closeSidebar();
   // };
   const [isBuslineSelectionOpen, setIsBuslineSelectionOpen] = useState(false);
+  const [showSingleStationInfo, setShowSingleStationInfo] = useState(false);
+  useEffect(() => {
+    setShowSingleStationInfo(false);
+  }, [selectedCity]);
+
+  useEffect(() => {
+    if (selectedTrip) {
+      setShowSingleStationInfo(true);
+    }
+  }, [selectedTrip]);
+
 
   const handleBuslineSelectionToggle = () => {
     setIsBuslineSelectionOpen((prevState) => !prevState);
@@ -26,7 +37,7 @@ export const Sidebar = ({
 
   // const sidebarHeight = selectedTrip  ? "h-3/4" : "h-fit";
   // const sidebarTop = selectedTrip ? "top-12" : "top-1/2 transform -translate-y-1/2";
-  const sidebarDividerShadow = selectedTrip ? "shadow-bottom" : "";
+  const sidebarDividerShadow = showSingleStationInfo ? "shadow-bottom" : "";
 
   return (
     <div
@@ -51,13 +62,14 @@ export const Sidebar = ({
             onToggle={handleBuslineSelectionToggle}
           />
         </div>
+        {showSingleStationInfo &&
         <SingleStationInfo
           className="stop-infos divide-x-2"
           selectedTrip={selectedTrip}
           currentVehicle={currentVehicle}
             tripUpdate={tripUpdate}
           setSelectedCity={setSelectedCity}
-        />
+        />}
       </div>
     </div>
   );

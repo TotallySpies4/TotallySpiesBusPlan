@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import Select from "react-select";
 import { SingleStationInfo } from "./SingleStationInfo.js";
 
@@ -6,9 +6,11 @@ export const BuslineSelection = ({
   selectedCity,
   setSelectedBusline,
   allroutes,
-  congestionStatus,
-  currentVehicle,
 }) => {
+  const [selectedOption, setSelectedOption] = useState(null);
+  useEffect(() => {
+    setSelectedOption(null);
+  }, [selectedCity]);
   let busOptions;
 
   const isSelectDisable = !selectedCity;
@@ -59,6 +61,7 @@ export const BuslineSelection = ({
   }
 
   const handleBusSelection = (option) => {
+    setSelectedOption(option)
     let bus;
     if (selectedCity === "Amsterdam") {
       bus = allroutes.amsterdam.find(
@@ -81,7 +84,7 @@ export const BuslineSelection = ({
         <p className="text-[20px]">Bus line</p>
       </div>
 
-      <Select
+      <Select value={selectedOption}
         options={busOptions}
         onChange={handleBusSelection}
         isSearchable
