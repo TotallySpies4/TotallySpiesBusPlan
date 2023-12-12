@@ -159,6 +159,45 @@ width: 80%;
   vertical-align: middle;
 }
 
+/********** Stop info **********/
+.stop-list {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.stop-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  /* Weitere Styling-Attribute */
+}
+
+.stop-name {
+  font-weight: bold;
+  /* Weitere Styling-Attribute */
+}
+
+.arrival-info {
+  text-align: right;
+  /* Weitere Styling-Attribute */
+}
+
+.scheduled-time.strike-through {
+  text-decoration: line-through;
+  color: red; /* oder eine andere Farbe, je nach Design */
+  /* Weitere Styling-Attribute */
+}
+
+.delay-info {
+  color: red; /* oder eine andere Farbe, je nach Design */
+  /* Weitere Styling-Attribute */
+}
+
+.actual-time {
+  color: green; /* oder eine andere Farbe, je nach Design */
+  /* Weitere Styling-Attribute */
+}
+
 
 /********** Prediction **********/
 .prediction{
@@ -191,3 +230,4 @@ width: 80%;
   padding: 0px 10px !important;
 
 }
+

@@ -10,8 +10,7 @@ export const Sidebar = ({
   selectedTrip,
   selectedCity,
   setSelectedCity,
-  currentVehicle,
-  closeSidebar,
+  currentVehicle, tripUpdate
 }) => {
   // const handleCloseSidebar = () => {
   //   closeSidebar();
@@ -62,8 +61,8 @@ export const Sidebar = ({
         <SingleStationInfo
           className="divide-x-2"
           selectedTrip={selectedTrip}
-          // congestionStatus={congestionStatus}
           currentVehicle={currentVehicle}
+            tripUpdate={tripUpdate}
         />
       </div>
     </div>
