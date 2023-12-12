@@ -173,6 +173,10 @@ width: 80%;
   padding: 10px 0;
   border-bottom: 1px solid #ccc;
 }
+.stop-item-left {
+  display: flex;
+  flex-direction: column;
+}
 
 .stop-name {
   font-weight: bold;
@@ -183,16 +187,20 @@ width: 80%;
   text-align: right;
   /* Weitere Styling-Attribute */
 }
+.scheduled-time.ontime{
+  color: green;
+}
 
 .scheduled-time.strike-through {
   text-decoration: line-through;
-  color: red; /* oder eine andere Farbe, je nach Design */
-  /* Weitere Styling-Attribute */
+  color: red;
 }
 
-.delay-info {
-  color: red; /* oder eine andere Farbe, je nach Design */
-  /* Weitere Styling-Attribute */
+.delay-info.delayed {
+  color: red;
+}
+.delay-info.ontime {
+  color: green;
 }
 
 .actual-time {
