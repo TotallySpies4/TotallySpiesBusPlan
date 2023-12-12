@@ -87,7 +87,7 @@ const customIcon = new L.icon({
         )}
 
         {selectedTrip && !currentVehicle && (
-          <div className="bus-message">
+          <div className="bus-message shadow-lg">
             <img src="/icon/info.png" alt="Info" className="bus-icon" />
             The bus is currently not in operation.
           </div>

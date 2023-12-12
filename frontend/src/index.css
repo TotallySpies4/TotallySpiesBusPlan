@@ -82,12 +82,21 @@ code {
 /* .css-b62m3t-container{
 width: 80%;
 } */
+@keyframes slideInFromRight {
+  from {
+    right: -100%;
+  }
+  to {
+    right: 10px;
+  }
+}
+
 
 .bus-message {
   position: absolute;
   top: 10px;
   right: 10px;
-  background-color: rgba(70, 130, 180, 0.8);
+  background-color: #0085FF;
   padding: 10px;
   border-radius: 16px;
   z-index: 1000;
@@ -95,6 +104,7 @@ width: 80%;
   align-items: center;
   color: white;
   text: 18px;
+  animation: slideInFromRight 0.5s ease-out;
 }
 
 .bus-icon {
@@ -175,21 +185,9 @@ width: 80%;
 }
 
 /********** Stop info **********/
-.stop-info {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  background-color: rgba(70, 130, 180, 0.8);
-  padding: 10px;
-  border-radius: 16px;
-  z-index: 1000;
-  display: flex;
-  align-items: center;
-  color: white;
-  text: 18px;
-}
+
 .stop-list {
-  max-height: 250px;
+  max-height: 300px;
   overflow-y: auto;
     padding: 0 20px;
 }
