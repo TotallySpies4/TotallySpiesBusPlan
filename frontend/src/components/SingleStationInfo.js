@@ -46,10 +46,10 @@ export const SingleStationInfo = ({selectedTrip, tripUpdate,setSelectedCity, cur
               <div key={index} className="stop-item">
                 <div className="stop-item-left" >
                   <div className="stop-name">{stop.stop_name}</div>
-                  <div className={`delay-info ${isDelayed ? 'delayed' : 'ontime'}`}>{delayStr}</div>
+                  <div className={`delay-info ${isDelayed ? 'delayed' : 'ontime'} ${!currentVehicle ? 'not-operating' : ''}`}>{delayStr}</div>
                 </div>
                 <div className="arrival-info">
-                  <div className={`scheduled-time ${isDelayed ? "strike-through" : "ontime"}`}>
+                  <div className={`scheduled-time ${isDelayed ? "strike-through" : "ontime"} ${!currentVehicle ? 'not-operating' : ''}`}>
                     {scheduledTimeStr}
                   </div>
                   {isDelayed && <div className="actual-time">{actualTimeStr}</div>}

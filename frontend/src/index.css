@@ -161,7 +161,7 @@ width: 80%;
 
 /********** Stop info **********/
 .stop-list {
-  max-height: 400px;
+  max-height: 250px;
   overflow-y: auto;
     padding: 0 20px;
 }
@@ -195,12 +195,18 @@ width: 80%;
   text-decoration: line-through;
   color: red;
 }
+.scheduled-time.not-operating{
+  color: black;
+}
 
 .delay-info.delayed {
   color: red;
 }
 .delay-info.ontime {
   color: green;
+}
+.delay-info.not-operating{
+  display: none;
 }
 
 .actual-time {
