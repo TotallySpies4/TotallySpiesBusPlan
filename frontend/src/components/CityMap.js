@@ -15,7 +15,8 @@ function Map({ selectedTrip, congestionShape, currentVehicle, selectedCity, pred
   useEffect(() => {
     console.log("SelectedBusID in Map: " + selectedTrip);
     console.log("PredictionTime in Map was change: " + predictionTime)
-  }, [selectedTrip, predictionTime]);
+    console.log("currentVehicle in Map: " + currentVehicle)
+  }, [selectedTrip, predictionTime,currentVehicle]);
 
   // Update map center based on the selected city
   const handleCityChange = () => {
@@ -39,22 +40,29 @@ const customIcon = new L.icon({
 })
 
   const drawSegmentSpeedPrediction = () => {
-    if(predictionTime !== "now"){
-      let level = segmentSpeedPrediction[0][`speed_${predictionTime}_min_prediction`].level;
-      let levelColor;
-      level === null ? levelColor = 0 : levelColor = level;
-      let color = getCongestionColor(levelColor);
+    if (predictionTime !== "now") {
+      return segmentSpeedPrediction
+          .filter(segment => segment.shapes && segment.shapes.length > 0)
+          .map((segment, segmentIndex) => {
+            let level = segment[`speed_${predictionTime}_min_prediction`].level;
+            let color = getCongestionColor(level === null ? 0 : level);
 
-    return segmentSpeedPrediction.map(segment => {
-      console.log("shapes", segment.shapes)
-        segment.shapes.map(shape => (
-            <Polyline
-                positions={[shape.shape_pt_lat, shape.shape_pt_lon]}
-                color={color}
-            />
-        ))
-    });}
+            const positions = segment.shapes
+                .filter(shape => shape && shape.shape_pt_lat != null && shape.shape_pt_lon != null)
+                .map(shape => new L.LatLng(shape.shape_pt_lat, shape.shape_pt_lon));
+
+            return (
+                <React.Fragment key={segmentIndex}>
+                  <Polyline
+                      positions={positions}
+                      color={color}
+                  />
+                </React.Fragment>
+            );
+          });
+    }
   };
+
   return (
     <div className="map">
       <MapContainer
@@ -74,7 +82,7 @@ const customIcon = new L.icon({
               shape.shape_pt_lat,
               shape.shape_pt_lon,
             ])}
-            color={currentVehicle ? "#4FB453" : "#CE2273"}
+            color={!currentVehicle ? "#000" : "#3b82f6"}
             />
         )}
 

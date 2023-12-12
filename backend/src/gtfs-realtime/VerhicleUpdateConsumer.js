@@ -11,7 +11,7 @@ const kafka = new Kafka({
 });
 
 async function setupConsumerForCity(topic,city) {
-    const consumer = kafka.consumer({groupId: `gtfs-realtime-group-${topic}`});
+    const consumer = kafka.consumer({groupId: topic});
 
     await mongoose.connect('mongodb://mongodb:27017/TotallySpiesBusPlan', {
         serverSelectionTimeoutMS: 60000
@@ -35,8 +35,8 @@ async function setupConsumerForCity(topic,city) {
 
             for (const tripUpdate of data) {
                 if (!tripUpdate || !tripUpdate.tripUpdate || !tripUpdate.tripUpdate.trip) {
-                    //console.error('Invalid vehicle data format:', vehicle);
-                    continue; // Skip this iteration because the structure is not as expected
+                    console.error('Invalid vehicle data format:', vehicle);
+                    continue;
                 }
 
                 if (!tripUpdate.tripUpdate.trip.tripId) {

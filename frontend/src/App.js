@@ -21,6 +21,7 @@ const App = () => {
     console.log("SelectedBusID in App: " + selectedTrip);
     console.log("SelectedCity in App: " + selectedCity);
     console.log("PredictionTime in App was change: " + predictionTime)
+    console.log("currentVehicle in App: " + currentVehicle)
   }, [selectedTrip, currentVehicle, congestionShape, selectedCity, predictionTime]);
 
   useEffect(() => {
