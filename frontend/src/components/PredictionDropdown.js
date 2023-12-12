@@ -3,21 +3,22 @@ import Select from "react-select";
 
 export const PredictionDropDown = ({ selectedBusline, selectedCity, setPredictionTime, currentVehicle}) => {
   const [selectedOption, setSelectedOption] = useState({ value: "now", label: "Now" });
-  let isButtonDisable = !selectedCity || !selectedBusline ;
-  useEffect(() => {
-    setPredictionTime("now");
-    setSelectedOption({ value: "now", label: "Now" });
-    isButtonDisable = !currentVehicle
-  }, [selectedBusline, selectedCity, currentVehicle]);
+  const [isButtonDisabled, setIsButtonDisabled] = useState(true);
+    useEffect(() => {
+        setPredictionTime("now");
+        setSelectedOption({ value: "now", label: "Now" });
+        setIsButtonDisabled(!selectedCity || !selectedBusline || !currentVehicle);
+    }, [selectedBusline, selectedCity, currentVehicle]);
 
 
-  const customStyles = {
+
+    const customStyles = {
     control: (provided, state) => ({
       ...provided,
-      borderColor: isButtonDisable ? "grey":  "#3b82f6",
+      borderColor: isButtonDisabled ? "grey":  "#3b82f6",
       borderWidth: "2px",
       ":hover": {
-        borderColor: isButtonDisable ? "grey": "#3b82f6",
+        borderColor: isButtonDisabled ? "grey": "#3b82f6",
       },
     }),
     singleValue: (provided, state) => ({
@@ -27,9 +28,9 @@ export const PredictionDropDown = ({ selectedBusline, selectedCity, setPredictio
 
     dropdownIndicator: (provided, state) => ({
       ...provided,
-      color: isButtonDisable ? "grey": "#3b82f6",
+      color: isButtonDisabled ? "grey": "#3b82f6",
       ":hover": {
-        color: isButtonDisable ? "grey":"#3b82f6",
+        color: isButtonDisabled ? "grey":"#3b82f6",
       },
     }),
   };
@@ -41,7 +42,7 @@ export const PredictionDropDown = ({ selectedBusline, selectedCity, setPredictio
         <Select
             name="time-options"
             type="button"
-            isDisabled={isButtonDisable}
+            isDisabled={isButtonDisabled}
             placeholder="now"
             className={`rounded-full text-center py-2 ${customStyles}`}
             value={selectedOption}
