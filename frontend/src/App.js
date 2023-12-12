@@ -124,6 +124,7 @@ const App = () => {
           selectedCity={selectedCity}
           selectedBusline={selectedBusline}
           setPredictionTime={setPredictionTime}
+          currentVehicle={currentVehicle}
         />
       </div>
     </div>
