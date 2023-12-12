@@ -1,8 +1,11 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import Select from "react-select";
 
 export const PredictionDropDown = ({ selectedBusline, selectedCity, setPredictionTime }) => {
   const isButtonDisable = !selectedCity || !selectedBusline;
+  useEffect(() => {
+    setPredictionTime("now");
+  }, [selectedBusline, selectedCity])
   
   const customStyles = {
     control: (provided, state) => ({
