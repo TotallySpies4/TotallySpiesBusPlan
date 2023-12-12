@@ -8,13 +8,15 @@ import {
 } from "react-leaflet";
 import L from "leaflet";
 
-function Map({ selectedTrip, congestionShape, currentVehicle, selectedCity }) {
+function Map({ selectedTrip, congestionShape, currentVehicle, selectedCity, predictionTime, segmentSpeedPrediction }) {
 
   //Set default map center to Amsterdam
   const [mapCenter, setMapCenter] = useState([52.3676, 4.9041]);
   useEffect(() => {
     console.log("SelectedBusID in Map: " + selectedTrip);
-  }, [selectedTrip]);
+    console.log("PredictionTime in Map was change: " + predictionTime)
+    console.log("currentVehicle in Map: " + currentVehicle)
+  }, [selectedTrip, predictionTime,currentVehicle]);
 
   // Update map center based on the selected city
   const handleCityChange = () => {
@@ -28,7 +30,7 @@ function Map({ selectedTrip, congestionShape, currentVehicle, selectedCity }) {
   React.useEffect(() => {
     // Handle initial city change
     handleCityChange();
-  }, [selectedCity]);
+  }, [selectedCity])
 
 const customIcon = new L.icon({
   iconUrl: "/icon/BusMarker.png",
@@ -36,6 +38,31 @@ const customIcon = new L.icon({
   iconAnchor: [10, 10],
   popupAnchor: [0, -10],
 })
+
+  const drawSegmentSpeedPrediction = () => {
+    if (predictionTime !== "now") {
+      return segmentSpeedPrediction
+          .filter(segment => segment.shapes && segment.shapes.length > 0)
+          .map((segment, segmentIndex) => {
+            let level = segment[`speed_${predictionTime}_min_prediction`].level;
+            let color = getCongestionColor(level === null ? 0 : level);
+
+            const positions = segment.shapes
+                .filter(shape => shape && shape.shape_pt_lat != null && shape.shape_pt_lon != null)
+                .map(shape => new L.LatLng(shape.shape_pt_lat, shape.shape_pt_lon));
+
+            return (
+                <React.Fragment key={segmentIndex}>
+                  <Polyline
+                      positions={positions}
+                      color={color}
+                  />
+                </React.Fragment>
+            );
+          });
+    }
+  };
+
   return (
     <div className="map">
       <MapContainer
@@ -55,12 +82,12 @@ const customIcon = new L.icon({
               shape.shape_pt_lat,
               shape.shape_pt_lon,
             ])}
-            color={currentVehicle ? "#4FB453" : "#CE2273"}
+            color={!currentVehicle ? "#000" : "#3b82f6"}
             />
         )}
 
         {selectedTrip && !currentVehicle && (
-          <div className="bus-message">
+          <div className="bus-message shadow-lg">
             <img src="/icon/info.png" alt="Info" className="bus-icon" />
             The bus is currently not in operation.
           </div>
@@ -92,7 +119,7 @@ const customIcon = new L.icon({
         )}
 
         {/* Drawing congestion shape */}
-        {congestionShape && (
+        {(predictionTime === "now" || !segmentSpeedPrediction) && congestionShape &&  (
           <Polyline
             positions={congestionShape.map((shape) => [
               shape.shape_pt_lat,
@@ -101,6 +128,7 @@ const customIcon = new L.icon({
             color={getCongestionColor(currentVehicle.congestion_level.level)}
           />
         )}
+        {currentVehicle && predictionTime && segmentSpeedPrediction && drawSegmentSpeedPrediction()}
       </MapContainer>
     </div>
   );

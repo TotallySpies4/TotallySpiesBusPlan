@@ -82,12 +82,21 @@ code {
 /* .css-b62m3t-container{
 width: 80%;
 } */
+@keyframes slideInFromRight {
+  from {
+    right: -100%;
+  }
+  to {
+    right: 10px;
+  }
+}
+
 
 .bus-message {
   position: absolute;
   top: 10px;
   right: 10px;
-  background-color: rgba(70, 130, 180, 0.8);
+  background-color: #0085FF;
   padding: 10px;
   border-radius: 16px;
   z-index: 1000;
@@ -95,6 +104,7 @@ width: 80%;
   align-items: center;
   color: white;
   text: 18px;
+  animation: slideInFromRight 0.5s ease-out;
 }
 
 .bus-icon {
@@ -106,6 +116,21 @@ width: 80%;
 
 
 /********** Sidebar **********/
+.sidebar{
+  background-color: white;
+
+}
+.selections{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  padding: 10px;
+
+}
+.selections.shadow-bottom{
+  box-shadow: 0px 8px 15px -5px rgba(0, 0, 0, 0.3);
+}
 
 .css-1u9des2-indicatorSeparator{
   width: 0 !important;
@@ -159,6 +184,62 @@ width: 80%;
   vertical-align: middle;
 }
 
+/********** Stop info **********/
+
+.stop-list {
+  max-height: 300px;
+  overflow-y: auto;
+    padding: 0 20px;
+}
+
+.stop-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid #ccc;
+}
+.stop-item-left {
+  display: flex;
+  flex-direction: column;
+}
+
+.stop-name {
+  font-weight: bold;
+  /* Weitere Styling-Attribute */
+}
+
+.arrival-info {
+  text-align: right;
+  /* Weitere Styling-Attribute */
+}
+.scheduled-time.ontime{
+  color: green;
+}
+
+.scheduled-time.strike-through {
+  text-decoration: line-through;
+  color: red;
+}
+.scheduled-time.not-operating{
+  color: black;
+}
+
+.delay-info.delayed {
+  color: red;
+}
+.delay-info.ontime {
+  color: green;
+}
+.delay-info.not-operating{
+  display: none;
+}
+
+.actual-time {
+  color: green; /* oder eine andere Farbe, je nach Design */
+  /* Weitere Styling-Attribute */
+}
+
 
 /********** Prediction **********/
 .prediction{
@@ -191,3 +272,4 @@ width: 80%;
   padding: 0px 10px !important;
 
 }
+

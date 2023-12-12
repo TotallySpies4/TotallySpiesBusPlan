@@ -14,13 +14,16 @@ const App = () => {
   const [congestionShape, setCongestionShape] = useState(null);
   const [selectedCity, setSelectedCity] = useState(null);
   const [selectedBusline, setSelectedBusline] = useState(null);
-  const [congestionStatus, setCongestionStatus] = useState(null);
-  const [predictionTime, setPredictionTime] = useState(null);
+  const [predictionTime, setPredictionTime] = useState("now");
+  const [segmentSpeedPrediction, setSegmentSpeedPrediction] = useState(null);
+  const [tripUpdate, setTripUpdate] = useState(null);
 
   useEffect(() => {
     console.log("SelectedBusID in App: " + selectedTrip);
     console.log("SelectedCity in App: " + selectedCity);
-  }, [selectedTrip, currentVehicle, congestionShape, selectedCity]);
+    console.log("PredictionTime in App was change: " + predictionTime)
+    console.log("currentVehicle in App: " + currentVehicle)
+  }, [selectedTrip, currentVehicle, congestionShape, selectedCity, predictionTime]);
 
   useEffect(() => {
   if (selectedBusline) {
@@ -74,6 +77,9 @@ const App = () => {
   setSelectedTrip(busLineDetail.payload.trip);
   setCurrentVehicle(busLineDetail.payload.currentVehicle);
   setCongestionShape(busLineDetail.payload.congestionShape);
+  setSegmentSpeedPrediction(busLineDetail.payload.segmentSpeedPrediction);
+  setTripUpdate(busLineDetail.payload.updateStoptime)
+
   } catch (error) {
   console.error("Error parsing the incoming data:", error);
   }
@@ -102,6 +108,8 @@ const App = () => {
         selectedTrip={selectedTrip}
         congestionShape={congestionShape}
         currentVehicle={currentVehicle}
+        predictionTime={predictionTime}
+        segmentSpeedPrediction = {segmentSpeedPrediction}
               />
       <Sidebar
         allroutes={allroutes}
@@ -109,8 +117,8 @@ const App = () => {
         setSelectedBusline={setSelectedBusline}
         selectedCity={selectedCity}
         setSelectedCity={setSelectedCity}
-        congestionStatus={congestionStatus}
         currentVehicle={currentVehicle}
+        tripUpdate={tripUpdate}
       />
 
       <div className="prediction absolute top-2 transform -translate-x-1/2 flex flex-row items-center space-x-4">
@@ -120,6 +128,7 @@ const App = () => {
           selectedCity={selectedCity}
           selectedBusline={selectedBusline}
           setPredictionTime={setPredictionTime}
+          currentVehicle={currentVehicle}
         />
       </div>
     </div>

@@ -24,6 +24,7 @@
     "kafka-streams": "^4.6.1",
     "kafkajs": "^2.2.4",
     "maplibre-gl": "^3.6.2",
+    "moment-timezone": "^0.5.43",
     "mongoose": "^7.5.3",
     "node-wait-for-it": "^0.2.0",
     "nodemon": "^3.0.1",

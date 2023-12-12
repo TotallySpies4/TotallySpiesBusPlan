@@ -86,6 +86,6 @@ for index, row in prediction_df.iterrows():
 logging.info("Done. Stored predictions in database")
 
 #print(predictions)
-#print(set(prediction_df['Trip_ID']))
+print(set(prediction_df['Trip_ID']))
 #print(len(set(prediction_df['Trip_ID'])))
 #print(prediction_df)

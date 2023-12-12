@@ -46,7 +46,7 @@ export class StockholmVehicleDataProcessor extends IVehicleDataProcessor {
     }
 
     createNewTripUpdate(tripUpdate, city){
-
+        console.log("create new trip update stockholm")
         return new TripUpdate({
             city: city,
             trip_id: tripUpdate.tripUpdate.trip.tripId,
