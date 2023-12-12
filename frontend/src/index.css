@@ -106,6 +106,21 @@ width: 80%;
 
 
 /********** Sidebar **********/
+.sidebar{
+  background-color: white;
+
+}
+.selections{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  padding: 10px;
+
+}
+.selections.shadow-bottom{
+  box-shadow: 0px 8px 15px -5px rgba(0, 0, 0, 0.3);
+}
 
 .css-1u9des2-indicatorSeparator{
   width: 0 !important;
@@ -160,6 +175,19 @@ width: 80%;
 }
 
 /********** Stop info **********/
+.stop-info {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background-color: rgba(70, 130, 180, 0.8);
+  padding: 10px;
+  border-radius: 16px;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  color: white;
+  text: 18px;
+}
 .stop-list {
   max-height: 250px;
   overflow-y: auto;
