@@ -1,4 +1,9 @@
-import { getBusAllBuslineAmsterdam, getBusAllBuslineStockholm, getBusDetails, fetchAverageSpeed } from "../../../src/queryData/queryDbData.js";
+import {
+  getBusAllBuslineAmsterdam,
+  getBusAllBuslineStockholm,
+  getBusDetails,
+  fetchAverageSpeed,
+} from "../../../src/queryData/queryDbData.js";
 import { Route, StopTime, Trip } from "../../../src/DBmodels/busline.js";
 import { calculatorScheduledSpeedAmsterdam } from "../../../src/utils/speedCalculator.js";
 import { VehiclePositions } from "../../../src/DBmodels/vehiclepositions.js";
@@ -8,13 +13,15 @@ import { agency } from "../../../src/utils/enum.js";
 jest.mock('../../../src/DBmodels/busline.js', () => ({
   Route: {
     find: jest.fn(),
-    findOne: jest.fn(),
+    findOne: jest.fn().mockResolvedValue({ _id: 'someRouteObjID', trips: ['someTripID'] }),
   },
   Trip: {
     findOne: jest.fn(),
+    populate: jest.fn(),
   },
   StopTime: {
     findOne: jest.fn(),
+    populate: jest.fn(),
   },
 }));
 
@@ -163,4 +170,3 @@ describe('fetchAverageSpeed', () => {
     });
   });
 });
-

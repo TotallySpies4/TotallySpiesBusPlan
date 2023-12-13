@@ -14,9 +14,9 @@ from gtfs_realtime_download import download_data_for_date
 
 class TestDownloadDataForDate(unittest.TestCase):
 
-    @patch('gtfs_realtime_download.MongoClient', MongoClient)  # Use mongomock's MongoClient
-    @patch('gtfs_realtime_download.GridFS')
+    @patch('gtfs_realtime_download.MongoClient', MongoClient)
     @patch('gtfs_realtime_download.requests.get')
+    @patch('gtfs_realtime_download.GridFS')
     def test_download_data_success(self, mock_requests_get, mock_gridfs, mock_mongo_client):
         # Arrange
         date = "2023-11-25"
@@ -43,7 +43,7 @@ class TestDownloadDataForDate(unittest.TestCase):
         self.assertIsNotNone(result)
         mock_requests_get.assert_called_once_with(f"https://api.koda.trafiklab.se/KoDa/api/v2/gtfs-rt/sl/VehiclePositions?date={date}&key=gQpNjugJMEZZKu69pw3Sbz4PrLhZ0K_hVDGH5RAGUqk")
         mock_fs_put.assert_called_once_with(b'mock_content', filename=f"gtfs_{date}.bin")
-        mock_mongo_client.assert_called_once_with('mongodb://localhost:27017/')  # Adjust the connection string if needed
+        mock_mongo_client.assert_called_once_with('mongodb://localhost:27017/')
 
     @patch('gtfs_realtime_download.requests.get')
     def test_download_data_failure(self, mock_requests_get):
