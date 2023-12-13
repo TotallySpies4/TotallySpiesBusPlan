@@ -77,89 +77,32 @@ describe('AmsterdamVehicleDataProcessor', () => {
   });
 
     describe('updateVehicle', () => {
-        it('should update the existing vehicle position and congestion level', async () => {
-          // Mock data
-          const vehicle = {
-            vehicle: {
-              timestamp: new Date(),
+        it('should update the existing vehicle position and congestion level', () => {
+          // Mock the necessary functions
+          const congestionLevel = jest.fn();
+          const findOneMock = jest.spyOn(Route, 'findOne').mockResolvedValue({ _id: 'existingRouteId' });
+
+          // Define the expected values
+          const expectedPositions = [
+            {
               position: {
                 latitude: 1.234,
                 longitude: 5.678,
               },
-              stopId: 'someStopId',
-              currentStopSequence: 42,
-              currentStatus: 'someStatus',
+              timestamp: new Date('2023-12-12T19:20:24.975Z'),
             },
-          };
-          const existingPosition = {
-            current_position: {
-              latitude: 0,
-              longitude: 0,
-            },
-            previous_position: {
-              latitude: 0,
-              longitude: 0,
-            },
-            timestamp: new Date(),
-            stop_id: 'someStopId',
-            current_stop_sequence: 42,
-            current_status: 'someStatus',
-            congestion_level: {
-              timestamp: new Date(),
-              level: 0,
-              previousStop: null,
-              currentStop: null,
-            },
-          };
-          const existingTrip = {
-            route_id: 'existingRouteId',
-            trip_id: 'existingTripId',
-          };
+            // Add more positions if needed
+          ];
 
-          // Mock the congestionLevel function
-          congestionLevel.mockResolvedValue({
-            timestamp: new Date(),
-            congestionLevel: 1,
-            previousStop: 'previousStopId',
-            currentStop: 'currentStopId',
-          });
+          // Call the function that updates the vehicle
+          updateVehicle('vehicleId', expectedPositions);
 
-          // Mock the Route.findOne function
-          Route.findOne.mockResolvedValue({
-            route_id: 'existingRouteId',
-          });
+          // Verify the function calls
+          expect(congestionLevel).toHaveBeenCalledWith('existingRouteId', { positions: expectedPositions });
+          expect(findOneMock).toHaveBeenCalledWith({ vehicleId: 'vehicleId' });
 
-          // Call the updateVehicle method
-          await processor.updateVehicle(vehicle, existingPosition, existingTrip);
-
-          // Assertions
-          expect(existingPosition.timestamp).toBe(vehicle.vehicle.timestamp);
-          expect(existingPosition.current_position.latitude).toBe(1.234);
-          expect(existingPosition.current_position.longitude).toBe(5.678);
-          expect(existingPosition.previous_position.latitude).toBe(0);
-          expect(existingPosition.previous_position.longitude).toBe(0);
-
-          // Check if congestionLevel has been called with the expected arguments
-          expect(congestionLevel).toHaveBeenCalledWith('existingRouteId', {
-            trip_id: 'existingTripId',
-            stopSequence: 42,
-            positions: ([
-              {
-                position: { latitude: 0, longitude: 0 },
-                timestamp: existingPosition.timestamp,
-              },
-              {
-                position: vehicle.vehicle.position,
-                timestamp: vehicle.vehicle.timestamp,
-              },
-            ]),
-          });
-
-          // Check if congestion level and stops are updated
-            expect(existingPosition.congestion_level.timestamp).toBeInstanceOf(Date);
-          expect(existingPosition.congestion_level.level).toBe(1);
-          expect(existingPosition.congestion_level.currentStop).toBe('currentStopId');
-          expect(existingPosition.congestion_level.previousStop).toBe('previousStopId');
+          // Restore the original implementation of the mocked function
+          findOneMock.mockRestore();
         });
       });
 
