@@ -20,7 +20,7 @@ pipeline {
                        -Dsonar.projectName=totallyspies \\
                        -Dsonar.projectVersion=1.0 \\
                        -Dsonar.sources=backend/src,frontend/src,lstmModel/src \\
-                       -Dsonar.tests=backend/test,frontend/test,lstmModel/test \\
+                       -Dsonar.tests=backend/test,lstmModel/test \\
                        -Dsonar.sourceEncoding=UTF-8
                        """
 
