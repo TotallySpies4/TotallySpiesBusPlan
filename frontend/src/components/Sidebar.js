@@ -64,10 +64,10 @@ export const Sidebar = ({
         </div>
         {showSingleStationInfo &&
         <SingleStationInfo
-          className="stop-infos divide-x-2"
+          className="stop-infos"
           selectedTrip={selectedTrip}
           currentVehicle={currentVehicle}
-            tripUpdate={tripUpdate}
+          tripUpdate={tripUpdate}
           setSelectedCity={setSelectedCity}
         />}
       </div>
