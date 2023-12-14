@@ -1,4 +1,5 @@
 import { AmsterdamVehicleDataProcessor } from '../../../src/gtfs-realtime/AmsterdamVehicleDataProcessor.js';
+import { updateVehicle } from '../../../src/gtfs-realtime/AmsterdamVehicleDataProcessor.js';
 import { IVehicleDataProcessor } from '../../../src/gtfs-realtime/IVehicleDataProcessor';
 import { VehiclePositions } from '../../../src/DBmodels/vehiclepositions.js';
 import { Route } from '../../../src/DBmodels/busline.js';
@@ -10,6 +11,12 @@ jest.mock('../../../src/DBmodels/vehiclepositions.js');
 jest.mock('../../../src/DBmodels/busline.js');
 jest.mock('../../../src/DBmodels/tripUpdate.js');
 jest.mock('../../../src/utils/congestionLevel');
+
+jest.mock('../../../src/gtfs-realtime/AmsterdamVehicleDataProcessor.js', () => ({
+  ...jest.requireActual('../../../src/gtfs-realtime/AmsterdamVehicleDataProcessor.js'),
+  updateVehicle: jest.fn(),
+}));
+
 
 describe('AmsterdamVehicleDataProcessor', () => {
   let processor;

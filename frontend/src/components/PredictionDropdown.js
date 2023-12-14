@@ -36,7 +36,7 @@ export const PredictionDropDown = ({ selectedBusline, selectedCity, setPredictio
   };
   return (
       <div className="flex flex-row justify-around items-center w-[400px] bg-[#FFF] shadow-2xl rounded-full px-4">
-        <p className="p-prediction w-fit text-[19px]" >Congestion in</p>
+        <p className="p-prediction w-fit text-[19px] text-center" >Congestion in</p>
 
         {/* Dropdown for time options */}
         <Select

@@ -8,6 +8,7 @@ export const SingleStationInfo = ({
   setSelectedCity,
   currentVehicle,
 }) => {
+
   // Set timezone
   const cityToTimeZone = {
     Amsterdam: "Europe/Amsterdam",
@@ -29,7 +30,8 @@ export const SingleStationInfo = ({
   const formatDelay = (delay) => {
     if (delay > 0) {
       const delayMinutes = Math.floor(delay / 60);
-      return `Delay ${delayMinutes} min`;
+      // return Delay ${delayMinutes} min;
+      return delayMinutes;
     }
     return "On time";
   };
@@ -52,21 +54,62 @@ export const SingleStationInfo = ({
     [selectedTrip]
   );
 
-  const Dot = ({ coordinates }) => (
+  const stopNo = selectedTrip? selectedTrip.stop_times.map((stop) => ({
+      stopNo: stop.stop_sequence,
+    }))
+  : [];
+
+  const busCoordinates = useMemo(() => {
+    return (
+      selectedTrip &&
+      selectedTrip.vehiclepositions &&
+      selectedTrip.vehiclepositions.current_position
+    )
+      ? {
+          latitude: selectedTrip.vehiclepositions.current_position.latitude,
+          longitude: selectedTrip.vehiclepositions.current_position.longitude,
+        }
+      : null;
+  }, [selectedTrip]);
+
+  const Dot = ({ stopCoordinates, coordinates, stopNo }) => (
+    <div className="dot-container">
     <div
       className="dot"
-      value ={stopCoordinates}
       style={{
-        position: "absolute",
-        // left: ${coordinates.longitude * 20}px, // Adjust as needed for visualization
-        // top: ${coordinates.latitude * 20}px, // Adjust as needed for visualization
         width: "8px",
         height: "8px",
-        backgroundColor: currentVehicle ? "blue" : "grey", // Set your desired dot color
+        backgroundColor: currentVehicle ? "blue" : "grey",
         borderRadius: "100%",
-      }}></div>
+        marginRight: "10px",
+      }}
+    >
+      {[stopCoordinates,stopNo]}
+    </div>
+    {/* <div className="vertical-line" /> */}
+  </div>
   );
 
+const Bus = ({ index, coordinates, busCoordinates, icon }) => {
+
+const isVisible =
+  busCoordinates !== null &&
+  busCoordinates.latitude === stopCoordinates[index].latitude &&
+  busCoordinates.longitude === stopCoordinates[index].longitude;
+  return isVisible ? (
+    <div
+      style={{
+        position: "absolute",
+//        left: ${coordinates.longitude * 20}px, // Adjust as needed for visualization
+//        top: ${coordinates.latitude * 20}px, // Adjust as needed for visualization
+        width: "10px",// Set your desired width
+        height: "10px", // Set your desired height
+        backgroundColor: "red", // Set your desired dot color
+        borderRadius: "100%",
+     }}
+    />
+  ) : null;
+};
 
   return (
     <div className="stop-list w-96">
@@ -94,8 +137,15 @@ export const SingleStationInfo = ({
 
           return (
             <div key={index} className="stop-item">
+             <Dot coordinates={[stopCoordinates[index], stopNo]} className = "stop-dot" />
+
+             <Bus
+             index={index}
+               coordinates={stopCoordinates[index]}
+               busCoordinates={busCoordinates}
+             />
               <div className="stop-info">
-              <Dot coordinates={stopCoordinates[index]} className = "stop-dot" />
+
                 <div className="stop-item-left">
                   <div className="stop-name">{stop.stop_name}</div>
                   <div
@@ -105,6 +155,7 @@ export const SingleStationInfo = ({
                     {!currentVehicle?"Currently not in operation":delayStr}
                   </div>
                 </div>
+
                 <div className="arrival-info">
                   <div
                     className={`scheduled-time ${

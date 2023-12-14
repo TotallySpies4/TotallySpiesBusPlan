@@ -33,7 +33,7 @@ function Map({ selectedTrip, congestionShape, currentVehicle, selectedCity, pred
   }, [selectedCity])
 
 const customIcon = new L.icon({
-  iconUrl: "/icon/BusMarker.png",
+  iconUrl: "/icon/bus.png",
   iconSize: [20, 20],
   iconAnchor: [10, 10],
   popupAnchor: [0, -10],
@@ -72,7 +72,7 @@ const customIcon = new L.icon({
         zoomControl={false}>
         <TileLayer
           url="https://tile.jawg.io/jawg-sunny/{z}/{x}/{y}.png?access-token=BTdIPPqKEPczbvNzaOq7YKmEhFiO71WOmYjwuBQWLZkXLSvJZIupQZF63M8hSn3B"
-          attribution='<a href="http://jawg.io" title="Tiles Courtesy of Jawg Maps" target="_blank" class="jawg-attrib">&copy; <b>Jawg</b>Maps</a> | <a href="https://www.openstreetmap.org/copyright" title="OpenStreetMap is open data licensed under ODbL" target="_blank" class="osm-attrib">&copy; OSM contributors</a>'
+          // attribution='<a href="http://jawg.io" title="Tiles Courtesy of Jawg Maps" target="_blank" class="jawg-attrib">&copy; <b>Jawg</b>Maps</a> | <a href="https://www.openstreetmap.org/copyright" title="OpenStreetMap is open data licensed under ODbL" target="_blank" class="osm-attrib">&copy; OSM contributors</a>'
         />
         {/* Drawing stopes and shapes */}
 
@@ -82,7 +82,7 @@ const customIcon = new L.icon({
               shape.shape_pt_lat,
               shape.shape_pt_lon,
             ])}
-            color={!currentVehicle ? "#000" : "#3b82f6"}
+            color={!currentVehicle ? "#838383" : "#3b82f6"}
             />
         )}
 
@@ -102,7 +102,7 @@ const customIcon = new L.icon({
               <Popup>
                 <strong className="text-blue-500">{stop.stop_name}</strong>
                 <br /> <strong>Arrival Time: </strong> {stop.arrival_time},
-                <br /> <strong>Departure Time: </strong> {stop.departure_time})
+                <br /> <strong>Departure Time: </strong> {stop.departure_time}
               </Popup>
             </Marker>
           ))}
@@ -143,7 +143,7 @@ function getCongestionColor(level) {
     case 2:
       return "#B44F4F";
     default:
-      return "#CE2273";
+      return "#838383";
   }
 }
 

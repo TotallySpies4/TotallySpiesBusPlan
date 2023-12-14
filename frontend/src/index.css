@@ -20,6 +20,7 @@ code {
   height: 100vh;
   width: 100vw;
   display: flex;
+  overflow: hidden;
 }
 
 .BusButton {
@@ -54,25 +55,6 @@ code {
   width: 100%;
   z-index: 10;
 }
-
-/* .sidebar {
-  position: absolute;
-  top: 12%;
-  left: 0;
-  padding: 10px;
-  width: 350px;
-  height: 75%;
-  z-index: 1000;
-  background-color: rgba(255, 255, 255, 0.8);
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  border-radius: 20px;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19) ;
-} */
-
-
 
 
 #map {
@@ -196,15 +178,25 @@ width: 80%;
 .stop-item {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  /* space-between: 5px; */
   align-items: center;
   padding: 10px 0;
-  border-bottom: 1px solid #ccc;
+  width: 100% !important;
 }
+
+
+
 .stop-item-left {
   display: flex;
   flex-direction: column;
 }
+
+.stop-info{
+  display: flex;
+  flex-direction: column;
+  border-bottom: 1px solid #ccc;
+  width: 95% !important;
+ }
 
 .stop-name {
   font-weight: bold;
@@ -283,3 +275,26 @@ width: 80%;
 
 }
 
+/*Single value in selection box*/
+.css-9j327y-singleValue {
+
+    grid-area: 1 / 1 / 2 / 3;
+    max-width: 100%;
+    overflow: visible !important;
+    /* text-overflow: revert-layer; */
+    color: rgb(59, 130, 246);
+    margin-left: 2px;
+    margin-right: 2px;
+    box-sizing: border-box;
+}
+
+.dot-container {
+  display: flex;
+  align-items: center;
+}
+
+.vertical-line {
+  width: 2px;
+  height: 20px; /* Adjust the height as needed */
+  background-color: black; /* Adjust the color as needed */
+  margin: left 4px;}

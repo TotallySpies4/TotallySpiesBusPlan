@@ -44,8 +44,9 @@ export const BuslineSelection = ({
     busOptions = allroutes.amsterdam.map((bus) => ({
       value: bus.route_short_name,
       label: (
-        <div>
-          <strong>{bus.route_short_name}</strong> {bus.route_long_name}
+        <div className ="busline-select">
+          <strong>{bus.route_short_name}</strong>
+          <p>{bus.route_long_name}</p>
         </div>
       ),
     }));
