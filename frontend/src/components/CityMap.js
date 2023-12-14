@@ -33,7 +33,7 @@ function Map({ selectedTrip, congestionShape, currentVehicle, selectedCity, pred
   }, [selectedCity])
 
 const customIcon = new L.icon({
-  iconUrl: "/icon/BusMarker.png",
+  iconUrl: "/icon/right-arrow.png",
   iconSize: [20, 20],
   iconAnchor: [10, 10],
   popupAnchor: [0, -10],
