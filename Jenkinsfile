@@ -3,6 +3,7 @@ pipeline {
     def dockerhub
     tools{
         jdk 'java11'
+        nodejs 'node18'
     }
     stages {
         stage('Build') {
