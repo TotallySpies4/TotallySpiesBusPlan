@@ -1,10 +1,16 @@
 pipeline {
     agent any
-    def dockerhub
-    tools{
+
+    tools {
         jdk 'java11'
         nodejs 'node18'
     }
+
+    environment {
+        // Definieren Sie die Variable dockerhub hier
+        DOCKERHUB = ''
+    }
+
     stages {
         stage('Build') {
             steps {
@@ -37,14 +43,16 @@ pipeline {
         }
         stage('Build Docker Image') {
             steps {
-                dockerhub = docker.build("siri0000/totallydockerhub")
+                script {
+                    DOCKERHUB = docker.build("siri0000/totallydockerhub").id
+                }
             }
         }
         stage('Push to Docker Hub') {
             steps {
                 script {
                     withDockerRegistry('https://registry.hub.docker.com', 'dockerhub') {
-                        dockerhub.push("${env.BUILD_NUMBER}")
+                        docker.image(DOCKERHUB).push("${env.BUILD_NUMBER}")
                     }
                 }
             }
