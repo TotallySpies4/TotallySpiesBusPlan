@@ -60,7 +60,7 @@ pipeline {
                                             // Upload the build archive to S3 (customize bucket and file details)
                                             s3Upload(
                                                 source: "${buildDir}/build_archive.zip",
-                                                bucket: 'totally-bucket
+                                                bucket: 'totally-bucket',
                                                 key: "builds/${BRANCH_NAME}/${BUILD_NUMBER}/build_archive.zip",
                                                 acl: 'private'
                                             )
