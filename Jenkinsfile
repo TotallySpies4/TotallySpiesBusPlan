@@ -1,8 +1,19 @@
 pipeline {
     agent any
+    pipeline {
+        agent any
+        environment {
+            JAVA_HOME = '/usr/lib/jvm/jre-1.8.0-openjdk'
+            PATH = "$JAVA_HOME/bin:$PATH"
+        }
+
 
     stages {
-
+        stage('Build') {
+                steps {
+                    sh 'java -version'
+                }
+            }
         stage('Checkout') {
             steps {
                 checkout scm
