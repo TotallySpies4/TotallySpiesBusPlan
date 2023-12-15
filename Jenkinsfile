@@ -27,7 +27,7 @@ pipeline {
                         -Dsonar.sources=backend/src,frontend/src,lstmModel/src \\
                         -Dsonar.tests=backend/test,lstmModel/test \\
                         -Dsonar.sourceEncoding=UTF-8
-                        -Dsonar.properties=sonar-scanner.properties
+                        -Dsonar.properties=sonar-project.properties
                         """
                     }
                 }
