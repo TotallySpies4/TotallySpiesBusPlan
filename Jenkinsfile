@@ -21,6 +21,7 @@ pipeline {
                         sh 'echo $sonar_scanner'
                         sh """
                         ${env.sonar_scanner} \\
+                        --add-opens java.base/java.lang=ALL-UNNAMED \\
                         -Dsonar.projectKey=totallyspies \\
                         -Dsonar.projectName=totallyspies \\
                         -Dsonar.projectVersion=1.0 \\
