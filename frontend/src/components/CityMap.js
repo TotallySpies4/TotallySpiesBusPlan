@@ -89,7 +89,7 @@ const busIcon = new L.icon({
               shape.shape_pt_lat,
               shape.shape_pt_lon,
             ])}
-            color={!currentVehicle ? "#838383" : "#4FB453"}
+            color={!currentVehicle ? "#838383" : "#88c36c"}
             />
         )}
 
@@ -145,13 +145,13 @@ const busIcon = new L.icon({
 function getCongestionColor(level) {
   switch (level) {
     case 0:
-      return "#4FB453";
+      return "#88c36c";
     case 1:
-      return "#EAB059";
+      return " #fced83";
     case 2:
       return "#B44F4F";
     default:
-      return "#838383";
+      return "#ff7070";
   }
 }
 

@@ -190,11 +190,13 @@ width: 80%;
   padding: 10px 0;
   width: 100% !important;
   border-bottom: 1px solid #ccc;
+  height: 70px !important;
 }
 
 .stop-item-left {
   display: flex;
   flex-direction: column;
+
 }
 
 /* .stop-info{
@@ -341,3 +343,5 @@ width: 80%;
     justify-content: space-between;
     justify-items: center;
   }
+
+  .line{top: 35px !important;}

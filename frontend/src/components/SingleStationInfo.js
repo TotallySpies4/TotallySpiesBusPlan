@@ -69,12 +69,11 @@ export const SingleStationInfo = ({
       : null;
   }, [selectedTrip]);
 
-  const Dot = ({ stopCoordinates, coordinates, stopNo, hasNextStop }) => {
+  const Dot = ({ stopCoordinates, coordinates, stopNo, hasNextStop, isLastStop }) => {
     const isBusOnStop =
       busCoordinates &&
       busCoordinates.latitude === coordinates.latitude &&
       busCoordinates.longitude === coordinates.longitude;
-
     return (
       <div className="status-line">
         {hasNextStop && (
@@ -82,14 +81,15 @@ export const SingleStationInfo = ({
             className="line"
             style={{
               width: "10px",
-              height: "70px", // adjust the height of the line as needed
+              top:"35px",
+              height: "70px",
               backgroundColor: !currentVehicle
                 ? "#aeb0af"
                 : currentVehicle.congestion_level.level === 1
-                ? "green"
+                ? "#88c36c"
                 : currentVehicle.congestion_level.level === 2
-                ? "orange"
-                : "red",
+                ? "#fced83"
+                : "#ff7070",
               position: "relative",
               zIndex: 1,
             }}></div>
@@ -97,17 +97,16 @@ export const SingleStationInfo = ({
         <div
           className={`dot ${currentVehicle && isBusOnStop ? "pulse" : ""}`}
           style={{
-            width: "8px",
-            height: "8px",
+            width: "10px",
+            height: "10px",
             backgroundColor: currentVehicle ? "white" : "#dbdcdc",
             position: "relative",
             borderRadius: "100%",
-            top: "50%",
-            bottom: "50%",
-            transform: "translate(-113.8%)",
+            top: hasNextStop? "50%":"30px",
+            bottom: hasNextStop? "50%":"",
+            transform: hasNextStop?"translate(-100%)":"",
             zIndex: 2,
           }}>
-          {/* {[stopCoordinates, stopNo]} */}
         </div>
       </div>
     );
@@ -145,7 +144,8 @@ export const SingleStationInfo = ({
     <div className="stop-list w-96">
       {selectedTrip &&
         selectedTrip.stop_times.map((stop, index) => {
-          const hasNextStop = index <= selectedTrip.stop_times.length - 1;
+          const hasNextStop = index < selectedTrip.stop_times.length - 1;
+          const isLastStop = index === selectedTrip.stop_times.length;
           const stopUpdate = tripUpdate
             ? tripUpdate.find(
                 (update) => update.stopSequence === stop.stop_sequence
@@ -171,6 +171,7 @@ export const SingleStationInfo = ({
               <div className="moving-component">
                 <Dot
                   coordinates={[stopCoordinates[index], stopNo]}
+                  isLastStop={isLastStop}
                   hasNextStop={hasNextStop}
                   className="stop-dot"
                 />
