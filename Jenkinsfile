@@ -34,7 +34,7 @@ pipeline {
                         -Dsonar.projectVersion=1.0 \\
                         -Dsonar.sources=backend/src,frontend/src,lstmModel/src \\
                         -Dsonar.tests=backend/test,lstmModel/test \\
-                        -Dsonar.inclusions=backend/test/**/*.test.js,backend/test/gtfs-real-time/**/*.test.js,backend/test/Util/**/*.test.js,backend/test/Database/**/*.test.js,
+                        -Dsonar.inclusions=backend/test/**/*.test.js,backend/test/gtfs-real-time/**/*.test.js,backend/test/Util/**/*.test.js,backend/test/Database/**/*.test.js \\
                         -Dsonar.sourceEncoding=UTF-8
                         """
                     }
