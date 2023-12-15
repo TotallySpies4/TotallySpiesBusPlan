@@ -1,7 +1,9 @@
 pipeline {
     agent any
+    def dockerhub
     tools{
         jdk 'java11'
+        nodejs 'node18'
     }
     stages {
         stage('Build') {
@@ -26,6 +28,7 @@ pipeline {
                         -Dsonar.projectVersion=1.0 \\
                         -Dsonar.sources=backend/src,frontend/src,lstmModel/src \\
                         -Dsonar.tests=backend/test,lstmModel/test \\
+                        -Dsonar.inclusions=backend/test/**/*.test.js,backend/test/gtfs-real-time/**/*.test.js,backend/test/Util/**/*.test.js,backend/test/Database/**/*.test.js,
                         -Dsonar.sourceEncoding=UTF-8
                         """
                     }
@@ -34,20 +37,24 @@ pipeline {
         }
         stage('Build Docker Image') {
             steps {
-                script {
-                    withDockerRegistry([credentialsId: 'docker_hub', url: 'https://index.docker.io/v1/']) {
-                        sh 'docker build -t khanhlinh02/app:latest . '
-                    }
-                }
+                dockerhub = docker.build("siri0000/totallydockerhub")
             }
         }
         stage('Push to Docker Hub') {
             steps {
                 script {
-                    withDockerRegistry([credentialsId: 'docker_hub', url: 'https://index.docker.io/v1/']) {
-                        sh 'docker push khanhlinh02/app:latest'
+                    withDockerRegistry('https://registry.hub.docker.com', 'dockerhub') {
+                        dockerhub.push("${env.BUILD_NUMBER}")
                     }
                 }
+            }
+        }
+        stage('Trigger ManifestUpdate') {
+            steps {
+                echo 'Triggering ManifestUpdate'
+                build job: 'ManifestUpdate', parameters: [
+                    string(name: 'DOCKERTAG', value: env.BUILD_NUMBER)
+                ]
             }
         }
         stage('Builds to S3') {
