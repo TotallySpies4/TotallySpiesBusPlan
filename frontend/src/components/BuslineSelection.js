@@ -88,7 +88,7 @@ export const BuslineSelection = ({
       <Select value={selectedOption}
         options={busOptions}
         onChange={handleBusSelection}
-        isSearchable
+        isSearchable 
         placeholder="-Choose a bus line-"
         // className="w-full-width"
         styles={customStyles}

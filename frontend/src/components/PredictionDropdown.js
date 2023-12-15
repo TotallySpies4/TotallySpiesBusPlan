@@ -42,6 +42,7 @@ export const PredictionDropDown = ({ selectedBusline, selectedCity, setPredictio
         <Select
             name="time-options"
             type="button"
+            isSearchable ={false}
             isDisabled={isButtonDisabled}
             placeholder="now"
             className={`rounded-full text-center py-2 ${customStyles}`}

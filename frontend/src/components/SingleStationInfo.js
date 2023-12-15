@@ -8,7 +8,6 @@ export const SingleStationInfo = ({
   setSelectedCity,
   currentVehicle,
 }) => {
-
   // Set timezone
   const cityToTimeZone = {
     Amsterdam: "Europe/Amsterdam",
@@ -43,6 +42,12 @@ export const SingleStationInfo = ({
     }
   };
 
+  const stopNo = selectedTrip
+    ? selectedTrip.stop_times.map((stop) => ({
+        stopNo: stop.stop_sequence,
+      }))
+    : [];
+
   const stopCoordinates = useMemo(
     () =>
       selectedTrip
@@ -53,18 +58,10 @@ export const SingleStationInfo = ({
         : [],
     [selectedTrip]
   );
-
-  const stopNo = selectedTrip? selectedTrip.stop_times.map((stop) => ({
-      stopNo: stop.stop_sequence,
-    }))
-  : [];
-
   const busCoordinates = useMemo(() => {
-    return (
-      selectedTrip &&
+    return selectedTrip &&
       selectedTrip.vehiclepositions &&
       selectedTrip.vehiclepositions.current_position
-    )
       ? {
           latitude: selectedTrip.vehiclepositions.current_position.latitude,
           longitude: selectedTrip.vehiclepositions.current_position.longitude,
@@ -72,49 +69,83 @@ export const SingleStationInfo = ({
       : null;
   }, [selectedTrip]);
 
-  const Dot = ({ stopCoordinates, coordinates, stopNo }) => (
-    <div className="dot-container">
-    <div
-      className="dot"
-      style={{
-        width: "8px",
-        height: "8px",
-        backgroundColor: currentVehicle ? "blue" : "grey",
-        borderRadius: "100%",
-        marginRight: "10px",
-      }}
-    >
-      {[stopCoordinates,stopNo]}
-    </div>
-    {/* <div className="vertical-line" /> */}
-  </div>
-  );
+  const Dot = ({ stopCoordinates, coordinates, stopNo, hasNextStop }) => {
+    const isBusOnStop =
+      busCoordinates &&
+      busCoordinates.latitude === coordinates.latitude &&
+      busCoordinates.longitude === coordinates.longitude;
 
-const Bus = ({ index, coordinates, busCoordinates, icon }) => {
+    return (
+      <div className="status-line">
+        {hasNextStop && (
+          <div
+            className="line"
+            style={{
+              width: "10px",
+              height: "70px", // adjust the height of the line as needed
+              backgroundColor: !currentVehicle
+                ? "#aeb0af"
+                : currentVehicle.congestion_level.level === 1
+                ? "green"
+                : currentVehicle.congestion_level.level === 2
+                ? "orange"
+                : "red",
+              position: "relative",
+              zIndex: 1,
+            }}></div>
+        )}
+        <div
+          className={`dot ${currentVehicle && isBusOnStop ? "pulse" : ""}`}
+          style={{
+            width: "8px",
+            height: "8px",
+            backgroundColor: currentVehicle ? "white" : "#dbdcdc",
+            position: "relative",
+            borderRadius: "100%",
+            top: "50%",
+            bottom: "50%",
+            transform: "translate(-113.8%)",
+            zIndex: 2,
+          }}>
+          {/* {[stopCoordinates, stopNo]} */}
+        </div>
+      </div>
+    );
+  };
 
-const isVisible =
-  busCoordinates !== null &&
-  busCoordinates.latitude === stopCoordinates[index].latitude &&
-  busCoordinates.longitude === stopCoordinates[index].longitude;
-  return isVisible ? (
-    <div
-      style={{
-        position: "absolute",
-//        left: ${coordinates.longitude * 20}px, // Adjust as needed for visualization
-//        top: ${coordinates.latitude * 20}px, // Adjust as needed for visualization
-        width: "10px",// Set your desired width
-        height: "10px", // Set your desired height
-        backgroundColor: "red", // Set your desired dot color
-        borderRadius: "100%",
-     }}
-    />
-  ) : null;
-};
+  
+
+  // const busStopNo = selectedTrip
+  // ? selectedTrip.stop_times.map((stop) => ({
+  //     stopNo: stop.stop_sequence,
+  //   }))
+  // : [];
+
+  // const Bus = ({ coordinates, busCoordinates }) => {
+  //   const isVisible =
+  //     busCoordinates !== null &&
+  //     busCoordinates.latitude === coordinates.latitude &&
+  //     busCoordinates.longitude === coordinates.longitude;
+  //   return isVisible ? (
+  //     <div
+  //       className="bus"
+  //       // style={{
+  //       //   //        left: ${coordinates.longitude * 20}px, // Adjust as needed for visualization
+  //       //   //        top: ${coordinates.latitude * 20}px, // Adjust as needed for visualization
+  //       //   width: "10px", // Set your desired width
+  //       //   height: "10px", // Set your desired height
+  //       //   backgroundColor: "red", // Set your desired dot color
+  //       //   borderRadius: "100%",
+  //       // }}
+  //     />
+  //   ) : null;
+  // };
 
   return (
     <div className="stop-list w-96">
       {selectedTrip &&
         selectedTrip.stop_times.map((stop, index) => {
+          const hasNextStop = index <= selectedTrip.stop_times.length - 1;
           const stopUpdate = tripUpdate
             ? tripUpdate.find(
                 (update) => update.stopSequence === stop.stop_sequence
@@ -136,36 +167,42 @@ const isVisible =
             : "On time";
 
           return (
-            <div key={index} className="stop-item">
-             <Dot coordinates={[stopCoordinates[index], stopNo]} className = "stop-dot" />
-
-             <Bus
-             index={index}
-               coordinates={stopCoordinates[index]}
-               busCoordinates={busCoordinates}
-             />
-              <div className="stop-info">
-
-                <div className="stop-item-left">
-                  <div className="stop-name">{stop.stop_name}</div>
-                  <div
-                    className={`delay-info ${
-                      isDelayed ? "delayed" : "ontime"
-                    } ${!currentVehicle ? "not-operating" : ""}`}>
-                    {!currentVehicle?"Currently not in operation":delayStr}
+            <div key={index} className="single-info">
+              <div className="moving-component">
+                <Dot
+                  coordinates={[stopCoordinates[index], stopNo]}
+                  hasNextStop={hasNextStop}
+                  className="stop-dot"
+                />
+                {/* <Bus
+                  coordinates={stopCoordinates[index]}
+                  busCoordinates={busCoordinates}
+                /> */}
+              </div>
+              <div key={index} className="stop-item">
+                <div className="stop-info">
+                  <div className="stop-item-left">
+                    <div className="stop-name">{stop.stop_name}</div>
+                    <div
+                      className={`delay-info ${
+                        isDelayed ? "delayed" : "ontime"
+                      } ${!currentVehicle ? "not-operating" : ""}`}>
+                      {!currentVehicle
+                        ? "Currently not in operation"
+                        : delayStr}
+                    </div>
                   </div>
-                </div>
-
-                <div className="arrival-info">
-                  <div
-                    className={`scheduled-time ${
-                      isDelayed ? "strike-through" : "ontime"
-                    } ${!currentVehicle ? "not-operating" : ""}`}>
-                    {scheduledTimeStr}
+                  <div className="arrival-info">
+                    <div
+                      className={`scheduled-time ${
+                        isDelayed ? "strike-through" : "ontime"
+                      } ${!currentVehicle ? "not-operating" : ""}`}>
+                      {scheduledTimeStr}
+                    </div>
+                    {isDelayed && (
+                      <div className="actual-time">{actualTimeStr}</div>
+                    )}
                   </div>
-                  {isDelayed && (
-                    <div className="actual-time">{actualTimeStr}</div>
-                  )}
                 </div>
               </div>
             </div>
@@ -175,4 +212,4 @@ const isVisible =
   );
 };
 
-export default SingleStationInfo; 
+export default SingleStationInfo;

@@ -32,8 +32,15 @@ function Map({ selectedTrip, congestionShape, currentVehicle, selectedCity, pred
     handleCityChange();
   }, [selectedCity])
 
-const customIcon = new L.icon({
+const stopIcon = new L.icon({
   iconUrl: "/icon/bus.png",
+  iconSize: [20, 20],
+  iconAnchor: [10, 10],
+  popupAnchor: [0, -10],
+})
+
+const busIcon = new L.icon({
+  iconUrl: "/icon/busLocation.png",
   iconSize: [20, 20],
   iconAnchor: [10, 10],
   popupAnchor: [0, -10],
@@ -82,7 +89,7 @@ const customIcon = new L.icon({
               shape.shape_pt_lat,
               shape.shape_pt_lon,
             ])}
-            color={!currentVehicle ? "#838383" : "#3b82f6"}
+            color={!currentVehicle ? "#838383" : "#4FB453"}
             />
         )}
 
@@ -98,7 +105,7 @@ const customIcon = new L.icon({
             <Marker
               key={index}
               position={[stop.location.latitude, stop.location.longitude]}
-              icon={customIcon}>
+              icon={stopIcon}>
               <Popup>
                 <strong className="text-blue-500">{stop.stop_name}</strong>
                 <br /> <strong>Arrival Time: </strong> {stop.arrival_time},
@@ -110,6 +117,7 @@ const customIcon = new L.icon({
         {/* Drawing vehicle position */}
         {currentVehicle && (
           <Marker
+          icon={busIcon}
             position={[
               currentVehicle.current_position.latitude,
               currentVehicle.current_position.longitude,

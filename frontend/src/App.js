@@ -17,6 +17,7 @@ const App = () => {
   const [predictionTime, setPredictionTime] = useState("now");
   const [segmentSpeedPrediction, setSegmentSpeedPrediction] = useState(null);
   const [tripUpdate, setTripUpdate] = useState(null);
+  const [totalStops, setTotalStops] = useState(null);
 
   useEffect(() => {
     console.log("SelectedBusID in App: " + selectedTrip);
@@ -79,7 +80,9 @@ const App = () => {
   setCongestionShape(busLineDetail.payload.congestionShape);
   setSegmentSpeedPrediction(busLineDetail.payload.segmentSpeedPrediction);
   setTripUpdate(busLineDetail.payload.updateStoptime)
-
+  const totalStops = busLineDetail.payload.trip.stop_times.length;
+  setTripUpdate(busLineDetail.payload.updateStoptime);
+  setTotalStops(totalStops);
   } catch (error) {
   console.error("Error parsing the incoming data:", error);
   }
@@ -119,6 +122,7 @@ const App = () => {
         setSelectedCity={setSelectedCity}
         currentVehicle={currentVehicle}
         tripUpdate={tripUpdate}
+        totalStops={totalStops}
       />
 
       <div className="prediction absolute top-2 transform -translate-x-1/2 flex flex-row items-center space-x-4">
