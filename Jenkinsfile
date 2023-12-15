@@ -23,9 +23,9 @@ pipeline {
                 script {
                     withSonarQubeEnv('Sonar') {
                         sh 'echo $sonar_scanner'
+                        JDK_JAVA_OPTIONS = '--add-opens java.base/java.util=ALL-UNNAMED --add-opens java.base/java.lang.reflect=ALL-UNNAMED --add-opens java.base/java.text=ALL-UNNAMED --add-opens java.desktop/java.awt.font=ALL-UNNAMED' \\
                         sh """
                         ${env.sonar_scanner} \\
-                        JDK_JAVA_OPTIONS = '--add-opens java.base/java.util=ALL-UNNAMED --add-opens java.base/java.lang.reflect=ALL-UNNAMED --add-opens java.base/java.text=ALL-UNNAMED --add-opens java.desktop/java.awt.font=ALL-UNNAMED' \\
                         -Dsonar.projectKey=totallyspies \\
                         -Dsonar.projectName=totallyspies \\
                         -Dsonar.projectVersion=1.0 \\
