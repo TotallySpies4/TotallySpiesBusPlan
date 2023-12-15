@@ -40,24 +40,16 @@ pipeline {
                 }
             }
         }
-        stage('Build Docker Image') {
-            steps {
-                script {
-                    // Baut das Docker-Image und gibt das Image-Objekt zurück
-                    def builtImage = docker.build("${IMAGE_NAME}:${env.BUILD_NUMBER}")
-                }
-            }
-        }
-        stage('Push to Docker Hub') {
-            steps {
-                script {
-                    withDockerRegistry(url: 'https://registry.hub.docker.com', credentialsId: 'dockerhubCredentials') {
-                        // Push das gebaute Image zu Docker Hub
-                        docker.image("${IMAGE_NAME}:${env.BUILD_NUMBER}").push()
+        stage('Build and Push Docker Images with Docker Compose') {
+                    steps {
+                        script {
+                            withDockerRegistry(url: 'https://registry.hub.docker.com', credentialsId: 'dockerhub') {
+                            sh 'docker-compose build'
+                            sh 'docker-compose push'
+                            }
+                        }
                     }
                 }
-            }
-        }
         stage('Trigger ManifestUpdate') {
             steps {
                 echo 'Triggering ManifestUpdate'
