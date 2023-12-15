@@ -64,7 +64,7 @@ pipeline {
 
                         // Schritt 3: ZIP-Archiv zu S3 hochladen
                         s3Upload(
-                            bucket: 'Ihr-S3-Bucket-Name',
+                            bucket: 'totally-bucket',
                             file: "${WORKSPACE}/build_archive.zip",
                             path: "builds/totally-spies/${BRANCH_NAME}/${BUILD_NUMBER}/build_archive.zip"
                         )
