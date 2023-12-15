@@ -1,56 +1,72 @@
 pipeline {
-    agent any
-    tools{
-        jdk 'java11'
-    }
-    stages {
-        stage('Build') {
-            steps {
-                sh 'java -version'
-            }
+    pipeline {
+        agent any
+
+        tools {
+            jdk 'java11'
+            nodejs 'node18'
         }
-        stage('Checkout') {
-            steps {
-                checkout scm
-            }
+
+        environment {
+            // Definieren Sie die Variable für den Docker-Image-Name
+            IMAGE_NAME = "siri0000/totallydockerhub"
         }
-        stage('SonarQube Analysis') {
-            steps {
-                script {
-                    withSonarQubeEnv('Sonar') {
-                        sh 'echo $sonar_scanner'
-                        sh """
-                        ${env.sonar_scanner} \\
-                        -Dsonar.projectKey=totallyspies \\
-                        -Dsonar.projectName=totallyspies \\
-                        -Dsonar.projectVersion=1.0 \\
-                        -Dsonar.sources=backend/src,frontend/src,lstmModel/src \\
-                        -Dsonar.tests=backend/test,lstmModel/test \\
-                        -Dsonar.sourceEncoding=UTF-8
-                        -Dsonar.properties=sonar-project.properties
-                        """
+
+        stages {
+            stage('Build') {
+                steps {
+                    sh 'java -version'
+                }
+            }
+            stage('Checkout') {
+                steps {
+                    checkout scm
+                }
+            }
+            stage('SonarQube Analysis') {
+                steps {
+                    script {
+                        withSonarQubeEnv('Sonar') {
+                            sh 'echo $sonar_scanner'
+                            sh """
+                            ${env.sonar_scanner} \\
+                            -Dsonar.projectKey=totallyspies \\
+                            -Dsonar.projectName=totallyspies \\
+                            -Dsonar.projectVersion=1.0 \\
+                            -Dsonar.sources=backend/src,frontend/src,lstmModel/src \\
+                            -Dsonar.tests=backend/test,backend/test/UnitTest/Database,backend/test/UnitTest/gtfs-real-time,backend/test/UnitTest/Util,lstmModel/test \\
+                            -Dsonar.sourceEncoding=UTF-8
+                            """
+                        }
                     }
                 }
             }
-        }
-        stage('Build Docker Image') {
-            steps {
-                script {
-                    withDockerRegistry([credentialsId: 'docker_hub', url: 'https://index.docker.io/v1/']) {
-                        sh 'docker build -t khanhlinh02/app:latest . '
+            stage('Build Docker Image') {
+                steps {
+                    script {
+                        // Baut das Docker-Image und gibt das Image-Objekt zurück
+                        def builtImage = docker.build("${IMAGE_NAME}:${env.BUILD_NUMBER}")
                     }
                 }
             }
-        }
-        stage('Push to Docker Hub') {
-            steps {
-                script {
-                    withDockerRegistry([credentialsId: 'docker_hub', url: 'https://index.docker.io/v1/']) {
-                        sh 'docker push khanhlinh02/app:latest'
+            stage('Push to Docker Hub') {
+                steps {
+                    script {
+                        withDockerRegistry(url: 'https://registry.hub.docker.com', credentialsId: 'dockerhubCredentials') {
+                            // Push das gebaute Image zu Docker Hub
+                            docker.image("${IMAGE_NAME}:${env.BUILD_NUMBER}").push()
+                        }
                     }
                 }
             }
-        }
+            stage('Trigger ManifestUpdate') {
+                steps {
+                    echo 'Triggering ManifestUpdate'
+                    build job: 'ManifestUpdate', parameters: [
+                        string(name: 'DOCKERTAG', value: "${env.BUILD_NUMBER}")
+                    ]
+                }
+            }
         stage('Builds to S3') {
             steps {
                 script {
