@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment {
-        JAVA_HOME = '/usr/lib/jvm/jre-1.8.0-openjdk'
+        JAVA_HOME = '/usr/lib/jvm/jre-11-openjdk'
         PATH = "$JAVA_HOME/bin:$PATH"
     }
     stages {
