@@ -1,8 +1,8 @@
 pipeline {
     agent any
     environment {
-        JAVA_HOME = '/usr/lib/jvm/jre-11-openjdk' //
-        PATH = "$JAVA_HOME/bin:$PATH" //
+        JAVA_HOME = '/usr/lib/jvm/jre-11-openjdk' \\
+        PATH = "$JAVA_HOME/bin:$PATH" \\
         JAVA_OPTS = "-Dsonar.javaHome=${env.JAVA_HOME}
     }
     tools{
