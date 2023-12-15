@@ -3,6 +3,7 @@ pipeline {
     environment {
         JAVA_HOME = '/usr/lib/jvm/jre-11-openjdk'
         PATH = "$JAVA_HOME/bin:$PATH"
+        JDK_JAVA_OPTIONS = '--add-opens java.base/java.util=ALL-UNNAMED --add-opens java.base/java.lang.reflect=ALL-UNNAMED --add-opens java.base/java.text=ALL-UNNAMED --add-opens java.desktop/java.awt.font=ALL-UNNAMED'
     }
     stages {
         stage('Build') {
