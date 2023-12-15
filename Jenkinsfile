@@ -32,8 +32,8 @@ pipeline {
                         -Dsonar.projectKey=totallyspies \\
                         -Dsonar.projectName=totallyspies \\
                         -Dsonar.projectVersion=1.0 \\
-                        -Dsonar.sources=backend/src,frontend/src,backend/test/Database/lstmModel/src \\
-                        -Dsonar.tests=backend/test,backend/test/gtfs-real-time,lstmModel/test \\
+                        -Dsonar.sources=backend/src,frontend/src,lstmModel/src \\
+                        -Dsonar.tests=backend/test,backend/test/gtfs-real-time,backend/test/Database,lstmModel/test \\
                         -Dsonar.sourceEncoding=UTF-8
                         """
                     }
