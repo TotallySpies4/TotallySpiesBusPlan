@@ -3,6 +3,7 @@ pipeline {
     environment {
         JAVA_HOME = '/usr/lib/jvm/jre-11-openjdk'
         PATH = "$JAVA_HOME/bin:$PATH"
+        JAVA_OPTS = "-Dsonar.javaHome=${env.JAVA_HOME}
     }
     tools{
         jdk 'java11'
@@ -23,7 +24,6 @@ pipeline {
                 script {
                     withSonarQubeEnv('Sonar') {
                         sh 'echo $sonar_scanner'
-                        JAVA_HOME = '/usr/lib/jvm/jre-11-openjdk'
                         JDK_JAVA_OPTIONS = '--add-opens java.base/java.util=ALL-UNNAMED --add-opens java.base/java.lang.reflect=ALL-UNNAMED --add-opens java.base/java.text=ALL-UNNAMED --add-opens java.desktop/java.awt.font=ALL-UNNAMED'
                         sh """
                         ${env.sonar_scanner} \\
