@@ -51,26 +51,28 @@ pipeline {
                 }
             }
         }
+        stage('Builds to S3') {
+            steps {
+                script {
+                        // Define the build directory outside any step
+                                            def buildDir = "/var/lib/jenkins/jobs/'totally spies'/branches/${BRANCH_NAME}/builds/${BUILD_NUMBER}/"
+
+                                            // Upload the build archive to S3 (customize bucket and file details)
+                                            s3Upload(
+                                                source: "${buildDir}/build_archive.zip",
+                                                bucket: 'totally-bucket
+                                                key: "builds/${BRANCH_NAME}/${BUILD_NUMBER}/build_archive.zip",
+                                                acl: 'private'
+                                            )
+                                            sh "rm ${WORKSPACE}/build_archive.zip"
+                }
+            }
+        }
 
     }
     post {
         always {
             echo 'Prozess abgeschlossen.'
-            // Schritt 1: Pfad zum Build-Verzeichnis generieren
-                        def buildDir = "/var/lib/jenkins/jobs/'totally spies'/branches/${BRANCH_NAME}/builds/${BUILD_NUMBER}/"
-
-                        // Schritt 2: Build-Verzeichnis in eine ZIP-Datei komprimieren
-                        sh "cd ${buildDir} && zip -r ${WORKSPACE}/build_archive.zip *"
-
-                        // Schritt 3: ZIP-Archiv zu S3 hochladen
-                        s3Upload(
-                            bucket: 'totally-bucket',
-                            file: "${WORKSPACE}/build_archive.zip",
-                            path: "builds/totally-spies/${BRANCH_NAME}/${BUILD_NUMBER}/build_archive.zip"
-                        )
-
-                        // Optional: ZIP-Archiv löschen, um Speicherplatz freizugeben
-                        sh "rm ${WORKSPACE}/build_archive.zip"
         }
     }
 }
