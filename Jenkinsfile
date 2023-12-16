@@ -23,10 +23,12 @@ pipeline {
             }
         }
         stage('Test') {
-             dir('backend') {
-                 sh 'npm install'
-                 sh 'npm run test'
-             }
+             steps {
+                     dir('backend') {
+                         sh 'npm install'
+                         sh 'npm run test'
+                     }
+                 }
         }
         stage('SonarQube Analysis') {
             steps {
