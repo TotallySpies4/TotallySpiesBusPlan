@@ -33,7 +33,7 @@ export class StockholmVehicleDataProcessor extends IVehicleDataProcessor {
 
         console.log("existingtrip Id:", existingTrip.trip_id)
         console.log("existingTrip objID", existingTrip._id)
-        const congestionLevelObject = await congestionLevelStockholm(
+        const congestionLevelObject = congestionLevelStockholm(
             existingTrip._id,
             vehicle.vehicle.position.speed,
             vehicle.vehicle.position.latitude,

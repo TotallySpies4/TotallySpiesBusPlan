@@ -2,7 +2,7 @@ import {Kafka} from "kafkajs";
 import mongoose from "mongoose";
 import {AmsterdamVehicleDataProcessor} from "./AmsterdamVehicleDataProcessor.js";
 import {StockholmVehicleDataProcessor} from "./StockholmVehicleDataProcessor.js";
-import {Route, Trip} from "../DBmodels/busline.js";
+import {Trip} from "../DBmodels/busline.js";
 import {TripUpdate} from "../DBmodels/tripUpdate.js";
 
 const kafka = new Kafka({

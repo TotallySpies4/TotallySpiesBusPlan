@@ -1,8 +1,6 @@
 import Map from "./components/CityMap.js";
 import React, { useEffect, useState } from "react";
 import {Sidebar} from "./components/Sidebar.js";
-import useFetch from "./hooks/useFetch.js";
-import { ReroutingButton } from "./components/ReroutingButton.js";
 import { PredictionDropDown } from "./components/PredictionDropdown.js";
 const App = () => {
   const url = "ws://localhost:4000";
@@ -99,9 +97,6 @@ const App = () => {
   ws.send(message);
   }
   };
-
-  //const {buses, selectedTrip ,ws, sendRequest} = useFetch("ws://localhost:4000");
-
   return (
     <div className="container">
       <Map
