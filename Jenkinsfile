@@ -23,7 +23,7 @@ pipeline {
             }
         }
         stage('Test') {
-             steps {
+             dir('backend') {
                  sh 'npm install'
                  sh 'npm run test'
              }
