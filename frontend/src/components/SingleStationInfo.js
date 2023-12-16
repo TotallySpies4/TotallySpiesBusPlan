@@ -7,6 +7,7 @@ export const SingleStationInfo = ({
   tripUpdate,
   setSelectedCity,
   currentVehicle,
+  predictionTime,
 }) => {
   // Set timezone
   const cityToTimeZone = {
@@ -42,12 +43,6 @@ export const SingleStationInfo = ({
     }
   };
 
-  const stopNo = selectedTrip
-    ? selectedTrip.stop_times.map((stop) => ({
-        stopNo: stop.stop_sequence,
-      }))
-    : [];
-
   const stopCoordinates = useMemo(
     () =>
       selectedTrip
@@ -58,94 +53,63 @@ export const SingleStationInfo = ({
         : [],
     [selectedTrip]
   );
-  const busCoordinates = useMemo(() => {
-    return selectedTrip &&
-      selectedTrip.vehiclepositions &&
-      selectedTrip.vehiclepositions.current_position
-      ? {
-          latitude: selectedTrip.vehiclepositions.current_position.latitude,
-          longitude: selectedTrip.vehiclepositions.current_position.longitude,
-        }
-      : null;
-  }, [selectedTrip]);
 
-  const Dot = ({ stopCoordinates, coordinates, stopNo, hasNextStop, isLastStop }) => {
-    const isBusOnStop =
-      busCoordinates &&
-      busCoordinates.latitude === coordinates.latitude &&
-      busCoordinates.longitude === coordinates.longitude;
+  const Dot = ({ coordinates, hasNextStop, isLastStop }) => {
     return (
-      <div className="status-line">
+      // Status line for displaying bus congestion level in the sidebar.
+      <div className="status-line" style={{ position: "relative" }}>
         {hasNextStop && (
           <div
             className="line"
             style={{
               width: "10px",
-              top:"35px",
-              height: "70px",
-              backgroundColor: !currentVehicle
+              top: "35px",
+              height: isLastStop ? "35px" : "70px",
+              backgroundColor: isLastStop
+                ? "transparent"
+                :!currentVehicle
                 ? "#aeb0af"
-                : currentVehicle.congestion_level.level === 1
+                :predictionTime === "now" || predictionTime !== "now"
+                ?"#2596FF"
+                : currentVehicle.congestion_level.level === 0
                 ? "#88c36c"
+                : currentVehicle.congestion_level.level === 1
+                ? "#f5b873"
                 : currentVehicle.congestion_level.level === 2
-                ? "#fced83"
-                : "#ff7070",
+                ? "#ff7070"
+                : "#88c36c",
               position: "relative",
-              zIndex: 1,
-            }}></div>
+              zIndex: 2,
+            }}
+          />
         )}
+
+        {/* Displaying bus stop on the status line */}
         <div
-          className={`dot ${currentVehicle && isBusOnStop ? "pulse" : ""}`}
+          className={`dot ${currentVehicle}`}
           style={{
             width: "10px",
             height: "10px",
-            backgroundColor: currentVehicle ? "white" : "#dbdcdc",
+            backgroundColor: currentVehicle ? "#ebf2aa" : "#dbdcdc",
             position: "relative",
             borderRadius: "100%",
-            top: hasNextStop? "50%":"30px",
-            bottom: hasNextStop? "50%":"",
-            transform: hasNextStop?"translate(-100%)":"",
-            zIndex: 2,
-          }}>
-        </div>
+            top: "50%",
+            bottom: "50%",
+            transform: "translate(-100%)",
+            zIndex: 3,
+            boxShadow: "2px 2px 5px rgba(0, 0, 0, 0.2)",
+          }}
+        />
       </div>
     );
   };
-
-  
-
-  // const busStopNo = selectedTrip
-  // ? selectedTrip.stop_times.map((stop) => ({
-  //     stopNo: stop.stop_sequence,
-  //   }))
-  // : [];
-
-  // const Bus = ({ coordinates, busCoordinates }) => {
-  //   const isVisible =
-  //     busCoordinates !== null &&
-  //     busCoordinates.latitude === coordinates.latitude &&
-  //     busCoordinates.longitude === coordinates.longitude;
-  //   return isVisible ? (
-  //     <div
-  //       className="bus"
-  //       // style={{
-  //       //   //        left: ${coordinates.longitude * 20}px, // Adjust as needed for visualization
-  //       //   //        top: ${coordinates.latitude * 20}px, // Adjust as needed for visualization
-  //       //   width: "10px", // Set your desired width
-  //       //   height: "10px", // Set your desired height
-  //       //   backgroundColor: "red", // Set your desired dot color
-  //       //   borderRadius: "100%",
-  //       // }}
-  //     />
-  //   ) : null;
-  // };
 
   return (
     <div className="stop-list w-96">
       {selectedTrip &&
         selectedTrip.stop_times.map((stop, index) => {
-          const hasNextStop = index < selectedTrip.stop_times.length - 1;
-          const isLastStop = index === selectedTrip.stop_times.length;
+          const hasNextStop = index <= selectedTrip.stop_times.length - 1;
+          const isLastStop = index === selectedTrip.stop_times.length - 1;
           const stopUpdate = tripUpdate
             ? tripUpdate.find(
                 (update) => update.stopSequence === stop.stop_sequence
@@ -170,15 +134,11 @@ export const SingleStationInfo = ({
             <div key={index} className="single-info">
               <div className="moving-component">
                 <Dot
-                  coordinates={[stopCoordinates[index], stopNo]}
+                  coordinates={stopCoordinates[index]}
                   isLastStop={isLastStop}
                   hasNextStop={hasNextStop}
                   className="stop-dot"
                 />
-                {/* <Bus
-                  coordinates={stopCoordinates[index]}
-                  busCoordinates={busCoordinates}
-                /> */}
               </div>
               <div key={index} className="stop-item">
                 <div className="stop-info">

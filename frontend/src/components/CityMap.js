@@ -73,6 +73,7 @@ const busIcon = new L.icon({
   return (
     <div className="map">
       <MapContainer
+        key={mapCenter.toString()}
         center={mapCenter}
         zoom={13}
         style={{ height: "100vh", width: "100vw" }}
@@ -89,7 +90,7 @@ const busIcon = new L.icon({
               shape.shape_pt_lat,
               shape.shape_pt_lon,
             ])}
-            color={!currentVehicle ? "#838383" : "#88c36c"}
+            color={currentVehicle ? "#88c36c" : "#838383"}
             />
         )}
 
@@ -147,11 +148,11 @@ function getCongestionColor(level) {
     case 0:
       return "#88c36c";
     case 1:
-      return " #fced83";
+      return "#f5b873";
     case 2:
-      return "#B44F4F";
-    default:
       return "#ff7070";
+    default:
+      return "#838383";
   }
 }
 
