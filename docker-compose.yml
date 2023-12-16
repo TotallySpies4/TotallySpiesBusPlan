@@ -1,14 +1,15 @@
 version: '3'
 services:
   frontend:
-    build: ./frontend
+    build: ./
+    image: siri0000/frontend_image:latest
     ports:
       - "3000:80"
     volumes:
       - ./frontend:/app
   backend:
     build: ./backend
-    image: backend_image
+    image: siri0000/backend_image:latest
     ports:
       - "4000:4000"
     environment:
@@ -29,7 +30,7 @@ services:
 
   lstm-model:
     build: ./lstmModel
-    image: lstm_model_image
+    image: siri0000/lstm_model_image:latest
     ports:
       - "5050:5050"
     volumes:

@@ -1,5 +1,4 @@
 import React, { useMemo } from "react";
-import { formatTime } from "../utils/formatTime.js";
 import moment from "moment-timezone";
 
 export const SingleStationInfo = ({
