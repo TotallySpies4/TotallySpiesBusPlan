@@ -45,6 +45,7 @@ pipeline {
                         script {
                             withDockerRegistry(url: 'https://registry.hub.docker.com', credentialsId: 'dockerhub') {
                             sh 'docker-compose build'
+                            sh 'echo $DOCKER_HUB_PASSWORD | docker login -u $DOCKER_HUB_USERNAME --password-stdin'
                             sh 'docker-compose push'
                             }
                         }
