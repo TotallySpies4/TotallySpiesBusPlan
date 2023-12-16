@@ -44,8 +44,8 @@ pipeline {
                     steps {
                         script {
                             withDockerRegistry(url: 'https://registry.hub.docker.com', credentialsId: 'dockerhub') {
-                            sh 'docker build -t siri0000/frontend_image:latest'
-                            sh 'docker push siri0000/frontend_image:latest'
+                            sh 'docker-compose build'
+                            sh 'docker-compose push'
                             }
                         }
                     }
