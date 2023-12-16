@@ -69,7 +69,7 @@ export const SingleStationInfo = ({
                 ? "transparent"
                 :!currentVehicle
                 ? "#aeb0af"
-                :predictionTime === "now" || predictionTime !== "now"
+                :predictionTime !== "now"
                 ?"#2596FF"
                 : currentVehicle.congestion_level.level === 0
                 ? "#88c36c"
