@@ -22,6 +22,12 @@ pipeline {
                 checkout scm
             }
         }
+        stage('Test') {
+                    steps {
+                        sh 'npm install'
+                        sh 'npm run test'
+                    }
+                }
         stage('SonarQube Analysis') {
             steps {
                 script {
@@ -34,7 +40,8 @@ pipeline {
                         -Dsonar.projectVersion=1.0 \\
                         -Dsonar.sources=backend/src,frontend/src,lstmModel/src \\
                         -Dsonar.tests=backend/test,lstmModel/test \\
-                        -Dsonar.sourceEncoding=UTF-8
+                        -Dsonar.sourceEncoding=UTF-8\\
+                        -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
                         """
                     }
                 }
