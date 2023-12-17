@@ -20,8 +20,10 @@ function Map({ selectedTrip, congestionShape, currentVehicle, selectedCity, pred
   }, [selectedTrip, predictionTime,currentVehicle]);
 
   // Update map center based on the selected city
+
   const handleCityChange = () => {
     const mapInstance = mapRef.current;
+    console.log("fly to city")
     if (mapInstance != null) {
       let newCenter;
       if (selectedCity === "Stockholm") {
@@ -34,7 +36,7 @@ function Map({ selectedTrip, congestionShape, currentVehicle, selectedCity, pred
   };
 
   React.useEffect(() => {
-    // Handle initial city change
+    console.log("SelectedCity in Map: " + selectedCity);
     handleCityChange();
   }, [selectedCity])
 

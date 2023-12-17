@@ -105,6 +105,7 @@ const App = () => {
         currentVehicle={currentVehicle}
         predictionTime={predictionTime}
         segmentSpeedPrediction = {segmentSpeedPrediction}
+        selectedCity={selectedCity}
               />
       <Sidebar
         allroutes={allroutes}

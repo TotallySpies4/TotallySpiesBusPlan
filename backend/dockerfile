@@ -2,11 +2,11 @@ FROM node:18
 WORKDIR /app
 
 # Copy the wait-for-it script and start script
-COPY wait-for-it.sh start-script.sh /app/
+COPY wait-for-it.sh /app/wait-for-it.sh
 
 # Set permissions
 
-RUN chmod +x /app/wait-for-it.sh /app/start-script.sh
+RUN chmod +x /app/wait-for-it.sh
 
 
 # install dependencies
@@ -17,4 +17,4 @@ RUN npm install
 COPY . /app/
 
 # Use the start script as the entrypoint
-CMD ["/app/start-script.sh"]
+CMD ["node", "src/server.js"]

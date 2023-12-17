@@ -41,6 +41,7 @@ export const BuslineSelection = ({
   };
 
   if (selectedCity === "Amsterdam") {
+
     busOptions = allroutes.amsterdam.map((bus) => ({
       value: bus.route_short_name,
       label: (
