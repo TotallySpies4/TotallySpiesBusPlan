@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {
   MapContainer,
   TileLayer,
@@ -12,6 +12,7 @@ function Map({ selectedTrip, congestionShape, currentVehicle, selectedCity, pred
 
   //Set default map center to Amsterdam
   const [mapCenter, setMapCenter] = useState([52.3676, 4.9041]);
+  const mapRef = useRef(null);
   useEffect(() => {
     console.log("SelectedBusID in Map: " + selectedTrip);
     console.log("PredictionTime in Map was change: " + predictionTime)
@@ -20,10 +21,15 @@ function Map({ selectedTrip, congestionShape, currentVehicle, selectedCity, pred
 
   // Update map center based on the selected city
   const handleCityChange = () => {
-    if (selectedCity === "Stockholm") {
-      setMapCenter([59.3293, 18.0686]); // Set center for Stockholm
-    } else if (selectedCity === "Amsterdam") {
-      setMapCenter([52.3676, 4.9041]); // Reset center for Amsterdam
+    const mapInstance = mapRef.current;
+    if (mapInstance != null) {
+      let newCenter;
+      if (selectedCity === "Stockholm") {
+        newCenter = [59.3293, 18.0686];
+      } else if (selectedCity === "Amsterdam") {
+        newCenter = [52.3676, 4.9041];
+      }
+      mapInstance.flyTo(newCenter, mapInstance.getZoom());
     }
   };
 
@@ -73,8 +79,8 @@ const busIcon = new L.icon({
   return (
     <div className="map">
       <MapContainer
-        key={mapCenter.toString()}
-        center={mapCenter}
+          ref={mapRef}
+          center={[52.3676, 4.9041]}
         zoom={13}
         style={{ height: "100vh", width: "100vw" }}
         zoomControl={false}>
