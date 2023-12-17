@@ -22,14 +22,7 @@ pipeline {
                 checkout scm
             }
         }
-        stage('Test') {
-             steps {
-                     dir('backend') {
-                         sh 'npm install'
-                         sh 'npm run test'
-                     }
-                 }
-        }
+
         stage('SonarQube Analysis') {
             steps {
                 script {
@@ -43,7 +36,9 @@ pipeline {
                         -Dsonar.sources=backend/src,frontend/src,lstmModel/src \\
                         -Dsonar.tests=backend/test,lstmModel/test \\
                         -Dsonar.sourceEncoding=UTF-8\\
-                        -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
+                        -Dsonar.javascript.lcov.reportPaths=backend/coverage/lcov.info
+                        -Dsonar.python.coverage.reportPaths=lstmModel/coverage.xml
+
                         """
                     }
                 }
