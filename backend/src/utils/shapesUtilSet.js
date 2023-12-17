@@ -8,11 +8,12 @@ export async function getShapesBetweenStops(shapes, previousStop, currentStop) {
 
     let previousStopQuery = null;
     let currentStopQuery = null;
-
-    previousStopQuery = await StopTime.findOne({_id: previousStop._id});
-    currentStopQuery = await StopTime.findOne({_id: currentStop._id});
-    console.log("previousStopShape",previousStopQuery)
-    console.log("currentStopShape",currentStopQuery)
+    if(!previousStop || !currentStop) {
+        previousStopQuery = await StopTime.findOne({_id: previousStop._id});
+        currentStopQuery = await StopTime.findOne({_id: currentStop._id});
+        console.log("previousStopShape", previousStopQuery)
+        console.log("currentStopShape", currentStopQuery)
+    }
 
     if(!previousStopQuery || !currentStopQuery){
         previousStopQuery = await StopTime.findOne({stop_id: previousStop.stop_id});

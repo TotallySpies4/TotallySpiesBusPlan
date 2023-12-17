@@ -44,9 +44,10 @@ async function pollDatabaseForUpdates() {
             const busLineDetail = await getBusDetails(currentRouteId);
             // Vergleichen der aktuellen Details mit den letzten gespeicherten Details
             if (JSON.stringify(busLineDetail) !== JSON.stringify(lastBusLineDetail)) {
+                console.log('Sending updated bus line details to all clients');
                 wss.clients.forEach((client) => {
                     if (client.readyState === WebSocket.OPEN) {
-                        client.send(JSON.stringify({ type: 'BUS_LINE_UPDATE', payload: busLineDetail }));
+                        client.send(JSON.stringify({ type: 'BUS_LINE_DETAILS', payload: busLineDetail }));
                     }
                 });
                 lastBusLineDetail = busLineDetail; // Aktualisieren der gespeicherten Details
@@ -58,7 +59,7 @@ async function pollDatabaseForUpdates() {
 }
 
 // Regelmäßiges Polling der Datenbank in einem Intervall (z.B. alle 30 Sekunden)
-setInterval(pollDatabaseForUpdates, 30000);
+//setInterval(pollDatabaseForUpdates, 30000);
 
 server.listen(4000, () => {
     console.log('Server started on http://localhost:4000');
