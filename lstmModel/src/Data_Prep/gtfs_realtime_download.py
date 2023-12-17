@@ -7,13 +7,12 @@ import logging
 # Logging configuration
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
-# MongoDB client setup
-client = MongoClient('mongodb:27017')
-db = client.TotallySpiesBusPlan
-fs = GridFS(db)  # GridFS instance
-
 
 def download_data_for_date(date):
+    # MongoDB client setup
+    client = MongoClient('mongodb:27017')
+    db = client.TotallySpiesBusPlan
+    fs = GridFS(db)  # GridFS instance
     api_url = f"https://api.koda.trafiklab.se/KoDa/api/v2/gtfs-rt/sl/VehiclePositions?date={date}&key=gQpNjugJMEZZKu69pw3Sbz4PrLhZ0K_hVDGH5RAGUqk"
     logging.info(f"Downloading data for the date {date}")
     response = requests.get(api_url)
@@ -27,11 +26,4 @@ def download_data_for_date(date):
         logging.error(f"Error while downloading data for the date {date}. Status code: {response.status_code}")
         return None
 
-    # Download data for a range of dates
-
-    #if __name__ == "__main__":
-        # Download data for a range of dates
-        # start_date = datetime(2023, 1, 4)
-        # for i in range(7):
-        # date = (start_date + timedelta(days=i)).strftime("%Y-%m-%d")
-download_data_for_date("2023-12-11")
+#download_data_for_date("2023-12-10")

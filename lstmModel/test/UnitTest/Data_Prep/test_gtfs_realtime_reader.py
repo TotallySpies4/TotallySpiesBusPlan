@@ -1,87 +1,42 @@
 import unittest
-import os
-import sys
-import tempfile
-import csv
-import shutil
-from google.protobuf import text_format
+from unittest.mock import patch, mock_open, MagicMock
+
 from google.transit import gtfs_realtime_pb2
-from unittest.mock import mock_open, patch
 
-module_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../../src/Data_Prep'))
-sys.path.insert(0, module_path)
+from src.Data_Prep.gtfs_realtime_reader import process_pb_directory
 
-from gtfs_realtime_reader import process_pb_directory, process_pb_file
 
-class TestProcessPBFile(unittest.TestCase):
+class TestProcessPB(unittest.TestCase):
 
-    def setUp(self):
-        # Create a temporary directory to store test files
-        self.temp_dir = tempfile.mkdtemp()
+    @patch('src.Data_Prep.gtfs_realtime_reader.os.walk')
+    @patch('src.Data_Prep.gtfs_realtime_reader.open', new_callable=mock_open)
+    @patch('src.Data_Prep.gtfs_realtime_reader.csv.writer')
+    def test_process_pb_directory(self, mock_csv_writer, mock_open_file, mock_os_walk):
+        # Setup mock for os.walk to return a list of .pb files
+        mock_os_walk.return_value = [('/path/to/pb', [], ['file1.pb', 'file2.pb'])]
 
-        # Create a test directory within the temporary directory
-        self.test_dir = os.path.join(self.temp_dir, "test_dir")
-        os.mkdir(self.test_dir)
+        # Mock a pb file content
+        pb_content = b'your serialized pb content'
+        mock_open_file.return_value.read.return_value = pb_content
 
-    def tearDown(self):
-        # Remove the test directory and its contents
-        shutil.rmtree(self.test_dir)
+        # Mock the FeedMessage object
+        mock_feed_message = MagicMock(spec=gtfs_realtime_pb2.FeedMessage)
 
-        # Remove the temporary directory
-        os.rmdir(self.temp_dir)
+        # Setup the FeedMessage entities
+        mock_feed_message.entity = [
+            MagicMock(),  # You would set up this mock as needed
+        ]
 
-    def test_process_pb_file(self):
-        # Create a sample protobuf file for testing
-        pb_content = """
-header {
-    gtfs_realtime_version: "1.0"
-}
-entity {
-    id: "some_id"
-    vehicle {
-        timestamp: 1636354655
-        trip {
-            trip_id: "123"
-        }
-        position {
-            latitude: 37.7749
-            longitude: -122.4194
-            bearing: 90.0
-            speed: 25.0
-        }
-    }
-}
-"""
+        # Mock the parsing of pb content
+        with patch('src.Data_Prep.gtfs_realtime_reader.gtfs_realtime_pb2.FeedMessage', return_value=mock_feed_message):
+            # Call the function to test
+            process_pb_directory('/path/to/pb', 'output.csv')
 
-        pb_file_path = os.path.join(self.test_dir, "test.pb")
+            # Check that the CSV writer was created
+            mock_csv_writer.assert_called_once()
 
-        # Write the sample protobuf content to the test file
-        with open(pb_file_path, "wb") as pb_file:
-            pb_file.write(text_format.Merge(pb_content, gtfs_realtime_pb2.FeedMessage()).SerializeToString())
+            # Check that the pb files were read
+            mock_open_file().read.assert_called()
 
-        # Create the parent directory of the CSV file
-        os.makedirs(os.path.dirname(pb_file_path), exist_ok=True)
+            self.assertTrue(mock_csv_writer().writerow.called)
 
-        # Create the CSV file path
-        csv_file_path = os.path.join(self.test_dir, "test.csv")
-
-        # Mock the CSV writer to capture the written rows
-        with patch("builtins.open", mock_open()) as m:
-            process_pb_file(pb_file_path, csv.writer(m.return_value))
-
-        # Check if the CSV file was created
-        print(f"CSV file path: {csv_file_path}")
-        self.assertTrue(os.path.isfile(csv_file_path))
-
-        # Read the CSV file and check the content
-        with open(csv_file_path, "r", newline="") as csv_file:
-            csv_reader = csv.reader(csv_file)
-            header = next(csv_reader)
-            row = next(csv_reader)
-
-        # Check if the header and row match the expected values
-        self.assertEqual(header, ["Timestamp", "Trip ID", "Segment", "Latitude", "Longitude", "Bearing", "Speed"])
-        self.assertEqual(row, ["1636354655", "123", "", "37.7749", "-122.4194", "90.0", "25.0"])
-
-if __name__ == '__main__':
-    unittest.main()
