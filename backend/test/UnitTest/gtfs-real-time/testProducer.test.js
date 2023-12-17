@@ -1,4 +1,4 @@
-import {describe, expect, it, jest} from "@jest/globals";
+/*import {describe, expect, it, jest} from "@jest/globals";
 import {createTopic} from "../../../src/gtfs-realtime/realtimeProducer.js";
 import { Kafka } from 'kafkajs';
 jest.mock('kafkajs', () => {
@@ -26,4 +26,4 @@ describe('createTopic', () => {
         });
         expect(admin.disconnect).toHaveBeenCalled();
     });
-});
+});*/

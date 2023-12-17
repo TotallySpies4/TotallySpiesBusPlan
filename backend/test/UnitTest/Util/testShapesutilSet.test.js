@@ -1,5 +1,6 @@
 import { getShapesBetweenStops } from '../../../src/utils/shapesUtilSet.js';
 import { Shape, StopTime } from '../../../src/DBmodels/busline.js';
+import {beforeEach, describe, expect, it, jest} from "@jest/globals";
 
 // Mock the StopTime model
 jest.mock('../../../src/DBmodels/busline.js', () => ({

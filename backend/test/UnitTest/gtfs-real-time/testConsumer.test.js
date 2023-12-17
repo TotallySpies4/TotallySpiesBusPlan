@@ -1,4 +1,4 @@
-import { describe, it, jest } from "@jest/globals";
+import {beforeEach, describe, expect, it, jest} from "@jest/globals";
 import { setupConsumerForCity } from '../../../src/gtfs-realtime/realtimeConsumer.js';
 import { Kafka } from 'kafkajs';
 import mongoose from 'mongoose';
