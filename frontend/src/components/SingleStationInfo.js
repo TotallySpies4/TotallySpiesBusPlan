@@ -152,18 +152,18 @@ export const SingleStationInfo = ({
                         : delayStr}
                     </div>
                   </div>
-                  <div className="arrival-info">
-                    <div
-                      className={`scheduled-time ${
-                        isDelayed ? "strike-through" : "ontime"
-                      } ${!currentVehicle ? "not-operating" : ""}`}>
-                      {scheduledTimeStr}
-                    </div>
-                    {isDelayed && (
-                      <div className="actual-time">{actualTimeStr}</div>
-                    )}
-                  </div>
                 </div>
+                  <div className="arrival-info">
+                      <div
+                          className={`scheduled-time ${
+                              isDelayed ? "strike-through" : "ontime"
+                          } ${!currentVehicle ? "not-operating" : ""}`}>
+                          {scheduledTimeStr}
+                      </div>
+                      {isDelayed && (
+                          <div className="actual-time">{actualTimeStr}</div>
+                      )}
+                  </div>
               </div>
             </div>
           );
