@@ -23,26 +23,6 @@ code {
   overflow: hidden;
 }
 
-.BusButton {
-  background-color: #4caf50;
-  border: none;
-  color: white;
-  padding: 15px 32px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 16px;
-}
-
-.BusButton:hover {
-  background-color: #3e8e41;
-}
-
-.BusButton:active {
-  background-color: #3e8e41;
-  transform: translateY(4px);
-}
-
 .container {
   position: relative;
   display: flex;
@@ -61,9 +41,6 @@ code {
   height: 0 !important;
 }
 
-/* .css-b62m3t-container{
-width: 80%;
-} */
 @keyframes slideInFromRight {
   from {
     right: -100%;
@@ -248,37 +225,19 @@ width: 80%;
 }
 
 /* Status line component */
-
+/* 
 .stop-dot{
   position: absolute !important;
   width: 10px !important;
   height: 10px !important;
-  background-color: red;
   border-radius: 100% !important;
-}
+} */
 .status-line {
   display: flex;
   align-items: center;
 }
 
-  @keyframes moveBus {
-    from {
-      transform: translate(0, 0);
-    }
-    to {
-      transform: translate(100%, 100%);
-    }
-  }
-
-/* .bus {
-    position: absolute;
-    width: 10px;
-    height: 10px;
-    background-color: red;
-    border-radius: 50%;
-    animation: moveBus linear infinite;
-  }
-
+/* 
   @keyframes pulse {
     0% {
       box-shadow: 0 0 0 0px rgba(0, 0, 255, 0.5);
@@ -325,7 +284,48 @@ width: 80%;
 }
 
 
+/********** legend board **********/
 
+.legend-board{
+  height: 126px;
+  width: 145px;
+  bottom: 5px;
+  right: 5px;
+  position: absolute;
+  background-color: white;
+  border-radius: 16px;
+  padding:10px;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0px 5px 4px 0px rgba(0, 0, 0, 0.25);
+}
 
+.status{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.line{
+  width: 60px;
+  height: 10px;
+  margin-left: 10px;
+  border-radius: 16px;
+  align-self: center;
+}
+
+.title{
+  text-align: center;
+  width: 75px;
+  font-size: 16px;
+}
+
+b, strong {
+  font-weight: bold;
+  border-bottom-width: medium;
+}
 
 
