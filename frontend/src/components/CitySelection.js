@@ -54,7 +54,7 @@ export const CitySelection = ({ setSelectedCity }) => {
         options={cityOptions}
         value={selectedCity}
         onChange={handleChange}
-        isSearchable
+        isSearchable ={false}
         placeholder="-Select a city-"
         className="w-full-width"
         styles={customStyles}
