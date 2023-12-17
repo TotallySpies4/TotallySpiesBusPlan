@@ -1,6 +1,7 @@
 import { congestionLevel, congestionLevelStockholm, level } from '../../../src/utils/congestionLevel';
 import { calculateScheduledSpeedStockholm, realtimeAvgSpeedCalculator } from '../../../src/utils/speedCalculator';
 import { fetchAverageSpeed } from '../../../src/queryData/queryDbData';
+import {describe, it, jest} from "@jest/globals";
 
 // Mocking dependencies
 jest.mock('../../../src/utils/speedCalculator');

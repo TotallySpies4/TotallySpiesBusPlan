@@ -12,6 +12,7 @@ import { calculatorScheduledSpeedAmsterdam, calculatorScheduledSpeedStockholm } 
 import { getShapesBetweenStops } from "../../../src/utils/shapesUtilSet.js";
 import { agency } from "../../../src/utils/enum.js";
 import { populate } from 'mongoose';
+import {describe, expect, it, jest} from "@jest/globals";
 
 // Mock the necessary dependencies
 jest.mock("../../../src/DBmodels/busline.js");

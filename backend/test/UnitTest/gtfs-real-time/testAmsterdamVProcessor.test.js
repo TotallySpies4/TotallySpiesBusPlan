@@ -4,6 +4,7 @@ import { VehiclePositions } from '../../../src/DBmodels/vehiclepositions.js';
 import { Route } from '../../../src/DBmodels/busline.js';
 import { TripUpdate } from '../../../src/DBmodels/tripUpdate.js';
 import { congestionLevel } from "../../../src/utils/congestionLevel";
+import {beforeEach, describe, expect, it, jest} from "@jest/globals";
 
 // Mocking dependencies
 jest.mock('../../../src/DBmodels/vehiclepositions.js');

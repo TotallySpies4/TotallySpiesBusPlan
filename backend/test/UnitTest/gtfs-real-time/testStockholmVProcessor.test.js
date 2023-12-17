@@ -3,6 +3,7 @@ import { IVehicleDataProcessor } from '../../../src/gtfs-realtime/IVehicleDataPr
 import { VehiclePositions } from '../../../src/DBmodels/vehiclepositions.js';
 import { TripUpdate } from '../../../src/DBmodels/tripUpdate.js';
 import { congestionLevelStockholm } from '../../../src/utils/congestionLevel';
+import {beforeEach, describe, expect, it, jest} from "@jest/globals";
 
 // Mocking dependencies
 jest.mock('../../../src/DBmodels/vehiclepositions.js');
