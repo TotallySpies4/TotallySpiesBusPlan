@@ -120,7 +120,6 @@ const App = () => {
       <div className="prediction absolute top-2 transform -translate-x-1/2 flex flex-row items-center space-x-4">
 
         <PredictionDropDown
-          // isButtonDisabled = {isButtonDisabled}
           selectedCity={selectedCity}
           selectedBusline={selectedBusline}
           setPredictionTime={setPredictionTime}

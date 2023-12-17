@@ -225,34 +225,10 @@ code {
 }
 
 /* Status line component */
-/* 
-.stop-dot{
-  position: absolute !important;
-  width: 10px !important;
-  height: 10px !important;
-  border-radius: 100% !important;
-} */
 .status-line {
   display: flex;
   align-items: center;
 }
-
-/* 
-  @keyframes pulse {
-    0% {
-      box-shadow: 0 0 0 0px rgba(0, 0, 255, 0.5);
-    }
-    50% {
-      box-shadow: 0 0 0 10px rgba(0, 0, 255, 0);
-    }
-    100% {
-      box-shadow: 0 0 0 0px rgba(0, 0, 255, 0);
-    }
-  } */
-
-  /* .dot.pulse {
-    animation: pulse 1s infinite;
-  }   */
 
 /********** Prediction **********/
 .prediction{

@@ -12,9 +12,6 @@ export const Sidebar = ({
   setSelectedCity,
   currentVehicle, tripUpdate
 }) => {
-  // const handleCloseSidebar = () => {
-  //   closeSidebar();
-  // };
   const [isBuslineSelectionOpen, setIsBuslineSelectionOpen] = useState(false);
   const [showSingleStationInfo, setShowSingleStationInfo] = useState(false);
 const [totalStops, setTotalStops] = useState(null);
@@ -34,11 +31,6 @@ const [totalStops, setTotalStops] = useState(null);
     setIsBuslineSelectionOpen((prevState) => !prevState);
   };
 
-
-
-
-  // const sidebarHeight = selectedTrip  ? "h-3/4" : "h-fit";
-  // const sidebarTop = selectedTrip ? "top-12" : "top-1/2 transform -translate-y-1/2";
   const sidebarDividerShadow = showSingleStationInfo ? "shadow-bottom" : "";
 
   return (
