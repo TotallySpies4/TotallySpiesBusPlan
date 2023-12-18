@@ -116,6 +116,7 @@ const App = () => {
         setSelectedCity={setSelectedCity}
         currentVehicle={currentVehicle}
         tripUpdate={tripUpdate}
+        predictionTime={predictionTime}
       />
 
       <div className="prediction absolute -translate-x-1/2 top-2 flex space-x-4">

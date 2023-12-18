@@ -133,7 +133,7 @@ export const SingleStationInfo = ({
                       ? "#88c36c"
                       : currentVehicle.congestion_level.level === 1
                       ? "#f5b873"
-                      : currentVehicle.congestion_level.level === 2
+                      : currentVehicle.congestion_level.level === 2 || isDelayed
                       ? "#ff7070"
                       : "#88c36c"
                   }

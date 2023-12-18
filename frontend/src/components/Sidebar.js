@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import { CitySelection } from "./CitySelection.js";
 import { BuslineSelection } from "./BuslineSelection.js";
 import { SingleStationInfo } from "./SingleStationInfo.js";
@@ -10,11 +10,12 @@ export const Sidebar = ({
   selectedTrip,
   selectedCity,
   setSelectedCity,
-  currentVehicle, tripUpdate
+  currentVehicle,
+  tripUpdate,
 }) => {
   const [isBuslineSelectionOpen, setIsBuslineSelectionOpen] = useState(false);
   const [showSingleStationInfo, setShowSingleStationInfo] = useState(false);
-const [totalStops, setTotalStops] = useState(null);
+  const [predictionTime, setPredictionTime] = useState("now");
 
   useEffect(() => {
     setShowSingleStationInfo(false);
@@ -25,7 +26,6 @@ const [totalStops, setTotalStops] = useState(null);
       setShowSingleStationInfo(true);
     }
   }, [selectedTrip]);
-
 
   const handleBuslineSelectionToggle = () => {
     setIsBuslineSelectionOpen((prevState) => !prevState);
@@ -56,15 +56,29 @@ const [totalStops, setTotalStops] = useState(null);
             onToggle={handleBuslineSelectionToggle}
           />
         </div>
-        {showSingleStationInfo &&
-        <SingleStationInfo
-          className="stop-infos"
-          selectedTrip={selectedTrip}
-          currentVehicle={currentVehicle}
-          tripUpdate={tripUpdate}
-          setSelectedCity={setSelectedCity}
-          totalStops={totalStops}
-        />}
+        {showSingleStationInfo && (
+          <SingleStationInfo
+            className="stop-infos"
+            selectedTrip={selectedTrip}
+            currentVehicle={currentVehicle}
+            tripUpdate={tripUpdate}
+            setSelectedCity={setSelectedCity}
+            predictionTime={predictionTime}
+            statusLineColor={
+              !currentVehicle
+                ? "#aeb0af"
+                : predictionTime === 60 || predictionTime === 30
+                ? "#2596FF"
+                : currentVehicle.congestion_level.level === 0
+                ? "#88c36c"
+                : currentVehicle.congestion_level.level === 1
+                ? "#f5b873"
+                : currentVehicle.congestion_level.level === 2
+                ? "#ff7070"
+                : "#88c36c"
+            }
+          />
+        )}
       </div>
     </div>
   );
