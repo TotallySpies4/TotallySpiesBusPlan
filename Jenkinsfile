@@ -34,7 +34,8 @@ pipeline {
                                      /var/lib/jenkins/workspace/totally_spies_main/lstmModel/venv/bin/python3 -m pip install --upgrade pip
                                      pip install coverage
                                      pip install -U pip
-                                     pip install coverage
+                                     pip install -r requirements.txt
+                                     pip list
                                      coverage run -m unittest discover -s Test -p "test_*.py"
                                      coverage xml -o coverage-reports/coverage.xml
                                      '''
