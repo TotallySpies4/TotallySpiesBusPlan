@@ -26,6 +26,7 @@ pipeline {
              steps {
                  dir('lstmModel') {
                      // Activate the virtual environment
+                      sh 'python -m venv venv'
                       sh 'source venv/bin/activate'
 
                      // Run tests with coverage
