@@ -263,11 +263,6 @@ code {
 /********** legend board **********/
 
 .legend-board{
-  height: 126px;
-  width: 145px;
-  bottom: 5px;
-  right: 5px;
-  position: absolute;
   background-color: white;
   border-radius: 16px;
   padding:10px;
@@ -277,6 +272,7 @@ code {
   align-items: center;
   justify-content: space-between;
   box-shadow: 0px 5px 4px 0px rgba(0, 0, 0, 0.25);
+  right: -173px !important;
 }
 
 .status{
