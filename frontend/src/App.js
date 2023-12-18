@@ -18,10 +18,10 @@ const App = () => {
   const [tripUpdate, setTripUpdate] = useState(null);
 
   useEffect(() => {
-    console.log("SelectedBusID in App: " + selectedTrip);
-    console.log("SelectedCity in App: " + selectedCity);
-    console.log("PredictionTime in App was change: " + predictionTime)
-    console.log("currentVehicle in App: " + currentVehicle)
+  console.log("SelectedBusID in App: " + selectedTrip);
+  console.log("SelectedCity in App: " + selectedCity);
+  console.log("PredictionTime in App was change: " + predictionTime)
+  console.log("currentVehicle in App: " + currentVehicle)
   }, [selectedTrip, currentVehicle, congestionShape, selectedCity, predictionTime]);
 
   useEffect(() => {
@@ -118,7 +118,7 @@ const App = () => {
         tripUpdate={tripUpdate}
       />
 
-      <div className="prediction absolute top-2 transform -translate-x-1/2 flex flex-row items-center space-x-4">
+      <div className="prediction absolute -translate-x-1/2 top-2 flex space-x-4">
         <PredictionDropDown
           selectedCity={selectedCity}
           selectedBusline={selectedBusline}
