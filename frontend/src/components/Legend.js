@@ -1,6 +1,6 @@
 export const Legend = () => {
   return (
-    <div className="legend-board">
+    <div className="legend-board absolute right-[5px] bottom-[10px] w-[160px] h-[126px]">
       <strong className="text-center">Congestion level</strong>
       <div className="status normal">
         <div className="line bg-[#88c36c]" />

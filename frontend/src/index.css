@@ -263,11 +263,6 @@ code {
 /********** legend board **********/
 
 .legend-board{
-  height: 126px;
-  width: 145px;
-  bottom: 5px;
-  right: 5px;
-  position: absolute;
   background-color: white;
   border-radius: 16px;
   padding:10px;
