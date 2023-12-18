@@ -77,7 +77,7 @@ const App = () => {
   setCongestionShape(busLineDetail.payload.congestionShape);
   setSegmentSpeedPrediction(busLineDetail.payload.segmentSpeedPrediction);
   setTripUpdate(busLineDetail.payload.updateStoptime)
-
+  setTripUpdate(busLineDetail.payload.updateStoptime);
   } catch (error) {
   console.error("Error parsing the incoming data:", error);
   }
@@ -105,6 +105,7 @@ const App = () => {
         currentVehicle={currentVehicle}
         predictionTime={predictionTime}
         segmentSpeedPrediction = {segmentSpeedPrediction}
+        selectedCity={selectedCity}
               />
       <Sidebar
         allroutes={allroutes}

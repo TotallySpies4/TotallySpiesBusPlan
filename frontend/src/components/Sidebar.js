@@ -17,6 +17,8 @@ export const Sidebar = ({
   // };
   const [isBuslineSelectionOpen, setIsBuslineSelectionOpen] = useState(false);
   const [showSingleStationInfo, setShowSingleStationInfo] = useState(false);
+const [totalStops, setTotalStops] = useState(null);
+
   useEffect(() => {
     setShowSingleStationInfo(false);
   }, [selectedCity]);
@@ -43,7 +45,7 @@ export const Sidebar = ({
     <div
       className={`sidebar ${
         isSidebarOpen ? "open" : ""
-      } absolute left-2 py-10 w-96 top-6 z-50 flex flex-col rounded-3xl shadow-lg`}>
+      } absolute left-[10px] py-10 w-96 top-6 z-50 flex flex-col rounded-3xl shadow-lg`}>
       <div className="space-y-4">
         {/* City select dropdown and list */}
         <div className={`selections space-y-4 h-fit ${sidebarDividerShadow}`}>
@@ -64,11 +66,12 @@ export const Sidebar = ({
         </div>
         {showSingleStationInfo &&
         <SingleStationInfo
-          className="stop-infos divide-x-2"
+          className="stop-infos"
           selectedTrip={selectedTrip}
           currentVehicle={currentVehicle}
-            tripUpdate={tripUpdate}
+          tripUpdate={tripUpdate}
           setSelectedCity={setSelectedCity}
+          totalStops={totalStops}
         />}
       </div>
     </div>

@@ -2,7 +2,7 @@ import GtfsRealtimeBindings from 'gtfs-realtime-bindings';
 import {Kafka} from "kafkajs";
 import axios from "axios";
 
-const INTERVAL_MS = 60 * 1000;
+const INTERVAL_MS = 30 * 1000;
 const kafka = new Kafka({ brokers: ['kafka:19092'] });
 
 

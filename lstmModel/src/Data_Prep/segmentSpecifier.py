@@ -2,13 +2,12 @@ import math
 import pandas as pd
 from pymongo import MongoClient
 
-client = MongoClient('mongodb:27017')
-db = client.TotallySpiesBusPlan
-stoptimes = db['stoptimes']
-trip = db['trips']
-
 
 def calculate_current_segment(latitude, longitude, vehicle_bearing, trip_id):
+    client = MongoClient('mongodb:27017')
+    db = client.TotallySpiesBusPlan
+    stoptimes = db['stoptimes']
+    trip = db['trips']
     trip_object_id = db.trips.find_one({'trip_id': trip_id})['_id']
     stop_times_cursor = db.stoptimes.find({'trip_id': str(trip_object_id)}).sort('stop_sequence')
     stop_times_df = pd.DataFrame(list(stop_times_cursor))
@@ -74,4 +73,3 @@ def haversine_distance(lat1, lon1, lat2, lon2):
     c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
 
     return R * c  # Distanz in Metern
-

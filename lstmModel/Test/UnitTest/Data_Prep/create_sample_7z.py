@@ -8,7 +8,7 @@ def create_sample_7z_file(output_path, files):
 
 if __name__ == "__main__":
     # Specify the output path for the 7z file
-    output_path = 'sample-1.7z'
+    output_path = 'sample-2.7z'
 
     # Specify the files you want to include in the 7z file
     files_to_compress = ['file1.txt', 'file2.txt']

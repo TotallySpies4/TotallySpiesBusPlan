@@ -55,13 +55,11 @@ export async function congestionLevelStockholm(tripID, speed, latitude, longitud
  * @returns {number}
  */
 export function level(scheduleSpeed, route_avg_speed){
-    if (scheduleSpeed <= route_avg_speed + 5) {
-        if (scheduleSpeed < route_avg_speed + 20) {
-            return 1; // yellow
-        } else {
-            return 2; // red
-        }
+    if (scheduleSpeed > route_avg_speed + 5) {
+        return 0;  // green
+    } else if (scheduleSpeed > route_avg_speed - 5) {
+        return 1;  // yellow
     } else {
-        return 0; // green
+        return 2;  // red
     }
 }

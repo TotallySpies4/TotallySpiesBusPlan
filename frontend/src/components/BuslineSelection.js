@@ -41,11 +41,13 @@ export const BuslineSelection = ({
   };
 
   if (selectedCity === "Amsterdam") {
+
     busOptions = allroutes.amsterdam.map((bus) => ({
       value: bus.route_short_name,
       label: (
-        <div>
-          <strong>{bus.route_short_name}</strong> {bus.route_long_name}
+        <div className ="busline-select">
+          <strong>{bus.route_short_name}</strong>
+          <p>{bus.route_long_name}</p>
         </div>
       ),
     }));
@@ -87,7 +89,7 @@ export const BuslineSelection = ({
       <Select value={selectedOption}
         options={busOptions}
         onChange={handleBusSelection}
-        isSearchable
+        isSearchable 
         placeholder="-Choose a bus line-"
         // className="w-full-width"
         styles={customStyles}

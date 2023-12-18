@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {
   MapContainer,
   TileLayer,
@@ -12,6 +12,7 @@ function Map({ selectedTrip, congestionShape, currentVehicle, selectedCity, pred
 
   //Set default map center to Amsterdam
   const [mapCenter, setMapCenter] = useState([52.3676, 4.9041]);
+  const mapRef = useRef(null);
   useEffect(() => {
     console.log("SelectedBusID in Map: " + selectedTrip);
     console.log("PredictionTime in Map was change: " + predictionTime)
@@ -19,21 +20,35 @@ function Map({ selectedTrip, congestionShape, currentVehicle, selectedCity, pred
   }, [selectedTrip, predictionTime,currentVehicle]);
 
   // Update map center based on the selected city
+
   const handleCityChange = () => {
-    if (selectedCity === "Stockholm") {
-      setMapCenter([59.3293, 18.0686]); // Set center for Stockholm
-    } else if (selectedCity === "Amsterdam") {
-      setMapCenter([52.3676, 4.9041]); // Reset center for Amsterdam
+    const mapInstance = mapRef.current;
+    console.log("fly to city")
+    if (mapInstance != null) {
+      let newCenter;
+      if (selectedCity === "Stockholm") {
+        newCenter = [59.3293, 18.0686];
+      } else if (selectedCity === "Amsterdam") {
+        newCenter = [52.3676, 4.9041];
+      }
+      mapInstance.flyTo(newCenter, mapInstance.getZoom());
     }
   };
 
   React.useEffect(() => {
-    // Handle initial city change
+    console.log("SelectedCity in Map: " + selectedCity);
     handleCityChange();
   }, [selectedCity])
 
-const customIcon = new L.icon({
-  iconUrl: "/icon/right-arrow.png",
+const stopIcon = new L.icon({
+  iconUrl: "/icon/bus.png",
+  iconSize: [20, 20],
+  iconAnchor: [10, 10],
+  popupAnchor: [0, -10],
+})
+
+const busIcon = new L.icon({
+  iconUrl: "/icon/busLocation.png",
   iconSize: [20, 20],
   iconAnchor: [10, 10],
   popupAnchor: [0, -10],
@@ -66,13 +81,14 @@ const customIcon = new L.icon({
   return (
     <div className="map">
       <MapContainer
-        center={mapCenter}
+          ref={mapRef}
+          center={[52.3676, 4.9041]}
         zoom={13}
         style={{ height: "100vh", width: "100vw" }}
         zoomControl={false}>
         <TileLayer
           url="https://tile.jawg.io/jawg-sunny/{z}/{x}/{y}.png?access-token=BTdIPPqKEPczbvNzaOq7YKmEhFiO71WOmYjwuBQWLZkXLSvJZIupQZF63M8hSn3B"
-          attribution='<a href="http://jawg.io" title="Tiles Courtesy of Jawg Maps" target="_blank" class="jawg-attrib">&copy; <b>Jawg</b>Maps</a> | <a href="https://www.openstreetmap.org/copyright" title="OpenStreetMap is open data licensed under ODbL" target="_blank" class="osm-attrib">&copy; OSM contributors</a>'
+          // attribution='<a href="http://jawg.io" title="Tiles Courtesy of Jawg Maps" target="_blank" class="jawg-attrib">&copy; <b>Jawg</b>Maps</a> | <a href="https://www.openstreetmap.org/copyright" title="OpenStreetMap is open data licensed under ODbL" target="_blank" class="osm-attrib">&copy; OSM contributors</a>'
         />
         {/* Drawing stopes and shapes */}
 
@@ -82,7 +98,7 @@ const customIcon = new L.icon({
               shape.shape_pt_lat,
               shape.shape_pt_lon,
             ])}
-            color={!currentVehicle ? "#000" : "#3b82f6"}
+            color={currentVehicle ? "#88c36c" : "#838383"}
             />
         )}
 
@@ -98,11 +114,11 @@ const customIcon = new L.icon({
             <Marker
               key={index}
               position={[stop.location.latitude, stop.location.longitude]}
-              icon={customIcon}>
+              icon={stopIcon}>
               <Popup>
                 <strong className="text-blue-500">{stop.stop_name}</strong>
                 <br /> <strong>Arrival Time: </strong> {stop.arrival_time},
-                <br /> <strong>Departure Time: </strong> {stop.departure_time})
+                <br /> <strong>Departure Time: </strong> {stop.departure_time}
               </Popup>
             </Marker>
           ))}
@@ -110,6 +126,7 @@ const customIcon = new L.icon({
         {/* Drawing vehicle position */}
         {currentVehicle && (
           <Marker
+          icon={busIcon}
             position={[
               currentVehicle.current_position.latitude,
               currentVehicle.current_position.longitude,
@@ -137,13 +154,13 @@ const customIcon = new L.icon({
 function getCongestionColor(level) {
   switch (level) {
     case 0:
-      return "#4FB453";
+      return "#88c36c";
     case 1:
-      return "#EAB059";
+      return "#f5b873";
     case 2:
-      return "#B44F4F";
+      return "#ff7070";
     default:
-      return "#CE2273";
+      return "#838383";
   }
 }
 

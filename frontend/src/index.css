@@ -20,6 +20,7 @@ code {
   height: 100vh;
   width: 100vw;
   display: flex;
+  overflow: hidden;
 }
 
 .BusButton {
@@ -46,7 +47,7 @@ code {
   position: relative;
   display: flex;
   height: 100%;
-    width: 100%;
+  width: 100%;
 }
 .map {
   position: absolute;
@@ -54,25 +55,6 @@ code {
   width: 100%;
   z-index: 10;
 }
-
-/* .sidebar {
-  position: absolute;
-  top: 12%;
-  left: 0;
-  padding: 10px;
-  width: 350px;
-  height: 75%;
-  z-index: 1000;
-  background-color: rgba(255, 255, 255, 0.8);
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  border-radius: 20px;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19) ;
-} */
-
-
 
 
 #map {
@@ -94,7 +76,7 @@ width: 80%;
 
 .bus-message {
   position: absolute;
-  top: 10px;
+  top: 24px;
   right: 10px;
   background-color: #0085FF;
   padding: 10px;
@@ -103,6 +85,7 @@ width: 80%;
   display: flex;
   align-items: center;
   color: white;
+  font-size: 16px;
   animation: slideInFromRight 0.5s ease-out;
 }
 
@@ -185,37 +168,64 @@ width: 80%;
 
 /********** Stop info **********/
 
+/*Single value in selection box*/
+.css-9j327y-singleValue {
+
+  grid-area: 1 / 1 / 2 / 3;
+  max-width: 100%;
+  overflow: visible !important;
+  /* text-overflow: revert-layer; */
+  color: rgb(59, 130, 246);
+  margin-left: 2px;
+  margin-right: 2px;
+  box-sizing: border-box;
+}
+
+/* Stop display */
 .stop-list {
   max-height: 300px;
   overflow-y: auto;
-    padding: 0 20px;
-}
+  padding: 0 20px;
+  z-index: 1;
 
+}
+.single-info{
+  display: flex;
+  flex-direction: row ;
+  justify-content: space-between;
+  justify-items: center;
+}
 .stop-item {
   display: flex;
   justify-content: space-between;
+  /* space-between: 5px; */
   align-items: center;
   padding: 10px 0;
+  width: 100% !important;
   border-bottom: 1px solid #ccc;
+  height: 70px !important;
 }
 .stop-item-left {
   display: flex;
   flex-direction: column;
-}
 
+}
+.stop-info{
+  display: flex;
+  flex-direction: column;
+  /* border-bottom: 1px solid #ccc; */
+  width: 95% !important;
+  justify-content: space-between;
+}
 .stop-name {
   font-weight: bold;
-  /* Weitere Styling-Attribute */
 }
-
 .arrival-info {
   text-align: right;
-  /* Weitere Styling-Attribute */
 }
 .scheduled-time.ontime{
   color: green;
 }
-
 .scheduled-time.strike-through {
   text-decoration: line-through;
   color: red;
@@ -223,7 +233,6 @@ width: 80%;
 .scheduled-time.not-operating{
   color: black;
 }
-
 .delay-info.delayed {
   color: red;
 }
@@ -231,14 +240,60 @@ width: 80%;
   color: green;
 }
 .delay-info.not-operating{
-  display: none;
+  /* display: none; */
+  color: grey
 }
-
 .actual-time {
-  color: green; /* oder eine andere Farbe, je nach Design */
-  /* Weitere Styling-Attribute */
+  color: green;
 }
 
+/* Status line component */
+
+.stop-dot{
+  position: absolute !important;
+  width: 10px !important;
+  height: 10px !important;
+  background-color: red;
+  border-radius: 100% !important;
+}
+.status-line {
+  display: flex;
+  align-items: center;
+}
+
+  @keyframes moveBus {
+    from {
+      transform: translate(0, 0);
+    }
+    to {
+      transform: translate(100%, 100%);
+    }
+  }
+
+/* .bus {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background-color: red;
+    border-radius: 50%;
+    animation: moveBus linear infinite;
+  }
+
+  @keyframes pulse {
+    0% {
+      box-shadow: 0 0 0 0px rgba(0, 0, 255, 0.5);
+    }
+    50% {
+      box-shadow: 0 0 0 10px rgba(0, 0, 255, 0);
+    }
+    100% {
+      box-shadow: 0 0 0 0px rgba(0, 0, 255, 0);
+    }
+  } */
+
+  /* .dot.pulse {
+    animation: pulse 1s infinite;
+  }   */
 
 /********** Prediction **********/
 .prediction{
@@ -268,4 +323,9 @@ width: 80%;
   padding: 0px 10px !important;
 
 }
+
+
+
+
+
 

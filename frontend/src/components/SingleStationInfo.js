@@ -1,4 +1,5 @@
 import React, { useMemo } from "react";
+import { formatTime } from "../utils/formatTime.js";
 import moment from "moment-timezone";
 
 export const SingleStationInfo = ({
@@ -6,6 +7,7 @@ export const SingleStationInfo = ({
   tripUpdate,
   setSelectedCity,
   currentVehicle,
+  predictionTime,
 }) => {
   // Set timezone
   const cityToTimeZone = {
@@ -51,26 +53,62 @@ export const SingleStationInfo = ({
     [selectedTrip]
   );
 
-  const Dot = ({ coordinates }) => (
-    <div
-      className="dot"
-      value ={stopCoordinates}
-      style={{
-        position: "absolute",
-        // left: ${coordinates.longitude * 20}px, // Adjust as needed for visualization
-        // top: ${coordinates.latitude * 20}px, // Adjust as needed for visualization
-        width: "8px",
-        height: "8px",
-        backgroundColor: currentVehicle ? "blue" : "grey", // Set your desired dot color
-        borderRadius: "100%",
-      }}></div>
-  );
+  const Dot = ({ coordinates, hasNextStop, isLastStop }) => {
+    return (
+      // Status line for displaying bus congestion level in the sidebar.
+      <div className="status-line" style={{ position: "relative" }}>
+        {hasNextStop && (
+          <div
+            className="line"
+            style={{
+              width: "10px",
+              top: "35px",
+              height: isLastStop ? "35px" : "70px",
+              backgroundColor: isLastStop
+                ? "transparent"
+                :!currentVehicle
+                ? "#aeb0af"
+                :predictionTime !== "now"
+                ?"#2596FF"
+                : currentVehicle.congestion_level.level === 0
+                ? "#88c36c"
+                : currentVehicle.congestion_level.level === 1
+                ? "#f5b873"
+                : currentVehicle.congestion_level.level === 2
+                ? "#ff7070"
+                : "#88c36c",
+              position: "relative",
+              zIndex: 2,
+            }}
+          />
+        )}
 
+        {/* Displaying bus stop on the status line */}
+        <div
+          className={`dot ${currentVehicle}`}
+          style={{
+            width: "10px",
+            height: "10px",
+            backgroundColor: currentVehicle ? "#ebf2aa" : "#dbdcdc",
+            position: "relative",
+            borderRadius: "100%",
+            top: "50%",
+            bottom: "50%",
+            transform: "translate(-100%)",
+            zIndex: 3,
+            boxShadow: "2px 2px 5px rgba(0, 0, 0, 0.2)",
+          }}
+        />
+      </div>
+    );
+  };
 
   return (
     <div className="stop-list w-96">
       {selectedTrip &&
         selectedTrip.stop_times.map((stop, index) => {
+          const hasNextStop = index <= selectedTrip.stop_times.length - 1;
+          const isLastStop = index === selectedTrip.stop_times.length - 1;
           const stopUpdate = tripUpdate
             ? tripUpdate.find(
                 (update) => update.stopSequence === stop.stop_sequence
@@ -92,29 +130,40 @@ export const SingleStationInfo = ({
             : "On time";
 
           return (
-            <div key={index} className="stop-item">
-              <div className="stop-info">
-              <Dot coordinates={stopCoordinates[index]} className = "stop-dot" />
-                <div className="stop-item-left">
-                  <div className="stop-name">{stop.stop_name}</div>
-                  <div
-                    className={`delay-info ${
-                      isDelayed ? "delayed" : "ontime"
-                    } ${!currentVehicle ? "not-operating" : ""}`}>
-                    {!currentVehicle?"Currently not in operation":delayStr}
+            <div key={index} className="single-info">
+              <div className="moving-component">
+                <Dot
+                  coordinates={stopCoordinates[index]}
+                  isLastStop={isLastStop}
+                  hasNextStop={hasNextStop}
+                  className="stop-dot"
+                />
+              </div>
+              <div key={index} className="stop-item">
+                <div className="stop-info">
+                  <div className="stop-item-left">
+                    <div className="stop-name">{stop.stop_name}</div>
+                    <div
+                      className={`delay-info ${
+                        isDelayed ? "delayed" : "ontime"
+                      } ${!currentVehicle ? "not-operating" : ""}`}>
+                      {!currentVehicle
+                        ? "Currently not in operation"
+                        : delayStr}
+                    </div>
                   </div>
                 </div>
-                <div className="arrival-info">
-                  <div
-                    className={`scheduled-time ${
-                      isDelayed ? "strike-through" : "ontime"
-                    } ${!currentVehicle ? "not-operating" : ""}`}>
-                    {scheduledTimeStr}
+                  <div className="arrival-info">
+                      <div
+                          className={`scheduled-time ${
+                              isDelayed ? "strike-through" : "ontime"
+                          } ${!currentVehicle ? "not-operating" : ""}`}>
+                          {scheduledTimeStr}
+                      </div>
+                      {isDelayed && (
+                          <div className="actual-time">{actualTimeStr}</div>
+                      )}
                   </div>
-                  {isDelayed && (
-                    <div className="actual-time">{actualTimeStr}</div>
-                  )}
-                </div>
               </div>
             </div>
           );
