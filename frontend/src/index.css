@@ -225,7 +225,7 @@ code {
 }
 
 /* Status line component */
-.status-line {
+.status-display {
   display: flex;
   align-items: center;
 }

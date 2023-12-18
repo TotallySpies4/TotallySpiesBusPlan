@@ -56,10 +56,10 @@ export const SingleStationInfo = ({
   const Dot = ({ coordinates, hasNextStop, isLastStop }) => {
     return (
       // Status line for displaying bus congestion level in the sidebar.
-      <div className="status-line" style={{ position: "relative" }}>
+      <div className="status-display" style={{ position: "relative" }}>
         {hasNextStop && (
           <div
-            className="line"
+            className="status-line"
             style={{
               width: "10px",
               top: "35px",
@@ -89,14 +89,14 @@ export const SingleStationInfo = ({
           style={{
             width: "10px",
             height: "10px",
-            backgroundColor: currentVehicle ? "#ebf2aa" : "#dbdcdc",
+            backgroundColor: currentVehicle ? "white" : "#dbdcdc",
             position: "relative",
             borderRadius: "100%",
             top: "50%",
             bottom: "50%",
             transform: "translate(-100%)",
             zIndex: 3,
-            boxShadow: "2px 2px 5px rgba(0, 0, 0, 0.2)",
+            boxShadow: "0px 0px 5px rgba(0, 0, 0, 0.25)",
           }}
         />
       </div>
