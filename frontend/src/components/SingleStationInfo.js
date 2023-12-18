@@ -64,7 +64,7 @@ export const SingleStationInfo = ({
               width: "10px",
               top: "35px",
               height: isLastStop ? "35px" : "70px",
-              backgroundColor: statusLineColor,
+              backgroundColor:isLastStop? "transparent":statusLineColor || (currentVehicle?"blue":"grey"),
               position: "relative",
               zIndex: 2,
             }}
@@ -125,9 +125,7 @@ export const SingleStationInfo = ({
                   isLastStop={isLastStop}
                   hasNextStop={hasNextStop}
                   statusLineColor={
-                    isLastStop
-                      ? "transparent"
-                      : !currentVehicle
+                      !currentVehicle
                       ? "#aeb0af"
                       : predictionTime === "60" || predictionTime === "30"
                       ? "#2596FF"
