@@ -119,7 +119,6 @@ const App = () => {
       />
 
       <div className="prediction absolute top-2 transform -translate-x-1/2 flex flex-row items-center space-x-4">
-
         <PredictionDropDown
           selectedCity={selectedCity}
           selectedBusline={selectedBusline}
@@ -127,7 +126,6 @@ const App = () => {
           currentVehicle={currentVehicle}
         />
       </div>
-
       <Legend/>
     </div>
   );
