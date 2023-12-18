@@ -28,6 +28,7 @@ pipeline {
                      // Activate the virtual environment
                       sh 'python3 -m venv venv'
                       sh 'source venv/bin/activate'
+                      pip install coverage
 
                      // Run tests with coverage
                       sh 'coverage run -m unittest discover -s tests'
