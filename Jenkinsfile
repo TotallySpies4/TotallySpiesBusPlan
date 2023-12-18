@@ -31,6 +31,8 @@ pipeline {
                                      // Activate the virtual environment and install the necessary packages
                                      sh '''
                                      source venv/bin/activate
+                                     python3 -m pip install --upgrade pip
+                                     pip install coverage
                                      pip install -U pip  // Make sure pip is up to date
                                      pip install coverage
                                      coverage run -m unittest discover -s tests
