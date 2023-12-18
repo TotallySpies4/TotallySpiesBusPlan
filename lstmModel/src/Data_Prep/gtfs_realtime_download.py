@@ -26,4 +26,4 @@ def download_data_for_date(date):
         logging.error(f"Error while downloading data for the date {date}. Status code: {response.status_code}")
         return None
 
-#download_data_for_date("2023-12-10")
+#download_data_for_date("2023-12-08")

@@ -22,6 +22,15 @@ pipeline {
                 checkout scm
             }
         }
+        stage('Test') {
+             steps {
+                     dir('lstmModel') {
+                                         sh 'coverage run -m unittest discover -s Test -p "test_*.py"'
+                                         sh 'coverage xml -o coverage-reports/coverage.xml'
+                                     }
+                 }
+        }
+
 
         stage('SonarQube Analysis') {
             steps {

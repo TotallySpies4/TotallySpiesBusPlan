@@ -9,11 +9,11 @@ class TestDecompress7zFile(unittest.TestCase):
 
     def setUp(self):
         # Set up a valid 7z file for testing
-        self.valid_7z_file = 'testStub/sample-1.7z'
+        self.valid_7z_file = '/Users/siri2001/IdeaProjects/TotallySpiesBusPlan/lstmModel/Test/UnitTest/Data_Prep/testStub/sample-1.7z'
         # Create a valid 7z file or copy it to the test directory
 
         # Set up a bad 7z file for testing
-        self.bad_7z_file = 'testStub/sample-1-bad.7z'
+        self.bad_7z_file = '/Users/siri2001/IdeaProjects/TotallySpiesBusPlan/lstmModel/Test/UnitTest/Data_Prep/testStub/sample-1-bad.7z'
         # Create a bad 7z file or copy it to the test directory
 
         # Non-existent file

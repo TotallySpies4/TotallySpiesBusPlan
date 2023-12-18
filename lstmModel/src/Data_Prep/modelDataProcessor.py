@@ -3,14 +3,17 @@ from gridfs import GridFS
 from pymongo import MongoClient
 import logging
 
-from segmentSpecifier import calculate_current_segment
+from src.Data_Prep.segmentSpecifier import calculate_current_segment
+
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
-client = MongoClient('mongodb:27017')
-db = client.TotallySpiesBusPlan
-fs = GridFS(db)
+
 
 
 def process_resample_data_from_file(date, chunk_size):
+    client = MongoClient('mongodb:27017')
+    db = client.TotallySpiesBusPlan
+    fs = GridFS(db)
+
     file_name = f'gtfs_{date}.csv'
     csv = fs.find_one({'filename': file_name})
     stoptimes_collection = db['stoptimes']
@@ -94,5 +97,5 @@ def process_resample_data_from_file(date, chunk_size):
 # Load the data from the file system
 # resampled_df = pd.read_csv('resampled_df.csv')
 # print (resampled_df.head(5))
-r = process_resample_data_from_file('2023-11-20', 10000000)
-r.to_csv('2023-11-20_resampled.csv')
+#r = process_resample_data_from_file('2023-12-09', 10000000)
+#r.to_csv('2023-12-08_resampled.csv')

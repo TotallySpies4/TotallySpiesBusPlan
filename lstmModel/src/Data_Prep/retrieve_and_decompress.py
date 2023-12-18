@@ -2,14 +2,21 @@ import os
 import logging
 from datetime import datetime, timedelta
 
-from gtfs_realtime_decompressor import decompress_7z_file
-from gtfs_realtime_download import fs
-from gtfs_realtime_reader import process_pb_directory
-from store_csv_to_db import store_csv_in_db
+from gridfs import GridFS
+from pymongo import MongoClient
+
+from src.Data_Prep.gtfs_realtime_decompressor import decompress_7z_file
+from src.Data_Prep.gtfs_realtime_reader import process_pb_directory
+from src.Data_Prep.store_csv_to_db import store_csv_in_db
+
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 
 def retrieve_and_decompress(date):
+    client = MongoClient('mongodb:27017')
+    db = client.TotallySpiesBusPlan
+    fs = GridFS(db)
+
     logging.info(f"Start processing data for {date}")
     filename = f"gtfs_{date}.bin"
     try:
@@ -44,10 +51,4 @@ def retrieve_and_decompress(date):
     except Exception as e:
         logging.error(f"Error processing data for {date}: {e}")
 
-
-#if __name__ == "__main__":
-    # Download data for a range of dates
-    # start_date = datetime(2021, 1, 5)
-    # for i in range(6):
-    # date = (start_date + timedelta(days=i)).strftime("%Y-%m-%d")
-retrieve_and_decompress('2023-11-20')
+# retrieve_and_decompress('2023-12-10')
