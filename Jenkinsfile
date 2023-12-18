@@ -35,7 +35,7 @@ pipeline {
                                      pip install coverage
                                      pip install -U pip
                                      pip install coverage
-                                     coverage run -m unittest discover -s tests
+                                     coverage run -m unittest discover -s Test -p "test_*.py"
                                      coverage xml -o coverage-reports/coverage.xml
                                      '''
                      }
