@@ -2,6 +2,7 @@ import Map from "./components/CityMap.js";
 import React, { useEffect, useState } from "react";
 import {Sidebar} from "./components/Sidebar.js";
 import { PredictionDropDown } from "./components/PredictionDropdown.js";
+import {Legend} from "./components/Legend.js";
 const App = () => {
   const url = "ws://localhost:4000";
 
@@ -126,6 +127,8 @@ const App = () => {
           currentVehicle={currentVehicle}
         />
       </div>
+
+      <Legend/>
     </div>
   );
 };
