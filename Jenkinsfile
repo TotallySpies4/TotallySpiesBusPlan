@@ -31,7 +31,7 @@ pipeline {
                                      // Activate the virtual environment and install the necessary packages
                                      sh '''
                                      source venv/bin/activate
-                                     python3 -m pip install --upgrade pip
+                                     /var/lib/jenkins/workspace/totally_spies_main/lstmModel/venv/bin/python3 -m pip install --upgrade pip
                                      pip install coverage
                                      pip install -U pip  // Make sure pip is up to date
                                      pip install coverage
