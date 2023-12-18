@@ -51,7 +51,7 @@ export const PredictionDropDown = ({ selectedBusline, selectedCity, setPredictio
               { value: "now", label: "Now" },
               { value: 30, label: "30 mins" },
               { value: 60, label: "60 mins" },
-              { value: 120, label: "120 mins" },
+              // { value: 120, label: "120 mins" },
             ]}
             onChange={(option) => {
               setSelectedOption(option);

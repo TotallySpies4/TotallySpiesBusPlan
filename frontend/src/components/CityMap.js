@@ -82,7 +82,7 @@ const busIcon = new L.icon({
     <div className="map">
       <MapContainer
           ref={mapRef}
-          center={[52.3676, 4.9041]}
+          center={[59.3293, 18.0686]} //Set default to Stockholm
         zoom={13}
         style={{ height: "100vh", width: "100vw" }}
         zoomControl={false}>

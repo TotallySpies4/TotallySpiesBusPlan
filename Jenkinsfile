@@ -24,10 +24,17 @@ pipeline {
         }
         stage('Test') {
              steps {
-                     dir('lstmModel') {
-                                         sh 'coverage run -m unittest discover -s Test -p "test_*.py"'
-                                         sh 'coverage xml -o coverage-reports/coverage.xml'
-                                     }
+                 dir('lstmModel') {
+                     // Activate the virtual environment
+                      sh 'source venv/bin/activate'
+
+                     // Run tests with coverage
+                      sh 'coverage run -m unittest discover -s tests'
+
+                       // Generate the coverage report in XML format
+                       sh 'coverage xml -o coverage-reports/coverage.xml'
+
+                     }
                  }
         }
 
@@ -45,7 +52,7 @@ pipeline {
                         -Dsonar.sources=backend/src,frontend/src,lstmModel/src \\
                         -Dsonar.tests=backend/test,lstmModel/test \\
                         -Dsonar.sourceEncoding=UTF-8\\
-                        -Dsonar.javascript.lcov.reportPaths=backend/coverage/lcov.inf
+                        -Dsonar.python.coverage.reportPaths=coverage-reports/coverage.xml
                         """
                     }
                 }
