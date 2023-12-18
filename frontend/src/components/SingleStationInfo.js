@@ -53,7 +53,7 @@ export const SingleStationInfo = ({
     [selectedTrip]
   );
 
-  const Dot = ({ coordinates, hasNextStop, isLastStop }) => {
+  const Dot = ({ coordinates, hasNextStop, isLastStop, statusLineColor }) => {
     return (
       // Status line for displaying bus congestion level in the sidebar.
       <div className="status-display" style={{ position: "relative" }}>
@@ -64,19 +64,7 @@ export const SingleStationInfo = ({
               width: "10px",
               top: "35px",
               height: isLastStop ? "35px" : "70px",
-              backgroundColor: isLastStop
-                ? "transparent"
-                :!currentVehicle
-                ? "#aeb0af"
-                :predictionTime !== "now"
-                ?"#2596FF"
-                : currentVehicle.congestion_level.level === 0
-                ? "#88c36c"
-                : currentVehicle.congestion_level.level === 1
-                ? "#f5b873"
-                : currentVehicle.congestion_level.level === 2
-                ? "#ff7070"
-                : "#88c36c",
+              backgroundColor: statusLineColor,
               position: "relative",
               zIndex: 2,
             }}
@@ -136,6 +124,21 @@ export const SingleStationInfo = ({
                   coordinates={stopCoordinates[index]}
                   isLastStop={isLastStop}
                   hasNextStop={hasNextStop}
+                  statusLineColor={
+                    isLastStop
+                      ? "transparent"
+                      : !currentVehicle
+                      ? "#aeb0af"
+                      : predictionTime === "60" || predictionTime === "30"
+                      ? "#2596FF"
+                      : currentVehicle.congestion_level.level === 0
+                      ? "#88c36c"
+                      : currentVehicle.congestion_level.level === 1
+                      ? "#f5b873"
+                      : currentVehicle.congestion_level.level === 2
+                      ? "#ff7070"
+                      : "#88c36c"
+                  }
                   className="stop-dot"
                 />
               </div>
@@ -153,17 +156,17 @@ export const SingleStationInfo = ({
                     </div>
                   </div>
                 </div>
-                  <div className="arrival-info">
-                      <div
-                          className={`scheduled-time ${
-                              isDelayed ? "strike-through" : "ontime"
-                          } ${!currentVehicle ? "not-operating" : ""}`}>
-                          {scheduledTimeStr}
-                      </div>
-                      {isDelayed && (
-                          <div className="actual-time">{actualTimeStr}</div>
-                      )}
+                <div className="arrival-info">
+                  <div
+                    className={`scheduled-time ${
+                      isDelayed ? "strike-through" : "ontime"
+                    } ${!currentVehicle ? "not-operating" : ""}`}>
+                    {scheduledTimeStr}
                   </div>
+                  {isDelayed && (
+                    <div className="actual-time">{actualTimeStr}</div>
+                  )}
+                </div>
               </div>
             </div>
           );
