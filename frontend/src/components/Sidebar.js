@@ -67,7 +67,7 @@ export const Sidebar = ({
             statusLineColor={
               !currentVehicle
                 ? "#aeb0af"
-                : predictionTime === 60 || predictionTime === 30
+                : predictionTime !== "now"
                 ? "#2596FF"
                 : currentVehicle.congestion_level.level === 0
                 ? "#88c36c"
