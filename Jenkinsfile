@@ -25,17 +25,17 @@ pipeline {
         stage('Test') {
              steps {
                  dir('lstmModel') {
-                     // Activate the virtual environment
-                      sh 'python3 -m venv venv'
-                      sh 'source venv/bin/activate'
-                      pip install coverage
+                     // Create the virtual environment if it does not already exist
+                                     sh 'python3 -m venv venv || :'
 
-                     // Run tests with coverage
-                      sh 'coverage run -m unittest discover -s tests'
-
-                       // Generate the coverage report in XML format
-                       sh 'coverage xml -o coverage-reports/coverage.xml'
-
+                                     // Activate the virtual environment and install the necessary packages
+                                     sh '''
+                                     source venv/bin/activate
+                                     pip install -U pip  // Make sure pip is up to date
+                                     pip install coverage
+                                     coverage run -m unittest discover -s tests
+                                     coverage xml -o coverage-reports/coverage.xml
+                                     '''
                      }
                  }
         }
