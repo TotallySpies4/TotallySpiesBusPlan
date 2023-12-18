@@ -28,12 +28,12 @@ pipeline {
                      // Create the virtual environment if it does not already exist
                                      sh 'python3 -m venv venv || :'
 
-                                     // Activate the virtual environment and install the necessary packages
+
                                      sh '''
                                      source venv/bin/activate
                                      /var/lib/jenkins/workspace/totally_spies_main/lstmModel/venv/bin/python3 -m pip install --upgrade pip
                                      pip install coverage
-                                     pip install -U pip  // Make sure pip is up to date
+                                     pip install -U pip
                                      pip install coverage
                                      coverage run -m unittest discover -s tests
                                      coverage xml -o coverage-reports/coverage.xml
