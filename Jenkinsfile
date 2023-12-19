@@ -50,7 +50,7 @@ pipeline {
 
                             sh 'npm run test -- --coverage --detectOpenHandles'
 
-                            sh 'mv coverage/lcov.info ../coverage-reports/js-lcov.info'
+
                         }
                     }
                 }
@@ -69,8 +69,8 @@ pipeline {
                         -Dsonar.sources=backend/src,frontend/src,lstmModel/src \\
                         -Dsonar.tests=backend/test,lstmModel/test \\
                         -Dsonar.sourceEncoding=UTF-8\\
-                        -Dsonar.javascript.lcov.reportPaths=coverage-reports/js-lcov.info \\
-                        -Dsonar.python.coverage.reportPaths=coverage-reports/coverage.xml
+                        -Dsonar.javascript.lcov.reportPaths=backend/coverage/lcov.info \\
+                        -Dsonar.python.coverage.reportPaths=lstmModel/coverage.xml
                         """
                     }
                 }
