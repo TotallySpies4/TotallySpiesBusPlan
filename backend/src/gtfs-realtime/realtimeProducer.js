@@ -72,10 +72,12 @@ const stockholmConfig = {
     topic: 'gtfs-realtime-stockholm'
 };
 
+export function startFetchingData() {
+    fetchAndSend(amsterdamConfig.url, amsterdamConfig.topic);
+    setInterval(() => fetchAndSend(amsterdamConfig.url, amsterdamConfig.topic), INTERVAL_MS);
 
-// Fetch and send data for each city
-fetchAndSend(amsterdamConfig.url, amsterdamConfig.topic);
-setInterval(() => fetchAndSend(amsterdamConfig.url, amsterdamConfig.topic), INTERVAL_MS);
+    fetchAndSend(stockholmConfig.url, stockholmConfig.topic);
+    setInterval(() => fetchAndSend(stockholmConfig.url, stockholmConfig.topic), INTERVAL_MS);
+}
 
-fetchAndSend(stockholmConfig.url, stockholmConfig.topic);
-setInterval(() => fetchAndSend(stockholmConfig.url, stockholmConfig.topic), INTERVAL_MS);
+//startFetchingData();

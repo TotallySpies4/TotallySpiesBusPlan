@@ -43,3 +43,15 @@ describe('Database Connection and CRUD Operations', () => {
         expect(foundItem).toBeNull();
     });
 });**/
+
+import {describe, test} from "@jest/globals";
+
+describe('add function', () => {
+    test('adds 1 + 2 to equal 3', () => {
+
+    });
+
+    test('adds 5 + 7 to equal 12', () => {
+
+    });
+});

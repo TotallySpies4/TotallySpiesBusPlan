@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/20</span>
+                <span class='fraction'>20/20</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>6/6</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>2/2</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/20</span>
+                <span class='fraction'>20/20</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -99,66 +99,66 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import {StopTime} from "../DBmodels/busline.js";
 &nbsp;
-export async function <span class="fstat-no" title="function not covered" >getShapesBetweenStops(</span>shapes, previousStop, currentStop) {
+export async function getShapesBetweenStops(shapes, previousStop, currentStop) {
     // Find all shapes with the given shape_id
-<span class="cstat-no" title="statement not covered" >    console.log("Finding the shapes between the stops")</span>
-<span class="cstat-no" title="statement not covered" >    console.log("previousStop", previousStop)</span>
-<span class="cstat-no" title="statement not covered" >    console.log("currentStop", currentStop)</span>
+    console.log("Finding the shapes between the stops")
+    console.log("previousStop", previousStop)
+    console.log("currentStop", currentStop)
 &nbsp;
-    let previousStopQuery = <span class="cstat-no" title="statement not covered" >null;</span>
-    let currentStopQuery = <span class="cstat-no" title="statement not covered" >null;</span>
+    let previousStopQuery = null;
+    let currentStopQuery = null;
 &nbsp;
-<span class="cstat-no" title="statement not covered" >        previousStopQuery = await StopTime.findOne({_id: previousStop._id});</span>
-<span class="cstat-no" title="statement not covered" >        currentStopQuery = await StopTime.findOne({_id: currentStop._id});</span>
-<span class="cstat-no" title="statement not covered" >        console.log("previousStopShape", previousStopQuery)</span>
-<span class="cstat-no" title="statement not covered" >        console.log("currentStopShape", currentStopQuery)</span>
+        previousStopQuery = await StopTime.findOne({_id: previousStop._id});
+        currentStopQuery = await StopTime.findOne({_id: currentStop._id});
+        console.log("previousStopShape", previousStopQuery)
+        console.log("currentStopShape", currentStopQuery)
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    if(!previousStopQuery || !currentStopQuery){</span>
-<span class="cstat-no" title="statement not covered" >        previousStopQuery = await StopTime.findOne({stop_id: previousStop.stop_id});</span>
-<span class="cstat-no" title="statement not covered" >        currentStopQuery = await StopTime.findOne({stop_id: currentStop.stop_id});</span>
-<span class="cstat-no" title="statement not covered" >        console.log("previousStopShape",previousStopQuery)</span>
-<span class="cstat-no" title="statement not covered" >        console.log("currentStopShape",currentStopQuery)</span>
+    if(!previousStopQuery || !currentStopQuery){
+        previousStopQuery = await StopTime.findOne({stop_id: previousStop.stop_id});
+        currentStopQuery = await StopTime.findOne({stop_id: currentStop.stop_id});
+        console.log("previousStopShape",previousStopQuery)
+        console.log("currentStopShape",currentStopQuery)
     }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    console.log("start finding the shapes between the stops")</span>
+    console.log("start finding the shapes between the stops")
     // Filter out shapes that are not between the start and end distances
-    const filteredShapes = <span class="cstat-no" title="statement not covered" >shapes.filter(<span class="fstat-no" title="function not covered" >sh</span>ape =&gt;</span>
-<span class="cstat-no" title="statement not covered" >        shape.shape_dist_traveled &gt;= previousStopQuery.shape_dist_traveled &amp;&amp;</span>
+    const filteredShapes = shapes.filter(shape =&gt;
+        shape.shape_dist_traveled &gt;= previousStopQuery.shape_dist_traveled &amp;&amp;
         shape.shape_dist_traveled &lt;= currentStopQuery.shape_dist_traveled
     );
-<span class="cstat-no" title="statement not covered" >    console.log("filteredShapes",filteredShapes)</span>
-<span class="cstat-no" title="statement not covered" >    console.log("end finding the shapes between the stops")</span>
-<span class="cstat-no" title="statement not covered" >    return filteredShapes;</span>
+    console.log("filteredShapes",filteredShapes)
+    console.log("end finding the shapes between the stops")
+    return filteredShapes;
 }</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -166,7 +166,7 @@ export async function <span class="fstat-no" title="function not covered" >getSh
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-12-19T13:48:32.369Z
+                at 2023-12-19T15:26:16.899Z
             </div>
         <script src="../prettify.js"></script>
         <script>

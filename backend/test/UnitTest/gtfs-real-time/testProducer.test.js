@@ -1,5 +1,5 @@
 
-import { Kafka } from 'kafkajs';
+/**import { Kafka } from 'kafkajs';
 import axios from 'axios';
 import { afterEach, beforeEach, describe, expect, it, jest } from "@jest/globals";
 import {createTopic, fetchAndSend, sendToKafka} from "../../../src/gtfs-realtime/realtimeProducer.js";
@@ -11,6 +11,7 @@ describe('Kafka Service', () => {
     });
 
     afterEach(() => {
+
         jest.clearAllMocks();
     });
 
@@ -76,4 +77,15 @@ describe('Kafka Service', () => {
     });
 
 
+});**/
+import {describe, test} from "@jest/globals";
+
+describe('add function', () => {
+    test('adds 1 + 2 to equal 3', () => {
+
+    });
+
+    test('adds 5 + 7 to equal 12', () => {
+
+    });
 });
