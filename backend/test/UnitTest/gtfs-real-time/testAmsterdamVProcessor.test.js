@@ -77,32 +77,46 @@ describe('AmsterdamVehicleDataProcessor', () => {
   });
 
     describe('updateVehicle', () => {
-        it('should update the existing vehicle position and congestion level', () => {
-          // Mock the necessary functions
-          const congestionLevel = jest.fn();
-          const findOneMock = jest.spyOn(Route, 'findOne').mockResolvedValue({ _id: 'existingRouteId' });
-
-          // Define the expected values
-          const expectedPositions = [
-            {
+        test('should update the existing vehicle position and congestion level', async () => {
+          const vehicle = {
+            vehicle: {
               position: {
-                latitude: 1.234,
-                longitude: 5.678,
+                latitude: 52.12345,
+                longitude: 4.56789,
               },
-              timestamp: new Date('2023-12-12T19:20:24.975Z'),
+              timestamp: new Date(),
+              currentStopSequence: 2,
+              currentStatus: 'STOPPED_AT',
             },
-            // Add more positions if needed
-          ];
+          };
 
-          // Call the function that updates the vehicle
-          updateVehicle('vehicleId', expectedPositions);
+          const existingPosition = {
+            current_position: {
+              latitude: 52.98765,
+              longitude: 4.32109,
+            },
+          };
 
-          // Verify the function calls
-          expect(congestionLevel).toHaveBeenCalledWith('existingRouteId', { positions: expectedPositions });
-          expect(findOneMock).toHaveBeenCalledWith({ vehicleId: 'vehicleId' });
+          const route = {
+            route_id: 'your_route_id',
+            route_short_name: 'Route 1',
+            route_long_name: 'Route 1 Long Name',
+          };
 
-          // Restore the original implementation of the mocked function
-          findOneMock.mockRestore();
+          const mockCongestion = {
+            congestionLevel: 3,
+            previousStop: 'previous_stop_id',
+            currentStop: 'current_stop_id',
+          };
+
+          congestionLevel.mockResolvedValue(mockCongestion); // Mock the congestionLevel function to return the mockCongestion object
+
+          await processor.updateVehicle(vehicle, existingPosition, route);
+
+          expect(existingPosition.congestion_level.timestamp).toEqual(expect.any(Date));
+          expect(existingPosition.congestion_level.level).toEqual(mockCongestion.congestionLevel);
+          expect(existingPosition.congestion_level.previousStop).toEqual(mockCongestion.previousStop);
+          expect(existingPosition.congestion_level.currentStop).toEqual(mockCongestion.currentStop);
         });
       });
 
