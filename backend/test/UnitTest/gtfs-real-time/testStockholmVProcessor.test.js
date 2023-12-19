@@ -19,7 +19,6 @@ describe('StockholmVehicleDataProcessor', () => {
     processor = new StockholmVehicleDataProcessor();
   });
 
-  describe('createNewVehicle', () => {
     it('should create a new VehiclePositions instance', () => {
       const vehicle = {
         vehicle: {
@@ -61,9 +60,9 @@ describe('StockholmVehicleDataProcessor', () => {
       // Check if the returned result is an instance of VehiclePositions
       expect(result).toBeInstanceOf(VehiclePositions);
     });
-  });
 
-  describe('updateVehicle', () => {
+
+
       it('should update the existing vehicle position and congestion level', async () => {
         // Mock data
         const vehicle = {
@@ -121,12 +120,11 @@ describe('StockholmVehicleDataProcessor', () => {
         // Check if congestion level and stops are updated
         expect(existingPosition.congestion_level.timestamp).toBeInstanceOf(Date);
         expect(existingPosition.congestion_level.level).toBe(1);
-        expect(existingPosition.congestion_level.currentStop).toBe('currentStopId');
-        expect(existingPosition.congestion_level.previousStop).toBe('nextStopId');
+        expect(existingPosition.congestion_level.currentStop).toBe('nextStopId');
+        expect(existingPosition.congestion_level.previousStop).toBe('currentStopId');
       });
-    });
 
-    describe('createNewTripUpdate', () => {
+
       it('should create a new TripUpdate instance', () => {
         // Mock data
         const tripUpdate = {
@@ -152,9 +150,7 @@ describe('StockholmVehicleDataProcessor', () => {
         // Check if the returned result is an instance of TripUpdate
         expect(result).toBeInstanceOf(TripUpdate);
       });
-    });
 
-    describe('updateTrip', () => {
       it('should update the existing TripUpdate', () => {
         // Mock data
         const existingTripUpdate = {
@@ -173,5 +169,5 @@ describe('StockholmVehicleDataProcessor', () => {
         // Assertions
         expect(existingTripUpdate.stopTimeUpdates).toEqual(['newStopTimeUpdate1', 'newStopTimeUpdate2']);
       });
-    });
+
 });

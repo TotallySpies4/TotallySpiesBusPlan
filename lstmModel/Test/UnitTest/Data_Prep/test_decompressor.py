@@ -8,12 +8,14 @@ from src.Data_Prep.gtfs_realtime_decompressor import decompress_7z_file
 class TestDecompress7zFile(unittest.TestCase):
 
     def setUp(self):
+        current_file_dir = os.path.dirname(__file__)
+
         # Set up a valid 7z file for testing
-        self.valid_7z_file = '/Users/siri2001/IdeaProjects/TotallySpiesBusPlan/lstmModel/Test/UnitTest/Data_Prep/testStub/sample-1.7z'
+        self.valid_7z_file = os.path.join(current_file_dir, 'testStub', 'sample-1.7z')
         # Create a valid 7z file or copy it to the test directory
 
         # Set up a bad 7z file for testing
-        self.bad_7z_file = '/Users/siri2001/IdeaProjects/TotallySpiesBusPlan/lstmModel/Test/UnitTest/Data_Prep/testStub/sample-1-bad.7z'
+        self.bad_7z_file = os.path.join(current_file_dir, 'testStub', 'sample-1-bad.7z')
         # Create a bad 7z file or copy it to the test directory
 
         # Non-existent file

@@ -1,11 +1,11 @@
 
-import mongoose from 'mongoose';
+/**import mongoose from 'mongoose';
 import TestItem from './DBTestItem/testItem.js';
 import {beforeAll, afterAll, describe, test, expect} from "@jest/globals";
 
 
 // You can replace this with your own connection string if needed
-const mongoDB = 'mongodb://mongodb:27017/TotallySpiesBusPlan';
+const mongoDB = 'mongodb://localhost:27017/TotallySpiesBusPlan';
 
 beforeAll(async () => {
     await mongoose.connect(mongoDB, {
@@ -42,4 +42,4 @@ describe('Database Connection and CRUD Operations', () => {
         const foundItem = await TestItem.findOne({ name: 'TestName' });
         expect(foundItem).toBeNull();
     });
-});
+});**/

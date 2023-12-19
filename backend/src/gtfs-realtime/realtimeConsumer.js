@@ -12,29 +12,22 @@ const kafka = new Kafka({
 
 export async function setupConsumerForCity(topic,city) {
     const consumer = kafka.consumer({groupId: `gtfs-realtime-group-${topic}`});
-
     await mongoose.connect('mongodb://mongodb:27017/TotallySpiesBusPlan', {
         serverSelectionTimeoutMS: 60000
     });
     await VehiclePositions.deleteMany();
     await consumer.connect();
     await consumer.subscribe({topic});
-
     let processor;
     if (city === 'amsterdam') {
         processor = new AmsterdamVehicleDataProcessor();
     } else if (city === 'stockholm') {
         processor = new StockholmVehicleDataProcessor();
     }
-
-
-
     await consumer.run({
         eachMessage: async ({topic, partition, message}) => {
             const rawData = message.value.toString();
             const data = JSON.parse(rawData);
-
-
             for (const vehicle of data) {
                 if (!vehicle || !vehicle.vehicle || !vehicle.vehicle.trip) {
                     //console.error('Invalid vehicle data format:', vehicle);
@@ -45,7 +38,6 @@ export async function setupConsumerForCity(topic,city) {
                     //console.error('Trip ID is undefined for vehicle:', vehicle);
                     continue; // Skip this iteration because tripId is undefined
                 }
-
                     //console.log("vehicleID", vehicle);
                     const existingTrip = await Trip.findOne({trip_id: vehicle.vehicle.trip.tripId});
                     //console.log("existing trip", existingTrip);
@@ -53,17 +45,12 @@ export async function setupConsumerForCity(topic,city) {
                         //console.log(`Trip ID ${vehicle.vehicle.trip.tripId} not in the database.`);
                         continue;  // Skip this vehicle
                     }
-
                     const existingPosition = await VehiclePositions.findOne({currentTrip_id: existingTrip._id});
                      //console.log("existing position", existingPosition);
                      if (existingPosition) {
-
                     // Update existing entry
-
                     await processor.updateVehicle(vehicle, existingPosition, existingTrip);
                     await existingPosition.save();
-
-
                 } else {
                     // Create new entry
                     const route = await Route.findOne({_id: existingTrip.route_id});
@@ -72,15 +59,11 @@ export async function setupConsumerForCity(topic,city) {
                 }
             }
             console.log("done");
-
-
         }
 
     });
 
 }
-
-
 async function run() {
     try {
         await setupConsumerForCity('gtfs-realtime-amsterdam','amsterdam');

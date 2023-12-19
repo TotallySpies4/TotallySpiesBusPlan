@@ -1,5 +1,6 @@
 import {calculateScheduledSpeedStockholm, realtimeAvgSpeedCalculator} from "./speedCalculator.js";
-import { fetchAverageSpeed } from "../queryData/queryDbData.js";
+import {fetchAverageSpeed} from "../queryData/fetchAverageSpeed.js";
+import {level} from "./level.js";
 
 /**
  * Method to calculate the congestion level of a route segment
@@ -8,23 +9,12 @@ import { fetchAverageSpeed } from "../queryData/queryDbData.js";
  * @returns {Promise<{congestionLevel: number, currentStop: (*|null), previousStop: (*|undefined|null)}>}
  */
 export async function congestionLevel(routeID, vehiclePosition) {
-
-
-    // Fetch scheduled average speed for the current segment
     const speedObject = await fetchAverageSpeed(routeID, vehiclePosition.trip_id, vehiclePosition.stopSequence);
     const scheduleSpeed = speedObject.speedEntry;
     const previousStop = speedObject.previousStop;
     const currentStop = speedObject.currentStop;
-    //console.log("scheduleSpeed",scheduleSpeed)
-
-    // Calculate real-time average speed
     const route_avg_speed = await realtimeAvgSpeedCalculator(vehiclePosition.positions);
-
-
-        // professor said that if the route_avg_speed is larger than scheduleSpeed just 1 or 2 km/h, set this value to congestion level 1 is not fair.
-        // so we need an interval for it.
     return {congestionLevel: level(scheduleSpeed, route_avg_speed), previousStop: previousStop, currentStop: currentStop}
-
 
 }
 
@@ -38,28 +28,10 @@ export async function congestionLevel(routeID, vehiclePosition) {
  * @returns {{nextStop: *, congestionLevel: number, currentStop: *}}
  */
 export async function congestionLevelStockholm(tripID, speed, latitude, longitude,vehicleBearing) {
-    console.log("in congestionLevelStockholm")
-// calculate scheduleSpeed
     const speedObject = await calculateScheduledSpeedStockholm(tripID, latitude, longitude, vehicleBearing);
     return {
         congestionLevel: level(speedObject.scheduleSpeed, speed),
         currentStop: speedObject.currentStop,
         nextStop: speedObject.nextStop
-    }
-}
-
-/**
- * Method to calculate the congestion level
- * @param scheduleSpeed
- * @param route_avg_speed
- * @returns {number}
- */
-export function level(scheduleSpeed, route_avg_speed){
-    if (scheduleSpeed > route_avg_speed + 5) {
-        return 0;  // green
-    } else if (scheduleSpeed > route_avg_speed - 5) {
-        return 1;  // yellow
-    } else {
-        return 2;  // red
     }
 }
