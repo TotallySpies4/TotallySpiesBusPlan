@@ -43,7 +43,7 @@ pipeline {
 
         stage('Test JavaScript') {
                     steps {
-                        dir('frontend') {
+                        dir('backend') {
 
                             sh 'npm install'
 
