@@ -48,7 +48,7 @@ pipeline {
                             sh 'npm install'
 
 
-                            sh 'npm run test -- --coverage'
+                            sh 'npm run test -- --coverage --detectOpenHandles'
 
                             sh 'mv coverage/lcov.info ../coverage-reports/js-lcov.info'
                         }
