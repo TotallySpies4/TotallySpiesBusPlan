@@ -1,40 +1,107 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1702973000016" clover="3.2.0">
-  <project timestamp="1702973000016" name="All files">
-    <metrics statements="132" coveredstatements="25" conditionals="41" coveredconditionals="14" methods="16" coveredmethods="2" elements="189" coveredelements="41" complexity="0" loc="132" ncloc="132" packages="2" files="2" classes="2"/>
-    <package name="queryData">
-      <metrics statements="25" coveredstatements="25" conditionals="16" coveredconditionals="14" methods="2" coveredmethods="2"/>
-      <file name="fetchAverageSpeed.js" path="/Users/siri2001/IdeaProjects/TotallySpiesBusPlan/backend/src/queryData/fetchAverageSpeed.js">
-        <metrics statements="25" coveredstatements="25" conditionals="16" coveredconditionals="14" methods="2" coveredmethods="2"/>
-        <line num="15" count="5" type="stmt"/>
-        <line num="16" count="5" type="cond" truecount="2" falsecount="0"/>
-        <line num="17" count="1" type="stmt"/>
-        <line num="20" count="4" type="stmt"/>
-        <line num="21" count="4" type="cond" truecount="2" falsecount="0"/>
-        <line num="22" count="1" type="stmt"/>
-        <line num="25" count="3" type="stmt"/>
-        <line num="26" count="3" type="cond" truecount="2" falsecount="0"/>
-        <line num="27" count="1" type="stmt"/>
-        <line num="31" count="2" type="cond" truecount="2" falsecount="0"/>
-        <line num="32" count="1" type="stmt"/>
-        <line num="33" count="1" type="stmt"/>
-        <line num="35" count="1" type="cond" truecount="3" falsecount="1"/>
+<coverage generated="1702980512025" clover="3.2.0">
+  <project timestamp="1702980512025" name="All files">
+    <metrics statements="178" coveredstatements="30" conditionals="53" coveredconditionals="4" methods="25" coveredmethods="4" elements="256" coveredelements="38" complexity="0" loc="178" ncloc="178" packages="4" files="7" classes="7"/>
+    <package name="DBmodels">
+      <metrics statements="7" coveredstatements="7" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      <file name="tripUpdate.js" path="/Users/siri2001/IdeaProjects/TotallySpiesBusPlan/backend/src/DBmodels/tripUpdate.js">
+        <metrics statements="4" coveredstatements="4" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="2" count="1" type="stmt"/>
+        <line num="4" count="1" type="stmt"/>
+        <line num="19" count="1" type="stmt"/>
+        <line num="24" count="1" type="stmt"/>
+      </file>
+      <file name="vehiclepositions.js" path="/Users/siri2001/IdeaProjects/TotallySpiesBusPlan/backend/src/DBmodels/vehiclepositions.js">
+        <metrics statements="3" coveredstatements="3" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="2" count="1" type="stmt"/>
+        <line num="4" count="1" type="stmt"/>
+        <line num="30" count="1" type="stmt"/>
+      </file>
+    </package>
+    <package name="gtfs-realtime">
+      <metrics statements="25" coveredstatements="23" conditionals="8" coveredconditionals="4" methods="6" coveredmethods="4"/>
+      <file name="AmsterdamVehicleDataProcessor.js" path="/Users/siri2001/IdeaProjects/TotallySpiesBusPlan/backend/src/gtfs-realtime/AmsterdamVehicleDataProcessor.js">
+        <metrics statements="23" coveredstatements="23" conditionals="8" coveredconditionals="4" methods="4" coveredmethods="4"/>
+        <line num="9" count="1" type="stmt"/>
         <line num="36" count="1" type="stmt"/>
-        <line num="37" count="1" type="stmt"/>
-        <line num="41" count="2" type="cond" truecount="2" falsecount="0"/>
-        <line num="42" count="1" type="stmt"/>
-        <line num="44" count="1" type="stmt"/>
-        <line num="45" count="1" type="stmt"/>
+        <line num="40" count="1" type="stmt"/>
+        <line num="43" count="1" type="stmt"/>
+        <line num="44" count="1" type="cond" truecount="2" falsecount="2"/>
         <line num="46" count="1" type="stmt"/>
-        <line num="47" count="1" type="cond" truecount="1" falsecount="1"/>
-        <line num="48" count="1" type="stmt"/>
-        <line num="49" count="1" type="stmt"/>
-        <line num="50" count="1" type="stmt"/>
-        <line num="51" count="1" type="stmt"/>
+        <line num="52" count="1" type="stmt"/>
+        <line num="54" count="1" type="stmt"/>
+        <line num="55" count="1" type="stmt"/>
+        <line num="56" count="1" type="stmt"/>
+        <line num="57" count="1" type="stmt"/>
+        <line num="59" count="1" type="stmt"/>
+        <line num="60" count="1" type="stmt"/>
+        <line num="61" count="1" type="stmt"/>
+        <line num="62" count="1" type="stmt"/>
+        <line num="63" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="64" count="1" type="stmt"/>
+        <line num="65" count="1" type="stmt"/>
+        <line num="66" count="1" type="stmt"/>
+        <line num="71" count="1" type="stmt"/>
+        <line num="72" count="1" type="stmt"/>
+        <line num="77" count="1" type="stmt"/>
+        <line num="82" count="1" type="stmt"/>
+      </file>
+      <file name="IVehicleDataProcessor.js" path="/Users/siri2001/IdeaProjects/TotallySpiesBusPlan/backend/src/gtfs-realtime/IVehicleDataProcessor.js">
+        <metrics statements="2" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="0"/>
+        <line num="3" count="0" type="stmt"/>
+        <line num="6" count="0" type="stmt"/>
+      </file>
+    </package>
+    <package name="queryData">
+      <metrics statements="25" coveredstatements="0" conditionals="16" coveredconditionals="0" methods="2" coveredmethods="0"/>
+      <file name="fetchAverageSpeed.js" path="/Users/siri2001/IdeaProjects/TotallySpiesBusPlan/backend/src/queryData/fetchAverageSpeed.js">
+        <metrics statements="25" coveredstatements="0" conditionals="16" coveredconditionals="0" methods="2" coveredmethods="0"/>
+        <line num="15" count="0" type="stmt"/>
+        <line num="16" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="17" count="0" type="stmt"/>
+        <line num="20" count="0" type="stmt"/>
+        <line num="21" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="22" count="0" type="stmt"/>
+        <line num="25" count="0" type="stmt"/>
+        <line num="26" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="27" count="0" type="stmt"/>
+        <line num="31" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="32" count="0" type="stmt"/>
+        <line num="33" count="0" type="stmt"/>
+        <line num="35" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="36" count="0" type="stmt"/>
+        <line num="37" count="0" type="stmt"/>
+        <line num="41" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="42" count="0" type="stmt"/>
+        <line num="44" count="0" type="stmt"/>
+        <line num="45" count="0" type="stmt"/>
+        <line num="46" count="0" type="stmt"/>
+        <line num="47" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="48" count="0" type="stmt"/>
+        <line num="49" count="0" type="stmt"/>
+        <line num="50" count="0" type="stmt"/>
+        <line num="51" count="0" type="stmt"/>
       </file>
     </package>
     <package name="utils">
-      <metrics statements="107" coveredstatements="0" conditionals="25" coveredconditionals="0" methods="14" coveredmethods="0"/>
+      <metrics statements="121" coveredstatements="0" conditionals="29" coveredconditionals="0" methods="17" coveredmethods="0"/>
+      <file name="congestionLevel.js" path="/Users/siri2001/IdeaProjects/TotallySpiesBusPlan/backend/src/utils/congestionLevel.js">
+        <metrics statements="14" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="3" coveredmethods="0"/>
+        <line num="15" count="0" type="stmt"/>
+        <line num="16" count="0" type="stmt"/>
+        <line num="17" count="0" type="stmt"/>
+        <line num="18" count="0" type="stmt"/>
+        <line num="22" count="0" type="stmt"/>
+        <line num="27" count="0" type="stmt"/>
+        <line num="42" count="0" type="stmt"/>
+        <line num="44" count="0" type="stmt"/>
+        <line num="45" count="0" type="stmt"/>
+        <line num="59" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="60" count="0" type="stmt"/>
+        <line num="61" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="62" count="0" type="stmt"/>
+        <line num="64" count="0" type="stmt"/>
+      </file>
       <file name="speedCalculator.js" path="/Users/siri2001/IdeaProjects/TotallySpiesBusPlan/backend/src/utils/speedCalculator.js">
         <metrics statements="107" coveredstatements="0" conditionals="25" coveredconditionals="0" methods="14" coveredmethods="0"/>
         <line num="10" count="0" type="stmt"/>
