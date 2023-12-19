@@ -1,9 +1,5 @@
-import {
-  getBusAllBuslineAmsterdam,
-  getBusAllBuslineStockholm,
-  getBusDetails,
-  fetchAverageSpeed,
-} from "../../../src/queryData/queryDbData.js";
+import * as queryDbData from "../../../src/queryData/queryDbData.js";
+import {handleInactivity} from "../../../src//utils/querydataUtil.js";
 import { Route, StopTime, Trip } from "../../../src/DBmodels/busline.js";
 import { TripUpdate } from "../../../src/DBmodels/tripUpdate.js";
 import { SegmentSpeedPrediction } from "../../../src/DBmodels/segmentSpeedPrediction.js";
@@ -11,6 +7,7 @@ import { VehiclePositions } from "../../../src/DBmodels/vehiclepositions.js";
 import { calculatorScheduledSpeedAmsterdam, calculatorScheduledSpeedStockholm } from "../../../src/utils/speedCalculator.js";
 import { getShapesBetweenStops } from "../../../src/utils/shapesUtilSet.js";
 import { agency } from "../../../src/utils/enum.js";
+import {beforeEach, describe, expect, it, jest} from "@jest/globals";
 const mongoose = require('mongoose');
 
 // Mock the necessary dependencies
@@ -20,15 +17,20 @@ jest.mock("../../../src/utils/speedCalculator.js");
 jest.mock("../../../src/utils/shapesUtilSet.js");
 jest.mock("../../../src/DBmodels/tripUpdate.js");
 jest.mock("../../../src/DBmodels/segmentSpeedPrediction.js");
+jest.mock("../../../src/utils/querydataUtil");
+
 
 describe('Busline Service', () => {
-  describe('getBusAllBuslineAmsterdam', () => {
+    beforeEach(() => {
+        jest.resetAllMocks();
+    });
+    describe('getBusAllBuslineAmsterdam', () => {
     it('should retrieve all bus lines from Amsterdam', async () => {
       // Mock the Route.find() method to return a dummy response
       Route.find.mockResolvedValue(['busLine1', 'busLine2']);
 
       // Call the function being tested
-      const result = await getBusAllBuslineAmsterdam();
+      const result = await queryDbData.getBusAllBuslineAmsterdam();
 
       // Check the expected result
       expect(result).toEqual(['busLine1', 'busLine2']);
@@ -44,7 +46,7 @@ describe('Busline Service', () => {
       Route.find.mockResolvedValue(['busLine1', 'busLine2']);
 
       // Call the function being tested
-      const result = await getBusAllBuslineStockholm();
+      const result = await queryDbData.getBusAllBuslineStockholm();
 
       // Check the expected result
       expect(result).toEqual(['busLine1', 'busLine2']);
@@ -54,23 +56,110 @@ describe('Busline Service', () => {
     });
   });
 
+
+
+
   describe('getBusDetails', () => {
       it('should retrieve bus details for a given route ID', async () => {
-        // Set up the test data
-        const routeID = 'routeId';
-        const route = {
-          _id: 'routeId',
-          trips: ['tripId1', 'tripId2'],
-        };
+          const mockRoute = {
+              agency_id: 'GVB',
+              route_id: 'route123',
+              route_short_name: 'ShortName',
+              route_long_name: 'LongName',
+              trips: ['tripObjectId1', 'tripObjectId2']
+          };
 
-        // Mock the implementation of findOne and populate
-        Route.findOne.mockResolvedValue(route);
-        Route.findOne.populate = jest.fn().mockResolvedValue(route);
+          const mockCurrentVehicle = {
+              city: 'Amsterdam',
+              currentTrip_id: 'tripObjectId1',
+              route: 'routeObjectId',
+              timestamp: 'timestampString',
+              current_position: { latitude: 52.3676, longitude: 4.9041 },
+              previous_position: { latitude: 52.3667, longitude: 4.9052 },
+              stop_id: 'stopId123',
+              current_stop_sequence: 3,
+              current_status: 'statusString',
+              congestion_level: {
+                  timestamp: new Date(),
+                  level: 2,
+                  previousStop: 'previousStopId',
+                  currentStop: 'currentStopId',
+              }
+          };
 
-        const result = await getBusDetails(routeID);
-        expect(result).toBeDefined();
-        expect(Route.findOne).toHaveBeenCalledWith({ route_id: routeID });
-        expect(Route.findOne.populate).toHaveBeenCalledWith(route, 'trips');
+          const mockTrip = {
+              agency_id: 'GVB',
+              trip_id: 'trip123',
+              route_id: 'route123',
+              stop_times: ['stopTimeObjectId1', 'stopTimeObjectId2'],
+              shapes: ['shapeObjectId1', 'shapeObjectId2']
+          };
+          const mockSegmentSpeedPrediction = [{
+              trip_id: 'trip123',
+              previous_stop_id: 'prevStopId',
+              next_stop_id: 'nextStopId',
+              segment_number: 1,
+              average_speed: 50,
+              speed_30_min_prediction: { speed: 45, level: 2 },
+              speed_60_min_prediction: { speed: 40, level: 3 },
+              shapes: ['shapeObjectId3', 'shapeObjectId4']
+          }];
+
+          Route.findOne.mockImplementation(() => ({
+              populate: jest.fn().mockResolvedValue(mockRoute)
+          }));
+          VehiclePositions.findOne.mockResolvedValue(mockCurrentVehicle);
+          Trip.findOne.mockImplementation(() => ({
+              populate: jest.fn().mockImplementation(() => ({
+                  populate: jest.fn().mockResolvedValue(mockTrip)
+              }))
+          }));
+          SegmentSpeedPrediction.find.mockImplementation(() => ({
+              sort: jest.fn().mockReturnThis(), // Mock sort to return the same object (this)
+              populate: jest.fn().mockResolvedValue(mockSegmentSpeedPrediction)
+          }));
+
+          const result = await queryDbData.getBusDetails('route123');
+
+          expect(result).toHaveProperty('currentVehicle');
+          expect(result.currentVehicle).not.toBeNull();
+          expect(result.currentVehicle).toEqual(mockCurrentVehicle);
+          // Add more assertions as needed
+      });
+
+      it('should handle the scenario where currentVehicle is null', async () => {
+          // Mock Route with a valid response
+          const mockRoute = {
+              agency_id: 'GVB',
+              route_id: 'route123',
+              route_short_name: 'ShortName',
+              route_long_name: 'LongName',
+              trips: ['tripObjectId1', 'tripObjectId2']
+          };
+          const mockTrip = {
+              agency_id: 'GVB',
+              trip_id: 'trip123',
+              route_id: 'route123',
+              stop_times: ['stopTimeObjectId1', 'stopTimeObjectId2'],
+              shapes: ['shapeObjectId1', 'shapeObjectId2']
+          };
+
+          // Mock VehiclePositions to return null
+          VehiclePositions.findOne.mockResolvedValue(null);
+
+          Route.findOne.mockImplementation(() => ({
+              populate: jest.fn().mockResolvedValue(mockRoute)
+          }));
+
+          handleInactivity.mockResolvedValue(mockTrip);
+          // Call the function with a route ID
+          const result = await queryDbData.getBusDetails('route123');
+
+          // Assertions
+          expect(result.currentVehicle).toBeNull();
+          expect(result.trip).toEqual(mockTrip);
+          expect(result.congestionShape).toBeNull();
+          // Add more assertions as needed for other properties
       });
 
       it('should throw an error when route is not found', async () => {
@@ -79,159 +168,10 @@ describe('Busline Service', () => {
         Route.findOne.mockResolvedValue(null);
 
         // Act and Assert
-        await expect(getBusDetails(routeID)).rejects.toThrowError();
+        await expect(queryDbData.getBusDetails(routeID)).rejects.toThrowError();
       });
     });
 
-  describe('fetchAverageSpeed', () => {
-      it('should calculate the average speed correctly for a given routeId', async () => {
-        const routeId = 'routeId';
-        const stopTimeId11 = 'stopTimeId11';
-        const stopTimeId12 = 'stopTimeId12';
-        const stopTimeId21 = 'stopTimeId21';
-        const stopTimeId22 = 'stopTimeId22';
 
-        const route = {
-          _id: routeId,
-          trips: [
-            { trip_id: 'tripId1', stop_times: [stopTimeId11, stopTimeId12] },
-            { trip_id: 'tripId2', stop_times: [stopTimeId21, stopTimeId22] },
-          ],
-        };
 
-        const stopTime1 = { _id: stopTimeId11 };
-        const stopTime2 = { _id: stopTimeId12 };
-        const stopTime3 = { _id: stopTimeId21 };
-        const stopTime4 = { _id: stopTimeId22 };
-
-        // Mock the necessary dependencies
-        Route.findOne.mockResolvedValue(route);
-        stopTimeRepository.findById.mockResolvedValueOnce(stopTime1)
-          .mockResolvedValueOnce(stopTime2)
-          .mockResolvedValueOnce(stopTime3)
-          .mockResolvedValueOnce(stopTime4);
-        calculatorScheduledSpeed.mockReturnValueOnce(10).mockReturnValueOnce(15);
-
-        const averageSpeed = await fetchAverageSpeed(routeId);
-
-        expect(Route.findOne).toHaveBeenCalledWith({ _id: routeId });
-        expect(stopTimeRepository.findById).toHaveBeenNthCalledWith(1, stopTimeId11);
-        expect(stopTimeRepository.findById).toHaveBeenNthCalledWith(2, stopTimeId12);
-        expect(stopTimeRepository.findById).toHaveBeenNthCalledWith(3, stopTimeId21);
-        expect(stopTimeRepository.findById).toHaveBeenNthCalledWith(4, stopTimeId22);
-        expect(calculatorScheduledSpeed).toHaveBeenCalledWith([stopTime1, stopTime2]);
-        expect(calculatorScheduledSpeed).toHaveBeenCalledWith([stopTime3, stopTime4]);
-        expect(averageSpeed).toBe(12.5);
-      });
-
-    it('should calculate the average speed correctly for Amsterdam', async () => {
-        const routeId = 'routeId';
-        const stopTimeId11 = 'stopTimeId11';
-        const stopTimeId12 = 'stopTimeId12';
-        const stopTimeId21 = 'stopTimeId21';
-        const stopTimeId22 = 'stopTimeId22';
-
-        const route = {
-          _id: routeId,
-          trips: [
-            { trip_id: 'tripId1', stop_times: [stopTimeId11, stopTimeId12] },
-            { trip_id: 'tripId2', stop_times: [stopTimeId21, stopTimeId22] },
-          ],
-        };
-
-        const stopTime1 = { _id: stopTimeId11 };
-        const stopTime2 = { _id: stopTimeId12 };
-        const stopTime3 = { _id: stopTimeId21 };
-        const stopTime4 = { _id: stopTimeId22 };
-
-        const calculatorScheduledSpeedAmsterdam = jest.fn().mockReturnValue(10);
-
-        Route.findOne.mockReturnValue({
-                populate: jest.fn().mockResolvedValue(route),
-              });
-        StopTime.findOne
-          .mockReturnValueOnce(stopTime1)
-          .mockReturnValueOnce(stopTime2)
-          .mockReturnValueOnce(stopTime3)
-          .mockReturnValueOnce(stopTime4);
-
-        const averageSpeed = await fetchAverageSpeed(routeId, 'Amsterdam');
-
-        expect(Route.findOne).toHaveBeenCalledWith({ _id: routeId });
-        expect(StopTime.findOne).toHaveBeenNthCalledWith(1, { _id: stopTimeId11 });
-        expect(StopTime.findOne).toHaveBeenNthCalledWith(2, { _id: stopTimeId12 });
-        expect(StopTime.findOne).toHaveBeenNthCalledWith(3, { _id: stopTimeId21 });
-        expect(StopTime.findOne).toHaveBeenNthCalledWith(4, { _id: stopTimeId22 });
-        expect(calculatorScheduledSpeedAmsterdam).toHaveBeenCalledWith([stopTime1, stopTime2]);
-        expect(calculatorScheduledSpeedAmsterdam).toHaveBeenCalledWith([stopTime3, stopTime4]);
-        expect(averageSpeed).toBe(10);
-      });
-
-      it('should calculate the average speed correctly for Stockholm', async () => {
-        const routeId = 'routeId';
-        const stopTimeId11 = 'stopTimeId11';
-        const stopTimeId12 = 'stopTimeId12';
-        const stopTimeId21 = 'stopTimeId21';
-        const stopTimeId22 = 'stopTimeId22';
-
-        const route = {
-          _id: routeId,
-          trips: [
-            { trip_id: 'tripId1', stop_times: [stopTimeId11, stopTimeId12] },
-            { trip_id: 'tripId2', stop_times: [stopTimeId21, stopTimeId22] },
-          ],
-        };
-
-        const stopTime1 = { _id: stopTimeId11 };
-        const stopTime2 = { _id: stopTimeId12 };
-        const stopTime3 = { _id: stopTimeId21 };
-        const stopTime4 = { _id: stopTimeId22 };
-
-        const calculatorScheduledSpeedStockholm = jest.fn().mockReturnValue(15);
-
-        Route.findOne.mockReturnValue({
-                populate: jest.fn().mockResolvedValue(route),
-              });
-        StopTime.findOne
-          .mockReturnValueOnce(stopTime1)
-          .mockReturnValueOnce(stopTime2)
-          .mockReturnValueOnce(stopTime3)
-          .mockReturnValueOnce(stopTime4);
-
-        const averageSpeed = await fetchAverageSpeed(routeId, 'Stockholm');
-
-        expect(Route.findOne).toHaveBeenCalledWith({ _id: routeId });
-        expect(StopTime.findOne).toHaveBeenNthCalledWith(1, { _id: stopTimeId11 });
-        expect(StopTime.findOne).toHaveBeenNthCalledWith(2, { _id: stopTimeId12 });
-        expect(StopTime.findOne).toHaveBeenNthCalledWith(3, { _id: stopTimeId21 });
-        expect(StopTime.findOne).toHaveBeenNthCalledWith(4, { _id: stopTimeId22 });
-        expect(calculatorScheduledSpeedStockholm).toHaveBeenCalledWith([stopTime1, stopTime2]);
-        expect(calculatorScheduledSpeedStockholm).toHaveBeenCalledWith([stopTime3, stopTime4]);
-        expect(averageSpeed).toBe(15);
-      });
-  });
-
-  describe('getShapesBetweenStops', () => {
-      it('should retrieve the shapes between two stops', async () => {
-        // Mock the necessary dependencies and their responses
-        const route = {
-          _id: 'routeId',
-          trips: ['tripId1', 'tripId2'],
-          populate: jest.fn().mockResolvedValueOnce(route),
-        };
-        Route.findOne.mockResolvedValue(route);
-        Trip.findOne.mockResolvedValue({ toObject: jest.fn().mockReturnValue(route) });
-        getShapesBetweenStops.mockResolvedValue(['shape1', 'shape2']);
-
-        // Call the function being tested
-        const result = await getShapesBetweenStops(route, 'stopId1', 'stopId2');
-
-        // Check the expected result
-        expect(result).toEqual(['shape1', 'shape2']);
-
-        // Verify that the necessary methods were called
-        expect(Route.findOne).toHaveBeenCalledWith({ route_id: 'routeId' });
-        expect(getShapesBetweenStops).toHaveBeenCalledWith(route, 'stopId1', 'stopId2');
-      });
-    });
   });

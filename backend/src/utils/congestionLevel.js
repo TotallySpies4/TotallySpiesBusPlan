@@ -1,5 +1,6 @@
 import {calculateScheduledSpeedStockholm, realtimeAvgSpeedCalculator} from "./speedCalculator.js";
-import { fetchAverageSpeed } from "../queryData/queryDbData.js";
+import {fetchAverageSpeed} from "../queryData/fetchAverageSpeed.js";
+
 
 /**
  * Method to calculate the congestion level of a route segment
