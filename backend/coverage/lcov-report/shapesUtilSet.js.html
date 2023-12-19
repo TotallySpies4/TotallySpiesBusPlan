@@ -3,15 +3,15 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for utils/congestionLevel.js</title>
+    <title>Code coverage report for shapesUtilSet.js</title>
     <meta charset="utf-8" />
-    <link rel="stylesheet" href="../prettify.css" />
-    <link rel="stylesheet" href="../base.css" />
-    <link rel="shortcut icon" type="image/x-icon" href="../favicon.png" />
+    <link rel="stylesheet" href="prettify.css" />
+    <link rel="stylesheet" href="base.css" />
+    <link rel="shortcut icon" type="image/x-icon" href="favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <style type='text/css'>
         .coverage-summary .sorter {
-            background-image: url(../sort-arrow-sprite.png);
+            background-image: url(sort-arrow-sprite.png);
         }
     </style>
 </head>
@@ -19,20 +19,20 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../index.html">All files</a> / <a href="index.html">utils</a> congestionLevel.js</h1>
+        <h1><a href="index.html">All files</a> shapesUtilSet.js</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>8/8</span>
+                <span class='fraction'>20/20</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/0</span>
+                <span class='fraction'>6/6</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>8/8</span>
+                <span class='fraction'>20/20</span>
             </div>
         
             
@@ -95,82 +95,70 @@
 <a name='L30'></a><a href='#L30'>30</a>
 <a name='L31'></a><a href='#L31'>31</a>
 <a name='L32'></a><a href='#L32'>32</a>
-<a name='L33'></a><a href='#L33'>33</a>
-<a name='L34'></a><a href='#L34'>34</a>
-<a name='L35'></a><a href='#L35'>35</a>
-<a name='L36'></a><a href='#L36'>36</a>
-<a name='L37'></a><a href='#L37'>37</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L33'></a><a href='#L33'>33</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">8x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import {calculateScheduledSpeedStockholm, realtimeAvgSpeedCalculator} from "./speedCalculator.js";
-import {fetchAverageSpeed} from "../queryData/fetchAverageSpeed.js";
-import {level} from "./level.js";
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import {StopTime} from "../DBmodels/busline.js";
 &nbsp;
-/**
- * Method to calculate the congestion level of a route segment
- * @param routeID
- * @param vehiclePosition array of vehiclePositions from the realtime API
- * @returns {Promise&lt;{congestionLevel: number, currentStop: (*|null), previousStop: (*|undefined|null)}&gt;}
- */
-export async function congestionLevel(routeID, vehiclePosition) {
-    const speedObject = await fetchAverageSpeed(routeID, vehiclePosition.trip_id, vehiclePosition.stopSequence);
-    const scheduleSpeed = speedObject.speedEntry;
-    const previousStop = speedObject.previousStop;
-    const currentStop = speedObject.currentStop;
-    const route_avg_speed = await realtimeAvgSpeedCalculator(vehiclePosition.positions);
-    return {congestionLevel: level(scheduleSpeed, route_avg_speed), previousStop: previousStop, currentStop: currentStop}
+export async function getShapesBetweenStops(shapes, previousStop, currentStop) {
+    // Find all shapes with the given shape_id
+    console.log("Finding the shapes between the stops")
+    console.log("previousStop", previousStop)
+    console.log("currentStop", currentStop)
 &nbsp;
-}
+    let previousStopQuery = null;
+    let currentStopQuery = null;
 &nbsp;
-/**
- * Method to calculate the congestion level of a route segment for Stockholm
- * @param tripID
- * @param speed
- * @param latitude
- * @param longitude
- * @param vehicleBearing
- * @returns {{nextStop: *, congestionLevel: number, currentStop: *}}
- */
-export async function congestionLevelStockholm(tripID, speed, latitude, longitude,vehicleBearing) {
-    const speedObject = await calculateScheduledSpeedStockholm(tripID, latitude, longitude, vehicleBearing);
-    return {
-        congestionLevel: level(speedObject.scheduleSpeed, speed),
-        currentStop: speedObject.currentStop,
-        nextStop: speedObject.nextStop
+        previousStopQuery = await StopTime.findOne({_id: previousStop._id});
+        currentStopQuery = await StopTime.findOne({_id: currentStop._id});
+        console.log("previousStopShape", previousStopQuery)
+        console.log("currentStopShape", currentStopQuery)
+&nbsp;
+    if(!previousStopQuery || !currentStopQuery){
+        previousStopQuery = await StopTime.findOne({stop_id: previousStop.stop_id});
+        currentStopQuery = await StopTime.findOne({stop_id: currentStop.stop_id});
+        console.log("previousStopShape",previousStopQuery)
+        console.log("currentStopShape",currentStopQuery)
     }
+&nbsp;
+    console.log("start finding the shapes between the stops")
+    // Filter out shapes that are not between the start and end distances
+    const filteredShapes = shapes.filter(shape =&gt;
+        shape.shape_dist_traveled &gt;= previousStopQuery.shape_dist_traveled &amp;&amp;
+        shape.shape_dist_traveled &lt;= currentStopQuery.shape_dist_traveled
+    );
+    console.log("filteredShapes",filteredShapes)
+    console.log("end finding the shapes between the stops")
+    return filteredShapes;
 }</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -178,16 +166,16 @@ export async function congestionLevelStockholm(tripID, speed, latitude, longitud
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-12-19T13:49:45.773Z
+                at 2023-12-19T13:50:04.171Z
             </div>
-        <script src="../prettify.js"></script>
+        <script src="prettify.js"></script>
         <script>
             window.onload = function () {
                 prettyPrint();
             };
         </script>
-        <script src="../sorter.js"></script>
-        <script src="../block-navigation.js"></script>
+        <script src="sorter.js"></script>
+        <script src="block-navigation.js"></script>
     </body>
 </html>
     

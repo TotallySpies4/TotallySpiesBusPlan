@@ -1,29 +1,79 @@
-/*import {describe, expect, it, jest} from "@jest/globals";
-import {createTopic} from "../../../src/gtfs-realtime/realtimeProducer.js";
+
 import { Kafka } from 'kafkajs';
-jest.mock('kafkajs', () => {
-    const mockAdmin = () => ({
-        connect: jest.fn().mockResolvedValue(),
-        disconnect: jest.fn().mockResolvedValue(),
-        listTopics: jest.fn().mockResolvedValue([]),
-        createTopics: jest.fn().mockResolvedValue()
+import axios from 'axios';
+import { afterEach, beforeEach, describe, expect, it, jest } from "@jest/globals";
+import {createTopic, fetchAndSend, sendToKafka} from "../../../src/gtfs-realtime/realtimeProducer.js";
+describe('Kafka Service', () => {
+    let kafkaAdmin;
+
+    beforeEach(() => {
+        jest.resetModules(); // Setzt alle Module zurück
     });
 
-    return { Kafka: jest.fn(() => ({ admin: mockAdmin })) };
-});
+    afterEach(() => {
+        jest.clearAllMocks();
+    });
 
-describe('createTopic', () => {
-    it('should create a topic if it does not exist', async () => {
-        const admin = new Kafka().admin();
-        admin.listTopics.mockResolvedValue(['existingTopic']);
+    it('should create a new Kafka topic if it does not exist', async () => {
+        // Mock Setup innerhalb der Testfunktion
+        jest.doMock('kafkajs', () => {
+            const mockAdmin = {
+                connect: jest.fn().mockResolvedValue(),
+                disconnect: jest.fn().mockResolvedValue(),
+                listTopics: jest.fn().mockResolvedValue(['existing-topic']),
+                createTopics: jest.fn().mockResolvedValue(true),
+            };
 
-        await createTopic('newTopic');
-
-        expect(admin.connect).toHaveBeenCalled();
-        expect(admin.listTopics).toHaveBeenCalled();
-        expect(admin.createTopics).toHaveBeenCalledWith({
-            topics: [{ topic: 'newTopic', numPartitions: 1 }]
+            return {
+                Kafka: jest.fn(() => ({ admin: () => mockAdmin })),
+            };
         });
-        expect(admin.disconnect).toHaveBeenCalled();
+
+        const { createTopic } = require("../../../src/gtfs-realtime/realtimeProducer.js");
+        const { Kafka } = require('kafkajs');
+        const KafkaMocked = new Kafka({ brokers: ['kafka:19092'] });
+        kafkaAdmin = KafkaMocked.admin();
+
+        const topic = 'new-topic';
+
+        await createTopic(topic);
+
+        expect(kafkaAdmin.connect).toHaveBeenCalledTimes(1);
+
     });
-});*/
+
+    it('should send data to Kafka topic', async () => {
+        // Mock Setup für kafkajs
+        jest.doMock('kafkajs', () => {
+            const mockProducer = {
+                connect: jest.fn().mockResolvedValue(),
+                send: jest.fn().mockResolvedValue(),
+                disconnect: jest.fn().mockResolvedValue(),
+            };
+
+            return {
+                Kafka: jest.fn(() => ({ producer: () => mockProducer })),
+            };
+        });
+
+        const { sendToKafka } = require("../../../src/gtfs-realtime/realtimeProducer.js");
+
+        // Arrange
+        const topic = 'test-topic';
+        const data = { key: 'value' };
+
+        // Act
+        await sendToKafka(topic, data);
+
+        // Assert
+        const mockProducer = new (require('kafkajs').Kafka)().producer();
+        expect(mockProducer.connect).toHaveBeenCalledTimes(1);
+        expect(mockProducer.send).toHaveBeenCalledWith({
+            topic,
+            messages: [{ value: JSON.stringify(data) }],
+        });
+        expect(mockProducer.disconnect).toHaveBeenCalledTimes(1);
+    });
+
+
+});

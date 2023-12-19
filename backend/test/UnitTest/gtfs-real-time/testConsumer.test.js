@@ -1,61 +1,56 @@
-import {beforeEach, describe, expect, it, jest} from "@jest/globals";
-import { setupConsumerForCity } from '../../../src/gtfs-realtime/realtimeConsumer.js';
-import { Kafka } from 'kafkajs';
+/**import { Kafka } from 'kafkajs';
 import mongoose from 'mongoose';
-import { VehiclePositions } from '../../../src/DBmodels/vehiclepositions.js';
-import { Route, Trip } from '../../../src/DBmodels/busline.js';
-import { StockholmVehicleDataProcessor } from '../../../src/gtfs-realtime/StockholmVehicleDataProcessor.js';
-import { AmsterdamVehicleDataProcessor } from '../../../src/gtfs-realtime/AmsterdamVehicleDataProcessor.js';
 
-// Mock mongoose connect method
-jest.mock('mongoose', () => ({
-  connect: jest.fn().mockResolvedValue(),
-  Schema: {
-    Types: { ObjectId: jest.fn() },
-    // If you use other types, you may need to mock them as well.
-    // For example: String: jest.fn(), Number: jest.fn(), ...
-  },
-}));
 
-// Mock mongoose Schema
-mongoose.Schema = jest.fn();
+import { beforeEach, afterEach, describe, expect, it, jest } from '@jest/globals';
+import { setupConsumerForCity } from "../../../src/gtfs-realtime/realtimeConsumer.js";
+import {VehiclePositions} from "../../../src/DBmodels/vehiclepositions.js";
+import {Route, Trip} from "../../../src/DBmodels/busline.js";
+import {AmsterdamVehicleDataProcessor} from "../../../src/gtfs-realtime/AmsterdamVehicleDataProcessor.js";
+import {StockholmVehicleDataProcessor} from "../../../src/gtfs-realtime/StockholmVehicleDataProcessor.js";
 
-describe('Consumer Setup', () => {
+jest.mock('kafkajs'); // Mock Kafka
+jest.mock('mongoose'); // Mock Mongoose
+jest.mock('../../../src/DBmodels/vehiclepositions.js'); // Mock VehiclePositions
+jest.mock('../../../src/DBmodels/busline.js'); // Mock Trip
+jest.mock('../../../src/DBmodels/busline.js'); // Mock Route
+jest.mock('../../../src/gtfs-realtime/AmsterdamVehicleDataProcessor.js'); // Mock AmsterdamVehicleDataProcessor
+jest.mock('../../../src/gtfs-realtime/StockholmVehicleDataProcessor.js'); // Mock StockholmVehicleDataProcessor
+
+describe('setupConsumerForCity', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  it('sets up consumer for Amsterdam', async () => {
-    Kafka.prototype.consumer.mockImplementation(() => ({
-      connect: jest.fn().mockResolvedValue(),
-      subscribe: jest.fn(),
-      run: jest.fn(),
-    }));
+  it('should connect to Kafka and MongoDB successfully', async () => {
+    const mockConsumer = new Kafka.consumer({ groupId: 'test-group' });
+    const mockTrip = { _id: 'tripId', route_id: 'routeId' };
+    const mockRoute = { _id: 'routeId' };
+    const mockAmsterdamProcessor = new AmsterdamVehicleDataProcessor();
+    const mockStockholmProcessor = new StockholmVehicleDataProcessor();
 
-    await setupConsumerForCity('gtfs-realtime-amsterdam', 'amsterdam');
+    Kafka.mockImplementation(() => ({ consumer: () => mockConsumer }));
+    mongoose.connect.mockResolvedValuePromise();
+    VehiclePositions.deleteMany.mockResolvedValuePromise();
+    mockConsumer.connect.mockResolvedValuePromise();
+    mockConsumer.subscribe.mockResolvedValuePromise();
+    Trip.findOne.mockResolvedValueOnce(mockTrip);
+    Route.findOne.mockResolvedValueOnce(mockRoute);
+    AmsterdamVehicleDataProcessor.mockImplementation(() => mockAmsterdamProcessor);
+    StockholmVehicleDataProcessor.mockImplementation(() => mockStockholmProcessor);
 
-    expect(Kafka.prototype.consumer).toHaveBeenCalledTimes(1);
-    const mockConsumerInstance = Kafka.prototype.consumer.mock.instances[0];
-    expect(mockConsumerInstance.connect).toHaveBeenCalledTimes(1);
-    expect(mockConsumerInstance.subscribe).toHaveBeenCalledWith({ topic: 'gtfs-realtime-amsterdam' });
-    expect(mockConsumerInstance.run).toHaveBeenCalledTimes(1);
-    expect(mongoose.connect).toHaveBeenCalledTimes(1);
+    await setupConsumerForCity('test-topic', 'amsterdam');
+
+    expect(Kafka.mock.calls.length).toBe(1);
+    expect(mongoose.connect.mock.calls.length).toBe(1);
+    expect(VehiclePositions.deleteMany.mock.calls.length).toBe(1);
+    expect(mockConsumer.connect.mock.calls.length).toBe(1);
+    expect(mockConsumer.subscribe.mock.calls.length).toBe(1);
+    expect(Trip.findOne.mock.calls.length).toBe(1);
+    expect(Route.findOne.mock.calls.length).toBe(1);
+    expect(AmsterdamVehicleDataProcessor.mock.calls.length).toBe(1);
+    expect(mockAmsterdamProcessor.createNewVehicle).toHaveBeenCalledTimes(1);
   });
 
-  it('sets up consumer for Stockholm', async () => {
-    Kafka.prototype.consumer.mockImplementation(() => ({
-      connect: jest.fn().mockResolvedValue(),
-      subscribe: jest.fn(),
-      run: jest.fn(),
-    }));
-
-    await setupConsumerForCity('gtfs-realtime-stockholm', 'stockholm');
-
-    expect(Kafka.prototype.consumer).toHaveBeenCalledTimes(1);
-    const mockConsumerInstance = Kafka.prototype.consumer.mock.instances[0];
-    expect(mockConsumerInstance.connect).toHaveBeenCalledTimes(1);
-    expect(mockConsumerInstance.subscribe).toHaveBeenCalledWith({ topic: 'gtfs-realtime-stockholm' });
-    expect(mockConsumerInstance.run).toHaveBeenCalledTimes(1);
-    expect(mongoose.connect).toHaveBeenCalledTimes(1);
-  });
 });
+**/

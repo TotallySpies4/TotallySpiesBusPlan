@@ -1,91 +1,99 @@
-import { congestionLevel, congestionLevelStockholm, level } from '../../../src/utils/congestionLevel';
-import { calculateScheduledSpeedStockholm, realtimeAvgSpeedCalculator } from '../../../src/utils/speedCalculator';
-import { fetchAverageSpeed } from '../../../src/queryData/queryDbData';
-import {describe, it, jest} from "@jest/globals";
 
-// Mocking dependencies
-jest.mock('../../../src/utils/speedCalculator');
-jest.mock('../../../src/queryData/queryDbData');
+import { describe, it, jest, expect } from '@jest/globals';
+import {congestionLevel, congestionLevelStockholm} from "../../../src/utils/congestionLevel.js";
+import * as speedCalculator from '../../../src/utils/speedCalculator.js';
+import * as level from "../../../src/utils/level.js";
+import * as queryDataModule from "../../../src/queryData/fetchAverageSpeed.js";
+
 
 describe('congestionLevel', () => {
-  it('should calculate congestion level for a route segment', async () => {
-    // Mock data
-    const routeID = 'someRouteID';
-    const vehiclePosition = {
-      trip_id: 'someTripID',
-      stopSequence: 42,
-      positions: [
-        {
-          position: { latitude: 0, longitude: 0 },
-          timestamp: new Date(),
-        },
-        {
-          position: { latitude: 1, longitude: 1 },
-          timestamp: new Date(),
-        },
-      ],
-    };
+  it('should correctly calculate congestion level for Stockholm', async () => {
+    // Mock calculateScheduledSpeedStockholm und level
+    const mockCalculateScheduledSpeedStockholm = jest.spyOn(speedCalculator, 'calculateScheduledSpeedStockholm');
+    const mockLevel = jest.spyOn(level, 'level');
 
-    // Mock the fetchAverageSpeed function
-    fetchAverageSpeed.mockResolvedValue({
-      speedEntry: 30, // Replace with the actual scheduled speed
-      previousStop: 'previousStopID',
-      currentStop: 'currentStopID',
+    // Mock-Daten für calculateScheduledSpeedStockholm
+    const mockSpeedObject = {
+      scheduleSpeed: 50,
+      currentStop: 'stop1',
+      nextStop: 'stop2'
+    };
+    mockCalculateScheduledSpeedStockholm.mockResolvedValue(mockSpeedObject);
+
+    // Mock-Daten für level-Funktion
+    mockLevel.mockImplementation((scheduleSpeed, speed) => {
+      if (scheduleSpeed > speed + 5) {
+        return 0;  // green
+      } else if (scheduleSpeed > speed - 5) {
+        return 1;  // yellow
+      } else {
+        return 2;  // red
+      }
     });
 
-    // Mock the realtimeAvgSpeedCalculator function
-    realtimeAvgSpeedCalculator.mockResolvedValue(25);
+    const tripID = 'trip123';
+    const speed = 45; // Geschwindigkeit, die wir testen möchten
+    const latitude = 59.3293;
+    const longitude = 18.0686;
+    const vehicleBearing = 100;
 
-    // Call the congestionLevel function
+    const result = await congestionLevelStockholm(tripID, speed, latitude, longitude, vehicleBearing);
+
+    expect(result.congestionLevel).toBe(1); // Erwartet wird Gelb, da die Geschwindigkeit nahe der Plan-Geschwindigkeit liegt
+    expect(result.currentStop).toBe(mockSpeedObject.currentStop);
+    expect(result.nextStop).toBe(mockSpeedObject.nextStop);
+
+    // Überprüfe, ob die Mocks korrekt aufgerufen wurden
+    expect(mockCalculateScheduledSpeedStockholm).toHaveBeenCalledWith(tripID, latitude, longitude, vehicleBearing);
+    expect(mockLevel).toHaveBeenCalledWith(mockSpeedObject.scheduleSpeed, speed);
+  });
+
+  it('should calculate the correct congestion level', async () => {
+    // Mock fetchAverageSpeed, realtimeAvgSpeedCalculator, and level
+    const mockFetchAverageSpeed = jest.spyOn(queryDataModule, 'fetchAverageSpeed');
+    const mockRealtimeAvgSpeedCalculator = jest.spyOn(speedCalculator, 'realtimeAvgSpeedCalculator');
+    const mockLevel = jest.spyOn(level, 'level');
+
+    // Mock data for fetchAverageSpeed
+    const mockSpeedObject = {
+      speedEntry: 40,
+      previousStop: { stopName: 'PrevStop' },
+      currentStop: { stopName: 'CurrStop' }
+    };
+    mockFetchAverageSpeed.mockResolvedValue(mockSpeedObject);
+
+    // Mock data for realtimeAvgSpeedCalculator
+    const routeAvgSpeed = 45;
+    mockRealtimeAvgSpeedCalculator.mockResolvedValue(routeAvgSpeed);
+
+    // Mock data for level function
+    mockLevel.mockImplementation((scheduleSpeed, speed) => {
+      if (scheduleSpeed > speed + 5) {
+        return 0; // Green
+      } else if (scheduleSpeed > speed - 5) {
+        return 1; // Yellow
+      } else {
+        return 2; // Red
+      }
+    });
+
+    const routeID = 'route123';
+    const vehiclePosition = {
+      trip_id: 'trip123',
+      stopSequence: 2,
+      positions: [{ /* position data */ }]
+    };
+
     const result = await congestionLevel(routeID, vehiclePosition);
 
     // Assertions
-    expect(result).toEqual({
-      congestionLevel: 1,
-      previousStop: 'previousStopID',
-      currentStop: 'currentStopID',
-    });
-  });
-});
+    expect(result.congestionLevel).toBe(mockLevel(mockSpeedObject.speedEntry, routeAvgSpeed));
+    expect(result.previousStop).toEqual(mockSpeedObject.previousStop);
+    expect(result.currentStop).toEqual(mockSpeedObject.currentStop);
 
-describe('congestionLevelStockholm', () => {
-  it('should calculate congestion level for Stockholm', async () => {
-    // Mock data
-    const tripID = 'someTripID';
-    const speed = 40;
-    const latitude = 1;
-    const longitude = 1;
-    const vehicleBearing = 90;
-
-    // Mock the calculateScheduledSpeedStockholm function
-    calculateScheduledSpeedStockholm.mockResolvedValue({
-      scheduleSpeed: 35, // Replace with the actual scheduled speed
-      currentStop: 'currentStopID',
-      nextStop: 'nextStopID',
-    });
-
-    // Call the congestionLevelStockholm function
-    const result = await congestionLevelStockholm(tripID, speed, latitude, longitude, vehicleBearing);
-
-    // Assertions
-    expect(result).toEqual({
-      congestionLevel: 1,
-      currentStop: 'currentStopID',
-      nextStop: 'nextStopID',
-    });
-  });
-});
-
-describe('level', () => {
-  it('should calculate the congestion level based on scheduleSpeed and route_avg_speed', () => {
-    // Mock data
-    const scheduleSpeed = 30;
-    const route_avg_speed = 25;
-
-    // Call the level function
-    const result = level(scheduleSpeed, route_avg_speed);
-
-    // Assertions
-    expect(result).toBe(1);
+    // Verify that mocks are called correctly
+    expect(mockFetchAverageSpeed).toHaveBeenCalledWith(routeID, vehiclePosition.trip_id, vehiclePosition.stopSequence);
+    expect(mockRealtimeAvgSpeedCalculator).toHaveBeenCalledWith(vehiclePosition.positions);
+    expect(mockLevel).toHaveBeenCalledWith(mockSpeedObject.speedEntry, routeAvgSpeed);
   });
 });

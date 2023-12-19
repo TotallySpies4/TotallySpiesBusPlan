@@ -8,6 +8,7 @@ import { calculatorScheduledSpeedAmsterdam, calculatorScheduledSpeedStockholm } 
 import { getShapesBetweenStops } from "../../../src/utils/shapesUtilSet.js";
 import { agency } from "../../../src/utils/enum.js";
 import {beforeEach, describe, expect, it, jest} from "@jest/globals";
+import {getBusAllBuslineAmsterdam, getBusAllBuslineStockholm} from "../../../src/queryData/queryDbData.js";
 const mongoose = require('mongoose');
 
 // Mock the necessary dependencies
@@ -24,7 +25,7 @@ describe('Busline Service', () => {
     beforeEach(() => {
         jest.resetAllMocks();
     });
-    describe('getBusAllBuslineAmsterdam', () => {
+
     it('should retrieve all bus lines from Amsterdam', async () => {
       // Mock the Route.find() method to return a dummy response
       Route.find.mockResolvedValue(['busLine1', 'busLine2']);
@@ -38,9 +39,8 @@ describe('Busline Service', () => {
       // Verify that the Route.find() method was called
       expect(Route.find).toHaveBeenCalledWith({ agency_id: agency.GVB });
     });
-  });
 
-  describe('getBusAllBuslineStockholm', () => {
+
     it('should retrieve all bus lines from Stockholm', async () => {
       // Mock the Route.find() method to return a dummy response
       Route.find.mockResolvedValue(['busLine1', 'busLine2']);
@@ -54,12 +54,8 @@ describe('Busline Service', () => {
       // Verify that the Route.find() method was called
       expect(Route.find).toHaveBeenCalledWith({ agency_id: agency.SL });
     });
-  });
 
 
-
-
-  describe('getBusDetails', () => {
       it('should retrieve bus details for a given route ID', async () => {
           const mockRoute = {
               agency_id: 'GVB',
@@ -170,8 +166,42 @@ describe('Busline Service', () => {
         // Act and Assert
         await expect(queryDbData.getBusDetails(routeID)).rejects.toThrowError();
       });
+
+    it('should return all bus lines for Amsterdam', async () => {
+        // Erwartete Daten für den Mock definieren
+        const mockBusLines = [
+            { agency_id: 'GVB', route_id: '1', route_name: 'Busline 1' },
+            { agency_id: 'GVB', route_id: '2', route_name: 'Busline 2' },
+            // Weitere Buslinien-Daten...
+        ];
+
+        // Mock für Route.find
+        Route.find.mockResolvedValue(mockBusLines);
+
+        // Funktion ausführen
+        const busLines = await getBusAllBuslineAmsterdam();
+
+        // Assertions
+        expect(busLines).toEqual(mockBusLines);
+        expect(Route.find).toHaveBeenCalledWith({ agency_id: 'GVB' });
     });
 
+    it('should return all bus lines for Stockholm', async () => {
+        // Erwartete Daten für den Mock definieren
+        const mockBusLines = [
+            { agency_id: '14010000000001001', route_id: '10', route_name: 'Busline 10' },
+            { agency_id: '14010000000001001', route_id: '20', route_name: 'Busline 20' },
+            // Weitere Buslinien-Daten...
+        ];
 
+        // Mock für Route.find
+        Route.find.mockResolvedValue(mockBusLines);
 
+        // Funktion ausführen
+        const busLines = await getBusAllBuslineStockholm();
+
+        // Assertions
+        expect(busLines).toEqual(mockBusLines);
+        expect(Route.find).toHaveBeenCalledWith({ agency_id: '14010000000001001' });
+    });
   });
